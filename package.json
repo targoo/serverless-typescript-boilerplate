@@ -1,0 +1,84 @@
+{
+  "name": "serverless-typescript-boilerplate",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "format": "prettier -c --ignore-path .gitignore \"**/*.{css,html,js,jsx,ts,tsx,json,yml,yaml,md}\" --write",
+    "package": "serverless package",
+    "deploy": "serverless deploy --stage dev",
+    "destroy": "serverless remove --stage dev",
+    "deploy:stage": "serverless deploy --stage stage",
+    "destroy:stage": "serverless remove --stage stage",
+    "deploy:prod": "serverless deploy --stage prod",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "local": "serverless dynamodb install; serverless offline start --stage local",
+    "test": "npm run test:unit",
+    "test:unit": "jest",
+    "test:watch": "jest --watch",
+    "test:ci": "jest --ci --colors --coverage",
+    "test:integration": "jest -c jest.config.integration.js",
+    "watch:hello-status": "serverless invoke local --watch --function hello-status --path fixtures/event.json",
+    "watch:board-status": "IS_OFFLINE=true serverless invoke local --watch --function board-status --path fixtures/event.json",
+    "watch:board-list": "IS_OFFLINE=true serverless invoke local --watch --function board-list --path fixtures/board-list.json",
+    "watch:file-upload": "IS_OFFLINE=true serverless invoke local --watch --function file-upload --log --data='{ \"image_url\": \"https: //assets-cdn.github.com/images/modules/open_graph/github-mark.png\", \"key\": \"github.png\"}'"
+  },
+  "engines": {
+    "node": ">=10.0.0 <11.0.0"
+  },
+  "keywords": [
+    "api",
+    "typescript",
+    "serverless",
+    "lambda",
+    "AWS",
+    "Jest"
+  ],
+  "author": "David Calcus",
+  "license": "MIT",
+  "dependencies": {
+    "uuid": "3.3.3"
+  },
+  "devDependencies": {
+    "@babel/core": "7.6.0",
+    "@babel/preset-env": "7.6.0",
+    "@babel/preset-typescript": "7.6.0",
+    "@types/aws-lambda": "8.10.31",
+    "@typescript-eslint/eslint-plugin": "2.2.0",
+    "@typescript-eslint/parser": "2.2.0",
+    "aws-sdk": "2.528.0",
+    "axios": "0.19.0",
+    "babel-jest": "24.9.0",
+    "babel-loader": "8.0.6",
+    "eslint": "6.4.0",
+    "eslint-config-prettier": "6.3.0",
+    "eslint-plugin-jest": "22.17.0",
+    "eslint-plugin-prettier": "3.1.0",
+    "husky": "3.0.5",
+    "jest": "24.9.0",
+    "lint-staged": "9.2.5",
+    "prettier": "1.18.2",
+    "serverless": "1.51.0",
+    "serverless-dynamodb-local": "0.2.38",
+    "serverless-iam-roles-per-function": "2.0.2",
+    "serverless-offline": "5.11.0",
+    "serverless-webpack": "5.3.1",
+    "ts-loader": "6.1.0",
+    "typescript": "3.6.3",
+    "webpack": "4.40.2",
+    "webpack-node-externals": "1.7.2",
+    "yamljs": "0.3.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "(src|test)/**/*.{js,jsx,ts,tsx}": [
+      "npm run format",
+      "npm run lint",
+      "git add"
+    ]
+  }
+}

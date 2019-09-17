@@ -1,0 +1,37 @@
+Resources:
+  CognitoUserPool:
+    Type: AWS::Cognito::UserPool
+    Description: 'A Cognito user pool for authenticating users'
+    Properties:
+      UserPoolName: ${self:custom.stackname}-user-pool
+      AutoVerifiedAttributes:
+        - email
+      UsernameAttributes:
+        - email
+      Policies:
+        PasswordPolicy:
+          MinimumLength: 8
+          RequireLowercase: true
+          RequireNumbers: true
+          RequireSymbols: false
+          RequireUppercase: true
+  WebUserPoolClient:
+    Type: AWS::Cognito::UserPoolClient
+    Description: 'App Client used by AWS AppSync'
+    Properties:
+      ClientName: ${self:custom.stackname}-user-pool-client
+      GenerateSecret: false
+      RefreshTokenValidity: 30
+      UserPoolId: { Ref: CognitoUserPool }
+Outputs:
+  CognitoPoolId:
+    Value: !Ref CognitoUserPool
+  CognitoClientId:
+    Value: !Ref WebUserPoolClient
+  CognitoUserPoolArn:
+    Value:
+      Fn::GetAtt:
+        - CognitoUserPool
+        - Arn
+    Export:
+      Name: ${self:custom.stackname}-cognito-user-pool-arn

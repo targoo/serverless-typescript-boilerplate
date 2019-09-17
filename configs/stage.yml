@@ -1,0 +1,4 @@
+ENV: 'stage'
+MESSAGE: 'MESSAGE'
+DYNAMO_TABLE: ${self:custom.stackname}-main
+REGION: ${self:custom.region}

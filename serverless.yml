@@ -1,0 +1,69 @@
+service: serverless-boilerplate
+
+plugins:
+  - serverless-webpack
+  - serverless-iam-roles-per-function
+  - serverless-dynamodb-local
+  - serverless-offline # serverless-offline needs to be last in the list
+
+frameworkVersion: '>=1.42.0 <2.0.0'
+
+provider:
+  name: aws
+  runtime: nodejs10.x
+  stage: local
+  region: eu-west-1
+  timeout: 10 # Default Lambda timeout
+  memorySize: 512 # Default Lambda Memory Size
+  versionFunctions: false # No functions versioning
+  deploymentBucket:
+    name: serverless-boilerplate-eu-west-1-deploy
+  stackTags:
+    project: ${self:service}
+    env: ${self:custom.stage}
+  logs:
+    restApi: true
+  environment: ${file(./configs/${self:custom.stage}.yml)}
+
+package:
+  individually: true
+  exclude:
+    - .git/**
+    - .vscode/**
+    - .test/**
+
+custom:
+  region: ${self:provider.region}
+
+  stage: ${opt:stage, self:provider.stage}
+
+  stackname: ${self:service}-${self:custom.stage}
+
+  bucket: targoo-serverless-boilerplate
+
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
+
+  dynamodb:
+    stages:
+      - local
+      - dev
+    start:
+      port: 8000
+      inMemory: true
+      heapInitial: 200m
+      heapMax: 1g
+      seed: true
+      convertEmptyValues: true
+      migrate: true
+    # Uncomment only if you already have a DynamoDB running locally
+    # noStart: true
+
+functions: ${file(resources/lambdas/loader.js)}
+
+resources:
+  - ${file(resources/api/api.yml)}
+  - ${file(resources/dynamodbs/main.yml)}
+  - ${file(resources/cognito/user-pool.yml)}
+  - ${file(resources/cognito/identity-pool.yml)}

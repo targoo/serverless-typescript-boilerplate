@@ -1,0 +1,18 @@
+hello-status:
+  handler: src/modules/hello/status.handler
+  iamRoleStatementsName: ${self:custom.stackname}-hello-status
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:GetItem
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.stackname}-main'
+  timeout: 29
+  memorySize: 128
+  reservedConcurrency: 5
+  events:
+    - http:
+        method: GET
+        path: /hello
+  package:
+    include:
+      - src/hello/**

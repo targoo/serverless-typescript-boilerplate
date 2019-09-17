@@ -1,0 +1,143 @@
+board-status:
+  handler: src/modules/board/status.handler
+  timeout: 10
+  memorySize: 128
+  reservedConcurrency: 5
+  events:
+    - http:
+        method: GET
+        path: /board/status
+        authorizer: aws_iam # If we submit the IAM user's access keys through the Federated IdentitiesUser Pools
+        # authorizer:
+        #   type: COGNITO_USER_POOLS
+        #   authorizerId:
+        #     Ref: ApiGatewayAuthorizer
+        cors: true
+  package:
+    include:
+      - src/board/**
+
+board-create:
+  handler: src/modules/board/create.handler
+  iamRoleStatementsName: ${self:custom.stackname}-board-create
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:PutItem
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.stackname}-main'
+  timeout: 10
+  memorySize: 128
+  reservedConcurrency: 5
+  events:
+    - http:
+        method: POST
+        path: /board
+        authorizer: aws_iam # If we submit the IAM user's access keys through the Federated IdentitiesUser Pools
+        # authorizer:
+        #   type: COGNITO_USER_POOLS
+        #   authorizerId:
+        #     Ref: ApiGatewayAuthorizer
+        cors: true
+  package:
+    include:
+      - src/board/**
+
+board-update:
+  handler: src/modules/board/update.handler
+  iamRoleStatementsName: ${self:custom.stackname}-board-update
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:UpdateItem
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.stackname}-main'
+  timeout: 10
+  memorySize: 128
+  reservedConcurrency: 5
+  events:
+    - http:
+        method: PUT
+        path: /board/{id}
+        authorizer: aws_iam # If we submit the IAM user's access keys through the Federated IdentitiesUser Pools
+        # authorizer:
+        #   type: COGNITO_USER_POOLS
+        #   authorizerId:
+        #     Ref: ApiGatewayAuthorizer
+        cors: true
+  package:
+    include:
+      - src/board/**
+
+board-delete:
+  handler: src/modules/board/delete.handler
+  iamRoleStatementsName: ${self:custom.stackname}-board-delete
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:DeleteItem
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.stackname}-main'
+  timeout: 10
+  memorySize: 128
+  reservedConcurrency: 5
+  events:
+    - http:
+        method: DELETE
+        path: /board/{id}
+        authorizer: aws_iam # If we submit the IAM user's access keys through the Federated IdentitiesUser Pools
+        # authorizer:
+        #   type: COGNITO_USER_POOLS
+        #   authorizerId:
+        #     Ref: ApiGatewayAuthorizer
+        cors: true
+  package:
+    include:
+      - src/board/**
+
+board-list:
+  handler: src/modules/board/list.handler
+  iamRoleStatementsName: ${self:custom.stackname}-board-list
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:Query
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.stackname}-main'
+  timeout: 10
+  memorySize: 128
+  reservedConcurrency: 5
+  events:
+    - http:
+        method: GET
+        path: /board
+        authorizer: aws_iam # If we submit the IAM user's access keys through the Federated IdentitiesUser Pools
+        # authorizer:
+        #   type: COGNITO_USER_POOLS
+        #   authorizerId:
+        #     Ref: ApiGatewayAuthorizer
+        cors: true
+  package:
+    include:
+      - src/board/**
+
+board-detail:
+  handler: src/modules/board/detail.handler
+  iamRoleStatementsName: ${self:custom.stackname}-board-detail
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:GetItem
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.stackname}-main'
+  timeout: 10
+  memorySize: 128
+  reservedConcurrency: 5
+  events:
+    - http:
+        method: GET
+        path: /board/{id}
+        authorizer: aws_iam # If we submit the IAM user's access keys through the Federated IdentitiesUser Pools
+        # authorizer:
+        #   type: COGNITO_USER_POOLS
+        #   authorizerId:
+        #     Ref: ApiGatewayAuthorizer
+        cors: true
+  package:
+    include:
+      - src/hello/**

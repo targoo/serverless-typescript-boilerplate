@@ -1,0 +1,15 @@
+file-upload:
+  handler: src/modules/file/upload.handler
+  iamRoleStatementsName: ${self:custom.stackname}-file-upload
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:PutObjectAcl
+      Resource: 'arn:aws:s3:::${self:custom.bucket}/*'
+  timeout: 10
+  memorySize: 128
+  reservedConcurrency: 5
+  package:
+    include:
+      - src/file/**

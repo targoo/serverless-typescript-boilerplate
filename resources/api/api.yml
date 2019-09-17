@@ -1,0 +1,52 @@
+Resources:
+  # Rest API
+  ApiGatewayRestApi:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: ${self:service}-${self:custom.stage}
+      Description: API Gateway ${self:custom.stage}
+
+  # Rest API Paths
+  ApiGatewayResourceHello:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: { Ref: 'ApiGatewayRestApi' }
+      ParentId: { Fn::GetAtt: 'ApiGatewayRestApi.RootResourceId' }
+      PathPart: hello
+
+  # Rest API Paths
+  ApiGatewayResourceBoard:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      RestApiId: { Ref: 'ApiGatewayRestApi' }
+      ParentId: { Fn::GetAtt: 'ApiGatewayRestApi.RootResourceId' }
+      PathPart: board
+
+  # API Gateway authorizer pointing to the User Pool
+  ApiGatewayAuthorizer:
+    DependsOn:
+      - ApiGatewayRestApi
+    Type: AWS::ApiGateway::Authorizer
+    Properties:
+      Name: ${self:service}-${self:custom.stage}-cognito-authorizer
+      Type: COGNITO_USER_POOLS
+      IdentitySource: method.request.header.Authorization
+      RestApiId:
+        Ref: ApiGatewayRestApi
+      ProviderARNs:
+        - Fn::GetAtt: [CognitoUserPool, Arn]
+
+Outputs:
+  # RestApi resource ID (e.g. ei829oe)
+  RestApiId:
+    Value:
+      Ref: ApiGatewayRestApi
+    Export:
+      Name: ${self:service}-${self:custom.stage}-rest-api-id
+  RootResourceId:
+    Value:
+      Fn::GetAtt:
+        - ApiGatewayRestApi
+        - RootResourceId
+    Export:
+      Name: ${self:service}-${self:custom.stage}-root-resource-id

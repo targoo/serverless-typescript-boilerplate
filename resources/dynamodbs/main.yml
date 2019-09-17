@@ -1,0 +1,19 @@
+Resources:
+  MainTable:
+    Type: AWS::DynamoDB::Table
+    Description: 'Main'
+    Properties:
+      TableName: ${self:custom.stackname}-main
+      AttributeDefinitions:
+        - AttributeName: 'id'
+          AttributeType: 'S'
+        - AttributeName: 'relation'
+          AttributeType: 'S'
+      KeySchema:
+        - AttributeName: 'id'
+          KeyType: 'HASH'
+        - AttributeName: 'relation'
+          KeyType: 'RANGE'
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1

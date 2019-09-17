@@ -1,0 +1,86 @@
+const AWS = require('aws-sdk');
+
+const localConfig = {
+  region: 'localhost',
+  endpoint: 'http://localhost:8000',
+  accessKeyId: 'MOCK_ACCESS_KEY_ID',
+  secretAccessKey: 'MOCK_SECRET_ACCESS_KEY',
+  convertEmptyValues: true,
+};
+
+const AWSConfig = {
+  region: process.env.REGION || 'us-east-1',
+  api_version: '2012-08-10',
+};
+
+const dynamoConfig = process.env.IS_OFFLINE ? localConfig : AWSConfig;
+
+AWS.config.update(dynamoConfig);
+const dynamoClient = new AWS.DynamoDB.DocumentClient();
+
+/**
+ * DynamoDB Client Abstraction
+ */
+const client = {
+  /**
+   * Save an item on DynamoDB
+   */
+  saveItem: (item: any, tableName: string) => {
+    const params = {
+      TableName: tableName,
+      Item: item,
+    };
+    console.log('params', params);
+
+    return dynamoClient.put(params).promise();
+  },
+
+  /**
+   * Find one item from DynamoDB
+   */
+  getItem: (key: any, tableName: string) => {
+    const params = {
+      TableName: tableName,
+      Key: key,
+    };
+    console.log('params', params);
+
+    return dynamoClient.get(params).promise();
+  },
+
+  /**
+   * Remove one item from DynamoDB
+   */
+  removeItem: (key: any, tableName: string) => {
+    const params = {
+      TableName: tableName,
+      Key: key,
+      ReturnValues: 'ALL_OLD',
+    };
+    console.log('params', params);
+
+    return dynamoClient.delete(params).promise();
+  },
+
+  /**
+   * Update an item identified by Key
+   */
+  updateItem: (params, key, tableName) => {
+    params.TableName = tableName;
+    params.Key = key;
+    params.ReturnValues = 'ALL_NEW';
+
+    return dynamoClient.update(params).promise();
+  },
+
+  /**
+   * Execute a Raw Select Query on DynamoTable.
+   * You must inform the KeyConditionExpression and ExpressionAttributeNames
+   */
+  query: (where: any, tableName: string) => {
+    where.TableName = tableName;
+    return dynamoClient.query(where).promise();
+  },
+};
+
+export default client;
