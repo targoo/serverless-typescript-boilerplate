@@ -11,6 +11,7 @@
     "deploy:stage": "serverless deploy --stage stage",
     "destroy:stage": "serverless remove --stage stage",
     "deploy:prod": "serverless deploy --stage prod",
+    "deploy:hello": "serverless deploy function -f hello --stage dev",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "local": "serverless dynamodb install; serverless offline start --stage local",
     "test": "npm run test:unit",
@@ -18,7 +19,8 @@
     "test:watch": "jest --watch",
     "test:ci": "jest --ci --colors --coverage",
     "test:integration": "jest -c jest.config.integration.js",
-    "watch:hello-status": "serverless invoke local --watch --function hello-status --path fixtures/event.json",
+    "tail:hello:dev": "serverless logs --function hello --tail --stage dev",
+    "watch:hello": "serverless invoke local --watch --function hello --path fixtures/event.json",
     "watch:board-status": "IS_OFFLINE=true serverless invoke local --watch --function board-status --path fixtures/event.json",
     "watch:board-list": "IS_OFFLINE=true serverless invoke local --watch --function board-list --path fixtures/board-list.json",
     "watch:file-upload": "IS_OFFLINE=true serverless invoke local --watch --function file-upload --log --data='{ \"image_url\": \"https: //assets-cdn.github.com/images/modules/open_graph/github-mark.png\", \"key\": \"github.png\"}'"

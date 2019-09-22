@@ -17,6 +17,10 @@ node_modules/
 .env
 .env*
 
+# Editor settings
+.idea
+.vscode
+
 # Logs
 logs
 *.log
@@ -29,3 +33,4 @@ coverage/
 # Others
 .vscode
 .eslintcache
+.DS_Store

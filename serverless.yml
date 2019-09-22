@@ -10,12 +10,13 @@ frameworkVersion: '>=1.42.0 <2.0.0'
 
 provider:
   name: aws
-  runtime: nodejs10.x
+  runtime: nodejs10.x # Latest version supported
   stage: local
-  region: eu-west-1
+  region: eu-west-1 # Your chosen region
   timeout: 10 # Default Lambda timeout
   memorySize: 512 # Default Lambda Memory Size
   versionFunctions: false # No functions versioning
+  profile: YOUR_PROFILE # Default profile to use. Don't forget to amend this value.
   deploymentBucket:
     name: serverless-boilerplate-eu-west-1-deploy
   stackTags:

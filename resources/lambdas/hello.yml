@@ -1,6 +1,6 @@
-hello-status:
+hello:
   handler: src/modules/hello/status.handler
-  iamRoleStatementsName: ${self:custom.stackname}-hello-status
+  iamRoleStatementsName: ${self:custom.stackname}-hello
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
