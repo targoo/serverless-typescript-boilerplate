@@ -22,13 +22,19 @@ The Serverless Framework provide a tool to deploy AWS services without too much 
 
 ## Quick start
 
-- npm install
-- Amend your AWS profile in the [serverless.yml](serverless.yml) file. Currently named YOUR_PROFILE.
-- npm run deploy
+```bash
+npm install
+# Amend your AWS profile in the [serverless.yml](serverless.yml) file. Currently named YOUR_PROFILE.
+npm run deploy
+```
 
 ## Testing
 
-### Jest unit testing
+### Jest Unit Testing
+
+```bash
+npm run test:unit
+```
 
 ### Integration
 

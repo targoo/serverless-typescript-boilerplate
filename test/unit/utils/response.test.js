@@ -7,7 +7,7 @@ describe('createResponse', () => {
     // Assert
     expect(result).toEqual({
       body: '"ok"',
-      headers: { 'Access-Control-Allow-Origin': '*' },
+      headers: { 'Access-Control-Allow-Origin': '*', 'Access-Control-Allow-Credentials': true },
       statusCode: 200,
     });
   });
