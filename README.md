@@ -13,6 +13,7 @@ The Serverless Framework provide a tool to deploy AWS services without too much 
 - Code formatting with Prettier
 
 ## Tools
+
 - AWS Lambda
 - Amazon DynamoDB
 - Amazon Cognito
@@ -57,4 +58,5 @@ npm run deploy:hello
 ```
 
 ## TODO
+
 - CI Integration
