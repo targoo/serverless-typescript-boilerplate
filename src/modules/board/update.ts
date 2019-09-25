@@ -2,7 +2,7 @@
 import { APIGatewayEvent, Context, Handler, Callback } from 'aws-lambda';
 
 import dynamo from '../../utils/dynamo';
-import { createResponse } from '../../utils/response';
+import { successResponse } from '../../utils/lambda-response';
 
 // curl -X PUT -H 'Content-Type:application/json' 'http://localhost:3000/board/3d6f5084-d2ca-458b-9ca2-f69f17560966' --data '{ "text": "Learn Serverless" }'
 
@@ -38,7 +38,7 @@ export const handler: Handler = async (event: APIGatewayEvent, _context: Context
 
   const { Attributes } = await dynamo.updateItem(params, key, DYNAMO_TABLE);
 
-  const response = createResponse(200, Attributes);
+  const response = successResponse(Attributes);
 
   callback(null, response);
 };

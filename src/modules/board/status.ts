@@ -1,4 +1,4 @@
-import { createResponse } from '../../utils/response';
+import { successResponse } from '../../utils/lambda-response';
 
 export const handler = async (event, _context, callback) => {
   const { requestContext: { identity: { cognitoAuthenticationProvider = '' } = {} } = {} } = event;
@@ -14,7 +14,7 @@ export const handler = async (event, _context, callback) => {
     userId,
   };
 
-  const response = createResponse(200, { identity: identity });
+  const response = successResponse({ identity: identity });
 
   callback(null, response);
 };

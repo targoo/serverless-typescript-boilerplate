@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import { APIGatewayEvent, Context, Handler, Callback } from 'aws-lambda';
 
-import { createResponse } from '../../utils/response';
+import { successResponse } from '../../utils/lambda-response';
 
 export const handler: Handler = async (event: APIGatewayEvent, context: Context, callback: Callback) => {
   const { requestContext: { identity: { cognitoIdentityId = '' } = {} } = {} } = event;
@@ -27,7 +27,7 @@ export const handler: Handler = async (event: APIGatewayEvent, context: Context,
   //   )
   //   .then(v => callback(null, v), callback);
 
-  const response = createResponse(200, {
+  const response = successResponse({
     result: 'result',
   });
 

@@ -3,7 +3,7 @@ import { v4 } from 'uuid';
 import { APIGatewayEvent, Context, Handler, Callback } from 'aws-lambda';
 
 import dynamo from '../../utils/dynamo';
-import { createResponse } from '../../utils/response';
+import { successResponse } from '../../utils/lambda-response';
 
 // curl -X POST -H 'Content-Type:application/json' 'http://localhost:3000/board' --data '{ "text": "test1" }'
 
@@ -25,7 +25,7 @@ export const handler: Handler = async (event: APIGatewayEvent, _context: Context
 
   await dynamo.saveItem(board, DYNAMO_TABLE);
 
-  const response = createResponse(200, board);
+  const response = successResponse(board);
 
   callback(null, response);
 };

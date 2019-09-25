@@ -2,7 +2,7 @@
 import { APIGatewayEvent, Context, Handler, Callback } from 'aws-lambda';
 
 import dynamo from '../../utils/dynamo';
-import { createResponse } from '../../utils/response';
+import { successResponse } from '../../utils/lambda-response';
 
 // curl -X DELETE -H 'Content-Type:application/json' 'http://localhost:3000/board/c2b88132-604b-4645-b506-9208d488dbee'
 
@@ -20,7 +20,7 @@ export const handler: Handler = async (event: APIGatewayEvent, _context: Context
 
   const { Attributes } = await dynamo.removeItem(key, DYNAMO_TABLE);
 
-  const response = createResponse(200, Attributes);
+  const response = successResponse(Attributes);
 
   callback(null, response);
 };

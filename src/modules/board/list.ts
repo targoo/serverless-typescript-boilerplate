@@ -2,7 +2,7 @@
 import { APIGatewayEvent, Context, Handler, Callback } from 'aws-lambda';
 
 import dynamo from '../../utils/dynamo';
-import { createResponse } from '../../utils/response';
+import { successResponse } from '../../utils/lambda-response';
 
 // curl -X GET -H 'Content-Type:application/json' 'http://localhost:3000/board'
 
@@ -26,7 +26,7 @@ export const handler: Handler = async (event: APIGatewayEvent, _context: Context
 
   const { Items } = await dynamo.query(params, DYNAMO_TABLE);
 
-  const response = createResponse(200, {
+  const response = successResponse({
     items: Items,
   });
 
