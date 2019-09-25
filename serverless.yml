@@ -4,6 +4,8 @@ plugins:
   - serverless-webpack
   - serverless-iam-roles-per-function
   - serverless-dynamodb-local
+  - serverless-prune-plugin
+  - serverless-dotenv-plugin
   - serverless-offline # serverless-offline needs to be last in the list
 
 frameworkVersion: '>=1.42.0 <2.0.0'
@@ -15,10 +17,9 @@ provider:
   region: eu-west-1 # Your chosen region
   timeout: 10 # Default Lambda timeout
   memorySize: 512 # Default Lambda Memory Size
-  versionFunctions: false # No functions versioning
   profile: YOUR_PROFILE # Default profile to use. Don't forget to amend this value.
   deploymentBucket:
-    name: serverless-boilerplate-eu-west-1-deploy
+    name: serverless-boilerplate-eu-west-1-deploy # Your chosen S3 bucket
   stackTags:
     project: ${self:service}
     env: ${self:custom.stage}
@@ -36,6 +37,10 @@ package:
 custom:
   region: ${self:provider.region}
 
+  prune:
+    automatic: true
+    number: 5 # Number of versions to keep
+
   stage: ${opt:stage, self:provider.stage}
 
   stackname: ${self:service}-${self:custom.stage}
@@ -45,6 +50,7 @@ custom:
   webpack:
     webpackConfig: ./webpack.config.js
     includeModules: true
+    packager: 'npm'
 
   dynamodb:
     stages:

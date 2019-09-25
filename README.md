@@ -4,15 +4,18 @@ The Serverless Framework provide a tool to deploy AWS services without too much 
 
 ## Keys features
 
-- AWS
-- Node 10.X compatibility
-- Webpack Support
-- TypeScript
-- Jest
-- Code Linting with eslint
-- Code formatting with Prettier
+The current Serverless Starter Kit adds a light layer on top of the Serverless framework with modern JavaScript Tools:
+
+- Babel / Webpack Support so you can use the Modern ESNext features
+- TypeScript Support
+- Unit testing with Jest
+- Linting with Eslint
+- Formatting with Prettier
+- ESLint and Prettier are both run on git commit thanks to `husky` and `lint-staged`.
 
 ## Tools
+
+Currently, the boilterplate is built and tested on AWS using the following services.
 
 - AWS Lambda
 - Amazon DynamoDB
@@ -61,6 +64,11 @@ Going to the AWS lambda console is slow and not really user-friendly. You can re
 ```bash
 npm run deploy:hello
 ```
+
+## Serverless plugins
+
+- serverless-prune-plugin: This plugin allows pruning of all but the most recent version(s) of managed functions from AWS
+- serverless-dotenv-plugin
 
 ## TODO
 
