@@ -6,7 +6,7 @@ exports[`handler executes as expected 1`] = `
     Array [
       null,
       Object {
-        "body": "{\\"message\\":{\\"message\\":\\"Go Serverless v2.0! Your function executed successfully!\\",\\"input\\":{}}}",
+        "body": "{\\"message\\":{\\"message\\":\\"Go Serverless v2.0! Your function executed successfully\\",\\"input\\":{}}}",
         "headers": Object {
           "Access-Control-Allow-Credentials": true,
           "Access-Control-Allow-Origin": "*",
