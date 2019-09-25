@@ -42,8 +42,7 @@ npm run test:unit
 
 ### Quick local script running
 
-We found setting an env variable for the profile before running works:
-env "AWS_PROFILE=<your profile>" serverless invoke local --function hello --path events/hello.json
+To run the hello function with the event data defined in [fixtures/event.json](./fixtures/event.json) (with live reloading), run:
 
 ```bash
 npm run watch:hello

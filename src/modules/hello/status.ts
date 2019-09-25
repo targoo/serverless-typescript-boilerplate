@@ -6,7 +6,7 @@ import { createResponse } from '../../utils/response';
 export const handler: Handler = async (event: APIGatewayEvent, _context: Context, callback: Callback) => {
   const response = createResponse(200, {
     message: {
-      message: 'Go Serverless v2.0! Your function executed successfully!',
+      message: 'Go Serverless v2.0! Your function executed successfully',
       input: event,
     },
   });
