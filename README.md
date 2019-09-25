@@ -1,6 +1,4 @@
-# AWS Serverless Typescript Boilerplate
-
-The Serverless Framework provide a tool to deploy AWS services without too much DevOps overhead.
+# Serverless Typescript Boilerplate
 
 ## Keys features
 
