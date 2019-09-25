@@ -1,14 +1,17 @@
+[![TypeScript version][ts-badge]][typescript-36]
+[![Node.js version][nodejs-badge]][nodejs]
+
 # Serverless Typescript Boilerplate
 
 ## Keys features
 
 The current Serverless Starter Kit adds a light layer on top of the Serverless framework with modern JavaScript Tools:
 
-- Babel / Webpack Support so you can use the Modern ESNext features
-- TypeScript Support
-- Unit testing with Jest
-- Linting with Eslint
-- Formatting with Prettier
+- **Babel / Webpack** Support so you can use the Modern ESNext features.
+- **TypeScript** Support.
+- Unit testing with **Jest** and code coverage
+- Linting with **Eslint**
+- Formatting with Prettier to enforce a consistent code style.
 - ESLint and Prettier are both run on git commit thanks to `husky` and `lint-staged`.
 
 ## Tools
@@ -41,6 +44,12 @@ npm run test:unit
 
 ## Commands
 
+- clean: remove coverage data, Jest cache and transpiled files
+- lint: lint source files and tests
+- test: run tests
+
+### Available scripts
+
 ### Quick local script running
 
 To run the hello function with the event data defined in [fixtures/event.json](./fixtures/event.json) (with live reloading), run:
@@ -69,5 +78,9 @@ npm run deploy:hello
 - serverless-dotenv-plugin
 
 ## TODO
+
+- CI Integration
+
+## License
 
 - CI Integration
