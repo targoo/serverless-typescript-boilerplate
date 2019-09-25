@@ -14,8 +14,8 @@ The current Serverless Starter Kit adds a light layer on top of the Serverless f
 - **TypeScript** Support.
 - Unit testing with **Jest** and code coverage
 - Linting with **Eslint**
-- Offline
-- Full CRUD DynamoDB
+- **Offline** mode
+- Full CRUD **DynamoDB**
 - Formatting with Prettier to enforce a consistent code style.
 - ESLint and Prettier are both run on git commit thanks to `husky` and `lint-staged`.
 
@@ -79,9 +79,12 @@ npm run deploy:hello
 
 ## Serverless plugins
 
-- serverless-prune-plugin: This plugin allows pruning of all but the most recent version(s) of managed functions from AWS
-- serverless-dotenv-plugin:
-- serverless-webpack:
+- [serverless-prune-plugin](https://www.npmjs.com/package/serverless-prune-plugin): Allows pruning of all but the most recent version(s) of managed functions from AWS
+- [serverless-offline](https://github.com/dherault/serverless-offline): run your services offline for e.g. testing
+- [serverless-webpack](https://github.com/elastic-coders/serverless-webpack): optimize package size with webpack
+- [serverless-iam-roles-per-function](https://www.npmjs.com/package/serverless-iam-roles-per-function): Enable setting roles on a per function basis
+- [serverless-plugin-split-stacks](https://github.com/dougmoscrop/serverless-plugin-split-stacks): Split Cloudformation stack to multiple stacks to overcome the 200 resource limit
+- [serverless-dynamodb-local](https://www.npmjs.com/package/serverless-dynamodb-local): Install DynamoDB Local
 
 ## TODO
 
