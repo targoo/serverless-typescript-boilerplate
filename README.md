@@ -1,14 +1,14 @@
 # ⚡️ Serverless Typescript Boilerplate ⚡️
 
-Minimalistic project template to jump start a Serverless application in TypeScript.
+Minimalist but yet supercharged project template to jump start a Serverless application in TypeScript.
 
 ## Motivation
 
-Serverless is awesome : no more server to setup, ultra scalable and very cheap. But I found not very easy to find the perfect setup to get started with. Using serverless brings a lot of not well documented pitfalls that drain a considerable amount of time and energy. I made this boilerplate after gathering the solutions to all of these.
+Serverless is awesome : no more server to setup, ultra scalable and very cheap. But getting started can be intimidating. The boilerplate will save you a considerable amount of time and energy.
 
 ## Keys features
 
-The current Serverless Starter Kit adds a light layer on top of the Serverless framework with modern JavaScript Tools:
+The current Serverless Starter Kit adds a light layer on top of the Serverless framework with modern JavaScript tools:
 
 - **Babel / Webpack** Support so you can use the Modern ESNext features.
 - **TypeScript** Support.
@@ -19,9 +19,9 @@ The current Serverless Starter Kit adds a light layer on top of the Serverless f
 - Formatting with Prettier to enforce a consistent code style.
 - ESLint and Prettier are both run on git commit thanks to `husky` and `lint-staged`.
 
-## Tools
+## Services
 
-Currently, the boilterplate is built and tested on AWS using the following services.
+Currently, the boilerplate is built and tested on AWS using the following services.
 
 - AWS Lambda
 - Amazon DynamoDB
@@ -89,6 +89,7 @@ npm run deploy:hello
 ## TODO
 
 - CI Integration
+- Explore the serverless-dotenv-plugin plugin.
 
 ## License
 
