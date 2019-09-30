@@ -32,8 +32,9 @@ Currently, the boilerplate is built and tested on AWS using the following servic
 ## Quick start
 
 ```bash
+nvm use
 npm install
-# Amend your AWS profile in the [serverless.yml](serverless.yml) file. Currently named YOUR_PROFILE.
+# Amend your AWS profile in the [serverless.yml](serverless.yml) file. Search for YOUR_PROFILE.
 npm run deploy
 ```
 
@@ -85,6 +86,10 @@ npm run deploy:hello
 - [serverless-iam-roles-per-function](https://www.npmjs.com/package/serverless-iam-roles-per-function): Enable setting roles on a per function basis
 - [serverless-plugin-split-stacks](https://github.com/dougmoscrop/serverless-plugin-split-stacks): Split Cloudformation stack to multiple stacks to overcome the 200 resource limit
 - [serverless-dynamodb-local](https://www.npmjs.com/package/serverless-dynamodb-local): Install DynamoDB Local
+
+## Files structure
+
+webpack.config.js: Webpack default config file
 
 ## TODO
 
