@@ -2,14 +2,23 @@ file-upload:
   handler: src/modules/file/upload.handler
   iamRoleStatementsName: ${self:custom.stackname}-file-upload
   iamRoleStatements:
-    - Effect: Allow
+    - Effect: 'Allow'
       Action:
-        - s3:PutObject
-        - s3:PutObjectAcl
-      Resource: 'arn:aws:s3:::${self:custom.bucket}/*'
+        - dynamodb:PutItem
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.stackname}-main'
   timeout: 10
   memorySize: 128
   reservedConcurrency: 5
+  events:
+    - http:
+        method: POST
+        path: /file
+        authorizer: aws_iam # If we submit the IAM user's access keys through the Federated IdentitiesUser Pools
+        # authorizer:
+        #   type: COGNITO_USER_POOLS
+        #   authorizerId:
+        #     Ref: ApiGatewayAuthorizer
+        cors: true
   package:
     include:
       - src/file/**

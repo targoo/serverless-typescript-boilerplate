@@ -8,36 +8,35 @@ import { successResponse } from '../../utils/lambda-response';
 
 export const handler: Handler = async (event: APIGatewayEvent, _context: Context, callback: Callback) => {
   console.log('event', event);
+  console.log('_context', _context);
   const DYNAMO_TABLE = process.env.DYNAMO_TABLE;
 
   const {
-    pathParameters: { relation = '' } = {},
+    pathParameters: { id = '' } = {},
     body = '',
     requestContext: { identity: { cognitoAuthenticationProvider = '' } = {} } = {},
   } = event;
 
-  const id = cognitoAuthenticationProvider.split(':').pop();
-  const { title } = JSON.parse(body);
-  console.log('title', title);
+  const userId = cognitoAuthenticationProvider.split(':').pop();
+  console.log('body', body);
+  const { text } = JSON.parse(body);
+  console.log('text', text);
 
   const key = {
-    id,
-    relation,
+    id: userId,
+    relation: `board-${id}`,
   };
-  console.log('key', key);
 
   const params = {
-    UpdateExpression: 'set #title = :title, #updated = :updated',
-    ExpressionAttributeNames: { '#title': 'title', '#updated': 'updated' },
+    UpdateExpression: 'set #text = :text, #updated = :updated',
+    ExpressionAttributeNames: { '#text': 'text', '#updated': 'updated' },
     ExpressionAttributeValues: {
-      ':title': title,
+      ':text': text,
       ':updated': new Date().getTime(),
     },
   };
-  console.log('params', params);
 
   const { Attributes } = await dynamo.updateItem(params, key, DYNAMO_TABLE);
-  console.log('Attributes', Attributes);
 
   const response = successResponse(Attributes);
 

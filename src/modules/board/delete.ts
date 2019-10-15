@@ -8,14 +8,16 @@ import { successResponse } from '../../utils/lambda-response';
 
 export const handler: Handler = async (event: APIGatewayEvent, _context: Context, callback: Callback) => {
   const DYNAMO_TABLE = process.env.DYNAMO_TABLE;
-  const { requestContext: { identity: { cognitoAuthenticationProvider = '' } = {} } = {} } = event;
+  const {
+    pathParameters: { relation = '' } = {},
+    requestContext: { identity: { cognitoAuthenticationProvider = '' } = {} } = {},
+  } = event;
 
-  const userId = cognitoAuthenticationProvider.split(':').pop();
-  const { pathParameters: { id = '' } = {} } = event;
+  const id = cognitoAuthenticationProvider.split(':').pop();
 
   const key = {
-    id: userId,
-    relation: `board-${id}`,
+    id,
+    relation,
   };
 
   const { Attributes } = await dynamo.removeItem(key, DYNAMO_TABLE);

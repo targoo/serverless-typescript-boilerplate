@@ -1,6 +1,6 @@
-board-create:
-  handler: src/modules/board/create.handler
-  iamRoleStatementsName: ${self:custom.stackname}-board-create
+job-create:
+  handler: src/modules/job/create.handler
+  iamRoleStatementsName: ${self:custom.stackname}-job-create
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -12,7 +12,7 @@ board-create:
   events:
     - http:
         method: POST
-        path: /board
+        path: /job/create
         authorizer: aws_iam # If we submit the IAM user's access keys through the Federated IdentitiesUser Pools
         # authorizer:
         #   type: COGNITO_USER_POOLS
@@ -21,11 +21,11 @@ board-create:
         cors: true
   package:
     include:
-      - src/board/**
+      - src/job/**
 
-board-update:
-  handler: src/modules/board/update.handler
-  iamRoleStatementsName: ${self:custom.stackname}-board-update
+job-update:
+  handler: src/modules/job/update.handler
+  iamRoleStatementsName: ${self:custom.stackname}-job-update
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -37,7 +37,7 @@ board-update:
   events:
     - http:
         method: PUT
-        path: /board/{relation}
+        path: /job/update/{relation}
         authorizer: aws_iam # If we submit the IAM user's access keys through the Federated IdentitiesUser Pools
         # authorizer:
         #   type: COGNITO_USER_POOLS
@@ -46,11 +46,11 @@ board-update:
         cors: true
   package:
     include:
-      - src/board/**
+      - src/job/**
 
-board-delete:
-  handler: src/modules/board/delete.handler
-  iamRoleStatementsName: ${self:custom.stackname}-board-delete
+job-delete:
+  handler: src/modules/job/delete.handler
+  iamRoleStatementsName: ${self:custom.stackname}-job-delete
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -62,7 +62,7 @@ board-delete:
   events:
     - http:
         method: DELETE
-        path: /board/{relation}
+        path: /job/delete/{relation}
         authorizer: aws_iam # If we submit the IAM user's access keys through the Federated IdentitiesUser Pools
         # authorizer:
         #   type: COGNITO_USER_POOLS
@@ -71,11 +71,11 @@ board-delete:
         cors: true
   package:
     include:
-      - src/board/**
+      - src/job/**
 
-board-list:
-  handler: src/modules/board/list.handler
-  iamRoleStatementsName: ${self:custom.stackname}-board-list
+job-list:
+  handler: src/modules/job/list.handler
+  iamRoleStatementsName: ${self:custom.stackname}-job-list
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -87,7 +87,7 @@ board-list:
   events:
     - http:
         method: GET
-        path: /board
+        path: /job/list/{relation}
         authorizer: aws_iam # If we submit the IAM user's access keys through the Federated IdentitiesUser Pools
         # authorizer:
         #   type: COGNITO_USER_POOLS
@@ -96,11 +96,11 @@ board-list:
         cors: true
   package:
     include:
-      - src/board/**
+      - src/job/**
 
-board-detail:
-  handler: src/modules/board/detail.handler
-  iamRoleStatementsName: ${self:custom.stackname}-board-detail
+job-detail:
+  handler: src/modules/job/detail.handler
+  iamRoleStatementsName: ${self:custom.stackname}-job-detail
   iamRoleStatements:
     - Effect: 'Allow'
       Action:
@@ -112,7 +112,7 @@ board-detail:
   events:
     - http:
         method: GET
-        path: /board/{relation}
+        path: /job/detail/{relation}
         authorizer: aws_iam # If we submit the IAM user's access keys through the Federated IdentitiesUser Pools
         # authorizer:
         #   type: COGNITO_USER_POOLS
@@ -121,4 +121,4 @@ board-detail:
         cors: true
   package:
     include:
-      - src/board/**
+      - src/job/**

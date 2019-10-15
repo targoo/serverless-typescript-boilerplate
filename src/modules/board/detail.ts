@@ -7,18 +7,23 @@ import { successResponse } from '../../utils/lambda-response';
 // curl -X GET -H 'Content-Type:application/json' 'http://localhost:3000/board/7c2b82d1-8468-4af7-860d-c49bc621d922'
 
 export const handler: Handler = async (event: APIGatewayEvent, _context: Context, callback: Callback) => {
+  console.log('event', event);
   const DYNAMO_TABLE = process.env.DYNAMO_TABLE;
-  const { requestContext: { identity: { cognitoAuthenticationProvider = '' } = {} } = {} } = event;
+  const {
+    pathParameters: { relation = '' } = {},
+    requestContext: { identity: { cognitoAuthenticationProvider = '' } = {} } = {},
+  } = event;
 
-  const userId = cognitoAuthenticationProvider.split(':').pop();
-  const { pathParameters: { id = '' } = {} } = event;
+  const id = cognitoAuthenticationProvider.split(':').pop();
 
   const key = {
-    id: userId,
-    relation: `board-${id}`,
+    id,
+    relation,
   };
+  console.log('key', key);
 
-  const { Item } = await dynamo.getItem(key, DYNAMO_TABLE);
+  const { Item = {} } = await dynamo.getItem(key, DYNAMO_TABLE);
+  console.log('Item', Item);
 
   const response = successResponse(Item);
 

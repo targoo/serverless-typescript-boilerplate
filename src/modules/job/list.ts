@@ -7,10 +7,16 @@ import { successResponse } from '../../utils/lambda-response';
 // curl -X GET -H 'Content-Type:application/json' 'http://localhost:3000/board'
 
 export const handler: Handler = async (event: APIGatewayEvent, _context: Context, callback: Callback) => {
+  console.log('event', event);
   const DYNAMO_TABLE = process.env.DYNAMO_TABLE;
-  const { requestContext: { identity: { cognitoAuthenticationProvider = '' } = {} } = {} } = event;
+  const {
+    pathParameters: { relation = '' } = {},
+    requestContext: { identity: { cognitoAuthenticationProvider = '' } = {} } = {},
+  } = event;
+  console.log('relation', relation);
 
   const userId = cognitoAuthenticationProvider.split(':').pop();
+  console.log('userId', userId);
 
   const params = {
     KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
@@ -20,11 +26,12 @@ export const handler: Handler = async (event: APIGatewayEvent, _context: Context
     },
     ExpressionAttributeValues: {
       ':userUUID': userId,
-      ':relation': 'board-',
+      ':relation': `${relation}-job`,
     },
   };
+  console.log('params', params);
 
-  const { Items = [] } = await dynamo.query(params, DYNAMO_TABLE);
+  const { Items } = await dynamo.query(params, DYNAMO_TABLE);
 
   const response = successResponse({
     items: Items,
