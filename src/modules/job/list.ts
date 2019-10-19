@@ -26,12 +26,12 @@ export const handler: Handler = async (event: APIGatewayEvent, _context: Context
     },
     ExpressionAttributeValues: {
       ':userUUID': userId,
-      ':relation': `${relation}-job`,
+      ':relation': `job-${relation}-`,
     },
   };
   console.log('params', params);
 
-  const { Items } = await dynamo.query(params, DYNAMO_TABLE);
+  const { Items = [] } = await dynamo.query(params, DYNAMO_TABLE);
 
   const response = successResponse({
     items: Items,

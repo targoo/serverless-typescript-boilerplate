@@ -18,7 +18,7 @@ export const handler: Handler = async (event: APIGatewayEvent, _context: Context
 
   const job = {
     id: userId,
-    relation: `${board_relation}-job-${uuid}`,
+    relation: `job-${board_relation}-${uuid}`,
     created: new Date().getTime(),
     uuid,
     text,
