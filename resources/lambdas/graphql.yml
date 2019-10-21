@@ -1,0 +1,29 @@
+graphql:
+  handler: src/modules/graphql/graphql.handler
+  environment:
+    SLS_DEBUG: true
+  iamRoleStatementsName: ${self:custom.stackname}-graphql
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - dynamodb:GetItem
+      Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.stackname}-main'
+  timeout: 29
+  memorySize: 128
+  reservedConcurrency: 5
+  events:
+    - http:
+        method: GET
+        path: /graphql
+        cors:
+          origins:
+            - '*'
+    - http:
+        method: POST
+        path: /graphql
+        cors:
+          origins:
+            - '*'
+  package:
+    include:
+      - src/graphql/**
