@@ -6,7 +6,7 @@
   "scripts": {
     "format": "prettier -c --ignore-path .gitignore \"**/*.{css,html,js,jsx,ts,tsx,json,yml,yaml,md}\" --write",
     "package": "serverless package",
-    "deploy": "serverless deploy --stage dev",
+    "deploy": "export NODE_OPTIONS=--max_old_space_size=8192 && serverless deploy --stage dev",
     "destroy": "serverless remove --stage dev",
     "deploy:stage": "serverless deploy --stage stage",
     "destroy:stage": "serverless remove --stage stage",
