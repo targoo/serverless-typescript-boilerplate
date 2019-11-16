@@ -5,20 +5,20 @@ plugins:
   - serverless-iam-roles-per-function
   - serverless-dynamodb-local
   - serverless-prune-plugin
-  - serverless-offline # serverless-offline needs to be last in the list
+  - serverless-offline # serverless-offline needs to be last in the list.
 
 frameworkVersion: '>=1.42.0 <2.0.0'
 
 provider:
   name: aws
-  runtime: nodejs10.x # Latest version supported
+  runtime: nodejs10.x # Latest version supported.
   stage: local
-  region: eu-west-1 # Your chosen region
-  timeout: 10 # Default Lambda timeout
-  memorySize: 512 # Default Lambda Memory Size
+  region: eu-west-1 # Your chosen region.
+  timeout: 10 # Default Lambda timeout.
+  memorySize: 512 # Default Lambda Memory Size.
   profile: YOUR_PROFILE # Default profile to use. Don't forget to amend this value.
   deploymentBucket:
-    name: serverless-boilerplate-eu-west-1-deploy # Your chosen S3 bucket
+    name: serverless-boilerplate-eu-west-1-deploy # Your chosen S3 bucket for deployment.
   stackTags:
     project: ${self:service}
     env: ${self:custom.stage}
@@ -38,7 +38,7 @@ custom:
 
   prune:
     automatic: true
-    number: 5 # Number of versions to keep
+    number: 5 # Number of versions of your lambda to keep.
 
   stage: ${opt:stage, self:provider.stage}
 

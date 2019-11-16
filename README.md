@@ -50,12 +50,6 @@ npm run test:unit
 
 ## Commands
 
-- clean: remove coverage data, Jest cache and transpiled files
-- lint: lint source files and tests
-- test: run tests
-
-### Available scripts
-
 ### Quick local script running
 
 To run the hello function with the event data defined in [fixtures/event.json](./fixtures/event.json) (with live reloading), run:
@@ -78,6 +72,12 @@ Going to the AWS lambda console is slow and not really user-friendly. You can re
 npm run deploy:hello
 ```
 
+### More
+
+- `npm run clean`: remove coverage data, Jest cache and transpiled files.
+- `npm run lint`: lint source files and tests.
+- `npm test`: run tests.
+
 ## Serverless plugins
 
 - [serverless-prune-plugin](https://www.npmjs.com/package/serverless-prune-plugin): Allows pruning of all but the most recent version(s) of managed functions from AWS
@@ -95,6 +95,8 @@ webpack.config.js: Webpack default config file
 
 - CI Integration
 - Explore the serverless-dotenv-plugin plugin.
+- https://serverless.com/blog/structuring-a-real-world-serverless-app/
+- https://medium.com/innomizetech/top-serverless-plugins-we-are-using-f02df901bbbf
 
 ## License
 
