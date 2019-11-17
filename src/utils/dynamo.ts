@@ -14,6 +14,7 @@ const AWSConfig = {
 };
 
 const dynamoConfig = process.env.IS_OFFLINE ? localConfig : AWSConfig;
+const DYNAMO_TABLE = process.env.DYNAMO_TABLE;
 
 AWS.config.update(dynamoConfig);
 const dynamoClient = new AWS.DynamoDB.DocumentClient();
@@ -25,7 +26,7 @@ const client = {
   /**
    * Save an item on DynamoDB
    */
-  saveItem: (item: any, tableName: string) => {
+  saveItem: (item: any, tableName: string = DYNAMO_TABLE) => {
     const params = {
       TableName: tableName,
       Item: item,
@@ -38,7 +39,7 @@ const client = {
   /**
    * Find one item from DynamoDB
    */
-  getItem: (key: any, tableName: string) => {
+  getItem: (key: any, tableName: string = DYNAMO_TABLE) => {
     const params = {
       TableName: tableName,
       Key: key,
@@ -51,7 +52,7 @@ const client = {
   /**
    * Remove one item from DynamoDB
    */
-  removeItem: (key: any, tableName: string) => {
+  removeItem: (key: any, tableName: string = DYNAMO_TABLE) => {
     const params = {
       TableName: tableName,
       Key: key,
@@ -65,7 +66,7 @@ const client = {
   /**
    * Update an item identified by Key
    */
-  updateItem: (params, key, tableName) => {
+  updateItem: (params, key, tableName: string = DYNAMO_TABLE) => {
     params.TableName = tableName;
     params.Key = key;
     params.ReturnValues = 'ALL_NEW';
@@ -77,7 +78,7 @@ const client = {
    * Execute a Raw Select Query on DynamoTable.
    * You must inform the KeyConditionExpression and ExpressionAttributeNames
    */
-  query: (where: any, tableName: string) => {
+  query: (where: any, tableName: string = DYNAMO_TABLE) => {
     where.TableName = tableName;
     return dynamoClient.query(where).promise();
   },

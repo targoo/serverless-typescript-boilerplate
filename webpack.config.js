@@ -1,10 +1,15 @@
 const nodeExternals = require('webpack-node-externals');
 const slsw = require('serverless-webpack');
+const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 module.exports = {
   entry: slsw.lib.entries,
   target: 'node',
+  // Generate sourcemaps for proper error messages
+  devtool: 'source-map',
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
+  // Since 'aws-sdk' is not compatible with webpack,
+  // we exclude all node dependencies
   externals: [nodeExternals()],
   optimization: {
     // We no not want to minimize our code.
@@ -16,6 +21,9 @@ module.exports = {
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
+  },
+  node: {
+    __dirname: false,
   },
   module: {
     rules: [
@@ -37,4 +45,5 @@ module.exports = {
       },
     ],
   },
+  plugins: [new FriendlyErrorsWebpackPlugin()],
 };

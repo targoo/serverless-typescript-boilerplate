@@ -2,27 +2,29 @@
 
 // eslint-disable-next-line no-unused-vars
 import { APIGatewayEvent, Context, Handler, Callback } from 'aws-lambda';
-import { makeExecutableSchema } from 'graphql-tools';
-import { ApolloServer, gql } from 'apollo-server-lambda';
+import { ApolloServer } from 'apollo-server-lambda';
+import { makeSchema } from 'nexus';
+// import { join } from 'path';
 
-// Construct a schema, using GraphQL schema language
-const typeDefs = gql`
-  type Query {
-    hello: String
-  }
-`;
+import { types } from './nexusTypes';
+import dynamo from '../../utils/dynamo';
 
-// Provide resolver functions for your schema fields
-const resolvers = {
-  Query: {
-    hello: () => 'Hello world!',
-  },
-};
-
-export const schema = makeExecutableSchema({
-  typeDefs,
-  resolvers,
+/**
+ * When the schema starts and `process.env.NODE_ENV !== "production"`,
+ * artifact files are auto-generated containing the .graphql definitions of
+ * the schema under .webpack/service/src/modules/graphql.
+ */
+const schema = makeSchema({
+  types,
+  // outputs: {
+  //   schema: join(__dirname, './generated/schema.graphql'),
+  //   typegen: join(__dirname, './generated/nexus.ts'),
+  // },
 });
+
+console.log('process.env.NODE_ENV', process.env.NODE_ENV);
+console.log('process.env.ENV', process.env.ENV);
+console.log('process.env.ENVIRONMENT', process.env.ENVIRONMENT);
 
 const server = new ApolloServer({
   schema,
@@ -33,12 +35,19 @@ const server = new ApolloServer({
   formatError: error => {
     return error;
   },
-  context: ({ event, context }) => ({
-    headers: event.headers,
-    functionName: context.functionName,
-    event,
-    context,
-  }),
+  context: ({ event, context }) => {
+    const { requestContext: { identity: { cognitoAuthenticationProvider = '' } = {} } = {} } = event;
+    const userId = cognitoAuthenticationProvider.split(':').pop();
+
+    return {
+      headers: event.headers,
+      functionName: context.functionName,
+      dynamo,
+      event,
+      userId,
+      context,
+    };
+  },
 });
 
 export const handler: Handler = server.createHandler({
@@ -47,29 +56,3 @@ export const handler: Handler = server.createHandler({
     credentials: true,
   },
 });
-
-// const server = new ApolloServer({
-//   typeDefs,
-//   resolvers,
-//   tracing: true,
-//   playground: true,
-//   context: ({ event, context }) => ({
-//     headers: event.headers,
-//     functionName: context.functionName,
-//     event,
-//     context,
-//   }),
-// });
-
-// export const handler: Handler = async (event: APIGatewayEvent, context: Context, callback: Callback) => {
-//   const response = server.createHandler({
-//     cors: {
-//       origin: '*',
-//       credentials: true,
-//       methods: ['POST', 'GET'],
-//       allowedHeaders: ['Content-Type', 'Origin', 'Accept'],
-//     },
-//   });
-
-//   return response(event, context, callback);
-// };

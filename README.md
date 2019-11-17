@@ -50,6 +50,12 @@ npm run test:unit
 
 ## Commands
 
+### Local
+
+```bash
+npm run local
+```
+
 ### Quick local script running
 
 To run the hello function with the event data defined in [fixtures/event.json](./fixtures/event.json) (with live reloading), run:

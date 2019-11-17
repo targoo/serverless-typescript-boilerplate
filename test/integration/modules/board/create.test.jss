@@ -16,11 +16,11 @@ describe('API — board', () => {
     timeout: 1000,
   });
 
-  it('GET /board', async () => {
-    const { data } = await instance.get('/board');
-    console.log(data);
-    // status
-    // data
-    // expect(data).toEqual('Mark');
-  });
+  // it('GET /board', async () => {
+  //   const { data } = await instance.get('/board');
+  //   console.log(data);
+  //   // status
+  //   // data
+  //   // expect(data).toEqual('Mark');
+  // });
 });
