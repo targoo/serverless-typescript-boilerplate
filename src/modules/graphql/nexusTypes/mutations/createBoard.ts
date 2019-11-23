@@ -1,6 +1,6 @@
 import { arg, inputObjectType } from 'nexus';
 
-import { Board, BoardStatus } from '../../../../types';
+import { Board, BoardStatus } from '../../../../types/types';
 import id from '../../../../utils/id';
 
 const CreateBoardInput = inputObjectType({

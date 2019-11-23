@@ -1,6 +1,7 @@
-const generate = require('nanoid/generate');
+import generate from 'nanoid/generate';
+
 const alphabet = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+
 export default function generateID() {
-  const uuid: string = generate(alphabet, 16);
-  return uuid;
+  return generate(alphabet, 16);
 }

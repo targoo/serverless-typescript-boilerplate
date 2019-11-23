@@ -2,7 +2,7 @@ import { v4 } from 'uuid';
 // eslint-disable-next-line no-unused-vars
 import { APIGatewayEvent, Context, Handler, Callback } from 'aws-lambda';
 
-import { Board, BoardStatus } from '../../types';
+import { Board, BoardStatus } from '../../types/types';
 import dynamo from '../../utils/dynamo';
 import { successResponse } from '../../utils/lambda-response';
 
