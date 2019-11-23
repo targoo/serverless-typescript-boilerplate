@@ -4,7 +4,7 @@
 import { APIGatewayEvent, Context, Handler, Callback } from 'aws-lambda';
 import { ApolloServer } from 'apollo-server-lambda';
 import { makeSchema } from 'nexus';
-// import { join } from 'path';
+import { join } from 'path';
 
 import { types } from './nexusTypes';
 import dynamo from '../../utils/dynamo';
@@ -16,28 +16,35 @@ import dynamo from '../../utils/dynamo';
  */
 const schema = makeSchema({
   types,
-  // outputs: {
-  //   schema: join(__dirname, './generated/schema.graphql'),
-  //   typegen: join(__dirname, './generated/nexus.ts'),
-  // },
 });
+
+if (process.env.NODE_ENV === 'development') {
+  schema['outputs'] = {
+    schema: join(__dirname, './generated/schema.graphql'),
+    typegen: join(__dirname, './generated/nexus.ts'),
+  };
+}
 
 console.log('process.env.NODE_ENV', process.env.NODE_ENV);
 console.log('process.env.ENV', process.env.ENV);
-console.log('process.env.ENVIRONMENT', process.env.ENVIRONMENT);
+console.log('process.env.IS_OFFLINE', process.env.IS_OFFLINE);
 
-const server = new ApolloServer({
+const graphqlRoutePrefix = process.env.IS_OFFLINE ? '' : `/${process.env.ENV}`;
+
+console.log(graphqlRoutePrefix + '/graphql');
+
+const server: ApolloServer = new ApolloServer({
   schema,
   tracing: true,
   playground: {
-    endpoint: process.env.ENV === 'local' ? '/graphql' : '/dev/graphql',
+    endpoint: graphqlRoutePrefix + '/graphql',
   },
   formatError: error => {
     return error;
   },
   context: ({ event, context }) => {
     const { requestContext: { identity: { cognitoAuthenticationProvider = '' } = {} } = {} } = event;
-    const userId = cognitoAuthenticationProvider.split(':').pop();
+    const userId = cognitoAuthenticationProvider ? cognitoAuthenticationProvider.split(':').pop() : null;
 
     return {
       headers: event.headers,

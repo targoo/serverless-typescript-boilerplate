@@ -4,10 +4,7 @@ import { APIGatewayEvent, Context, Handler, Callback } from 'aws-lambda';
 import dynamo from '../../utils/dynamo';
 import { successResponse } from '../../utils/lambda-response';
 
-// curl -X DELETE -H 'Content-Type:application/json' 'http://localhost:3000/board/c2b88132-604b-4645-b506-9208d488dbee'
-
 export const handler: Handler = async (event: APIGatewayEvent, _context: Context, callback: Callback) => {
-  const DYNAMO_TABLE = process.env.DYNAMO_TABLE;
   const {
     pathParameters: { relation = '' } = {},
     requestContext: { identity: { cognitoAuthenticationProvider = '' } = {} } = {},
@@ -20,7 +17,7 @@ export const handler: Handler = async (event: APIGatewayEvent, _context: Context
     relation,
   };
 
-  const { Attributes } = await dynamo.removeItem(key, DYNAMO_TABLE);
+  const { Attributes } = await dynamo.removeItem(key);
 
   const response = successResponse(Attributes);
 

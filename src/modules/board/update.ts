@@ -4,8 +4,6 @@ import { APIGatewayEvent, Context, Handler, Callback } from 'aws-lambda';
 import dynamo from '../../utils/dynamo';
 import { successResponse } from '../../utils/lambda-response';
 
-// curl -X PUT -H 'Content-Type:application/json' 'http://localhost:3000/board/3d6f5084-d2ca-458b-9ca2-f69f17560966' --data '{ "text": "Learn Serverless" }'
-
 export const handler: Handler = async (event: APIGatewayEvent, _context: Context, callback: Callback) => {
   console.log('event', event);
   const DYNAMO_TABLE = process.env.DYNAMO_TABLE;
@@ -18,7 +16,6 @@ export const handler: Handler = async (event: APIGatewayEvent, _context: Context
 
   const id = cognitoAuthenticationProvider.split(':').pop();
   const { title } = JSON.parse(body);
-  console.log('title', title);
 
   const key = {
     id,
@@ -34,10 +31,8 @@ export const handler: Handler = async (event: APIGatewayEvent, _context: Context
       ':updated': new Date().getTime(),
     },
   };
-  console.log('params', params);
 
   const { Attributes } = await dynamo.updateItem(params, key, DYNAMO_TABLE);
-  console.log('Attributes', Attributes);
 
   const response = successResponse(Attributes);
 

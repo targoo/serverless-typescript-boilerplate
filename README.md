@@ -103,6 +103,7 @@ webpack.config.js: Webpack default config file
 - Explore the serverless-dotenv-plugin plugin.
 - https://serverless.com/blog/structuring-a-real-world-serverless-app/
 - https://medium.com/innomizetech/top-serverless-plugins-we-are-using-f02df901bbbf
+- https://github.com/tomyitav/apollo-typed-lambda
 
 ## License
 

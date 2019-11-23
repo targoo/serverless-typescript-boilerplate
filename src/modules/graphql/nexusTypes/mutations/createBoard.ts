@@ -1,5 +1,7 @@
 import { arg, inputObjectType } from 'nexus';
-import { v4 } from 'uuid';
+
+import { Board, BoardStatus } from '../../../../types';
+import id from '../../../../utils/id';
 
 const CreateBoardInput = inputObjectType({
   name: 'CreateBoardInput',
@@ -17,17 +19,15 @@ export default {
     }),
   },
   resolve: async (_parent, { input: { title } }, { userId, dynamo }) => {
-    console.log('userId', userId);
+    const uuid = id();
 
-    const uuid = v4();
-
-    const board = {
+    const board: Board = {
       id: userId,
       relation: `board-${uuid}`,
       created: new Date().getTime(),
       uuid,
       title,
-      status: 'ACTIVE',
+      status: BoardStatus.ACTIVE,
     };
 
     await dynamo.saveItem(board);
@@ -35,7 +35,7 @@ export default {
     return {
       uuid: uuid,
       title: title,
-      status: 'ACTIVE',
+      status: BoardStatus.ACTIVE,
     };
   },
 };

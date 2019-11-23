@@ -13,13 +13,7 @@ graphql:
   reservedConcurrency: 5
   events:
     - http:
-        method: GET
-        path: /graphql
-        cors:
-          origins:
-            - '*'
-    - http:
-        method: POST
+        method: ANY
         path: /graphql
         cors:
           origins:

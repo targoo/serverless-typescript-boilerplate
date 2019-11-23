@@ -4,8 +4,6 @@ import { APIGatewayEvent, Context, Handler, Callback } from 'aws-lambda';
 import dynamo from '../../utils/dynamo';
 import { successResponse } from '../../utils/lambda-response';
 
-// curl -X GET -H 'Content-Type:application/json' 'http://localhost:3000/board'
-
 export const handler: Handler = async (event: APIGatewayEvent, _context: Context, callback: Callback) => {
   const DYNAMO_TABLE = process.env.DYNAMO_TABLE;
   const { requestContext: { identity: { cognitoAuthenticationProvider = '' } = {} } = {} } = event;
