@@ -1,0 +1,24 @@
+enum BoardStatus {
+  ACTIVE
+  ARCHIVED
+}
+
+enum JobStatus {
+  PENDING
+  ARCHIVED
+}
+
+type Board {
+  uuid: ID! @id
+  title: String!
+  status: BoardStatus!
+  jobs: [Job!]
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
+
+type Job {
+  uuid: ID! @id
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
+}
