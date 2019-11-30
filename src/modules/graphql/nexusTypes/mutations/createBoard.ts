@@ -1,20 +1,13 @@
-import { arg, inputObjectType } from 'nexus';
+import { arg } from 'nexus';
 
 import { Board, BoardStatus } from '../../../../types/types';
 import id from '../../../../utils/id';
 
-const CreateBoardInput = inputObjectType({
-  name: 'CreateBoardInput',
-  definition(t) {
-    t.string('title', { required: true });
-  },
-});
-
-export default {
+export const createBoard = {
   type: 'Board' as 'Board',
   args: {
     input: arg({
-      type: CreateBoardInput,
+      type: 'BoardInput',
       required: true,
     }),
   },

@@ -1,11 +1,6 @@
-import { objectType, enumType } from 'nexus';
+import { objectType } from 'nexus';
 
 import { Job } from './Job';
-
-const BoardStatus = enumType({
-  name: 'BoardStatus',
-  members: ['ACTIVE', 'ARCHIVED'],
-});
 
 export const Board = objectType({
   name: 'Board',
@@ -13,7 +8,7 @@ export const Board = objectType({
   definition(t) {
     t.id('uuid');
     t.string('title');
-    t.field('status', { type: BoardStatus });
+    t.field('status', { type: 'BoardStatus' });
     t.list.field('jobs', {
       type: Job,
       nullable: true,

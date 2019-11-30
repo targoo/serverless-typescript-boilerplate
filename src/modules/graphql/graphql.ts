@@ -16,18 +16,16 @@ import dynamo from '../../utils/dynamo';
  */
 const schema = makeSchema({
   types,
+  outputs: {
+    schema: join(__dirname, '../../../../../src/types/generated/schema.graphql'),
+    typegen: join(__dirname, '../../../../../src/types/generated/nexus.ts'),
+  },
 });
-
-if (process.env.NODE_ENV === 'development') {
-  schema['outputs'] = {
-    schema: join(__dirname, './generated/schema.graphql'),
-    typegen: join(__dirname, './generated/nexus.ts'),
-  };
-}
 
 console.log('process.env.NODE_ENV', process.env.NODE_ENV);
 console.log('process.env.ENV', process.env.ENV);
 console.log('process.env.IS_OFFLINE', process.env.IS_OFFLINE);
+console.log('__dirname', __dirname);
 
 const graphqlRoutePrefix = process.env.IS_OFFLINE ? '' : `/${process.env.ENV}`;
 
