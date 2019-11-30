@@ -5,12 +5,14 @@ import id from '../../../../utils/id';
 
 export const createBoard = {
   type: 'Board' as 'Board',
+
   args: {
     input: arg({
       type: 'BoardInput',
       required: true,
     }),
   },
+
   resolve: async (_parent, { input: { title } }, { userId, dynamo }) => {
     const uuid = id();
 
