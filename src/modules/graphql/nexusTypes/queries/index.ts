@@ -1,1 +1,2 @@
-export { default as boards } from './boards';
+export { boards } from './boards';
+export { board } from './board';

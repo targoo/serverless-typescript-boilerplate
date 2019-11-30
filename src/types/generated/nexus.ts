@@ -16,6 +16,7 @@ export interface NexusGenInputs {
 
 export interface NexusGenEnums {
   BoardStatus: 'ACTIVE' | 'ARCHIVED';
+  JobStatus: 'ARCHIVED' | 'PENDING';
 }
 
 export interface NexusGenRootTypes {
@@ -28,7 +29,7 @@ export interface NexusGenRootTypes {
   };
   Job: {
     // root type
-    id: string; // ID!
+    uuid: string; // ID!
   };
   Mutation: {};
   Query: {};
@@ -42,6 +43,7 @@ export interface NexusGenRootTypes {
 export interface NexusGenAllTypes extends NexusGenRootTypes {
   BoardInput: NexusGenInputs['BoardInput'];
   BoardStatus: NexusGenEnums['BoardStatus'];
+  JobStatus: NexusGenEnums['JobStatus'];
 }
 
 export interface NexusGenFieldTypes {
@@ -54,7 +56,7 @@ export interface NexusGenFieldTypes {
   };
   Job: {
     // field return type
-    id: string; // ID!
+    uuid: string; // ID!
   };
   Mutation: {
     // field return type
@@ -97,7 +99,7 @@ export type NexusGenObjectNames = 'Board' | 'Job' | 'Mutation' | 'Query';
 
 export type NexusGenInputNames = 'BoardInput';
 
-export type NexusGenEnumNames = 'BoardStatus';
+export type NexusGenEnumNames = 'BoardStatus' | 'JobStatus';
 
 export type NexusGenInterfaceNames = never;
 

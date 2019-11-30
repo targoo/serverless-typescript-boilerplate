@@ -1,3 +1,5 @@
+https://nexus.js.org/converter
+
 enum BoardStatus {
   ACTIVE
   ARCHIVED
@@ -9,7 +11,7 @@ enum JobStatus {
 }
 
 type Board {
-  uuid: ID! @id
+  uuid: ID!
   title: String!
   status: BoardStatus!
   jobs: [Job!]
@@ -18,7 +20,7 @@ type Board {
 }
 
 type Job {
-  uuid: ID! @id
+  uuid: ID!
   createdAt: DateTime! @createdAt
   updatedAt: DateTime! @updatedAt
 }

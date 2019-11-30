@@ -1,7 +1,7 @@
 import { queryType, stringArg } from 'nexus';
 import { Board } from './Board';
 
-import { boards } from './queries';
+import { board, boards } from './queries';
 
 const Query = queryType({
   definition(t) {
@@ -10,7 +10,7 @@ const Query = queryType({
       resolve: (_parent, { name }) => `Hello ${name || 'World'}!!!`,
     });
 
-    t.field('board', { type: Board });
+    t.field('board', board);
 
     t.list.field('boards', boards);
   },

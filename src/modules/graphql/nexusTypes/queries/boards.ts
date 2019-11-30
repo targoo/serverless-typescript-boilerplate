@@ -1,6 +1,6 @@
 import { Board } from '../Board';
 
-export default {
+export const boards = {
   type: Board,
   resolve: async (_parent, _args, { userId, dynamo }) => {
     const params = {

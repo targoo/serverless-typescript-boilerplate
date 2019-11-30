@@ -21,7 +21,12 @@ enum BoardStatus {
 
 """This is a description of a Job"""
 type Job {
-  id: ID!
+  uuid: ID!
+}
+
+enum JobStatus {
+  ARCHIVED
+  PENDING
 }
 
 type Mutation {
