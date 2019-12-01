@@ -5,7 +5,9 @@ import { BoardStatus } from './enums/BoardStatus';
 
 export const Board = objectType({
   name: 'Board',
+
   description: 'This is a description of a Board',
+
   definition(t) {
     t.id('uuid');
     t.string('title');

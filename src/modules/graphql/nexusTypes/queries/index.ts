@@ -1,2 +1,2 @@
-export { boards } from './boards';
-export { board } from './board';
+export * from './boards';
+export * from './board';

@@ -1,4 +1,4 @@
-import { arg, idArg } from 'nexus';
+import { idArg } from 'nexus';
 
 import { Board, BoardStatus } from '../../../../types/types';
 
