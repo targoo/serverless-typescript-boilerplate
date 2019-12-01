@@ -21,12 +21,13 @@ enum BoardStatus {
 
 """This is a description of a Job"""
 type Job {
+  status: JobStatus!
   uuid: ID!
 }
 
 enum JobStatus {
+  ACTIVE
   ARCHIVED
-  PENDING
 }
 
 type Mutation {
@@ -36,10 +37,6 @@ type Mutation {
 }
 
 type Query {
-  board(
-    """The id of the board"""
-    uuid: String!
-  ): Board!
   boards: [Board!]!
   hello(name: String): String!
 }

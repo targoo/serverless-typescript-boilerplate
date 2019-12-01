@@ -6,7 +6,7 @@ enum BoardStatus {
 }
 
 enum JobStatus {
-  PENDING
+  ACTIVE
   ARCHIVED
 }
 
@@ -15,12 +15,12 @@ type Board {
   title: String!
   status: BoardStatus!
   jobs: [Job!]
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }
 
 type Job {
   uuid: ID!
-  createdAt: DateTime! @createdAt
-  updatedAt: DateTime! @updatedAt
+  createdAt: DateTime!
+  updatedAt: DateTime!
 }

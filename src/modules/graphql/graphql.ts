@@ -17,8 +17,8 @@ import dynamo from '../../utils/dynamo';
 const schema = makeSchema({
   types,
   outputs: {
-    schema: join(__dirname, '../../../../../src/types/generated/schema.graphql'),
-    typegen: join(__dirname, '../../../../../src/types/generated/nexus.ts'),
+    schema: join(__dirname, '../../../../../src/modules/graphql/generated/schema.graphql'),
+    typegen: join(__dirname, '../../../../../src/modules/graphql/generated/nexus.ts'),
   },
 });
 

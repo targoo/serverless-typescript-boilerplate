@@ -10,7 +10,7 @@ const Query = queryType({
       resolve: (_parent, { name }) => `Hello ${name || 'World'}!!!`,
     });
 
-    t.field('board', board);
+    // t.field('board', board);
 
     t.list.field('boards', boards);
   },
