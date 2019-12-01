@@ -1,31 +1,27 @@
 import { arg, idArg } from 'nexus';
 
-import { Board } from '../../../../types/types';
+import { Board, BoardStatus } from '../../../../types/types';
 
-export const updateBoard = {
+export const cancelBoard = {
   type: 'Board' as 'Board',
 
   args: {
     uuid: idArg({
       required: true,
     }),
-    input: arg({
-      type: 'BoardInput',
-      required: true,
-    }),
   },
 
-  resolve: async (_parent, { uuid, input: { title } }, { userId, dynamo }) => {
+  resolve: async (_parent, { uuid }, { userId, dynamo }) => {
     const key = {
       id: userId,
       relation: `board-${uuid}`,
     };
 
     const params = {
-      UpdateExpression: 'set #title = :title, #updated = :updated',
-      ExpressionAttributeNames: { '#title': 'title', '#updated': 'updated' },
+      UpdateExpression: 'set #status = :status, #updated = :updated',
+      ExpressionAttributeNames: { '#status': 'status', '#updated': 'updated' },
       ExpressionAttributeValues: {
-        ':title': title,
+        ':status': BoardStatus.ARCHIVED,
         ':updated': new Date().getTime(),
       },
     };

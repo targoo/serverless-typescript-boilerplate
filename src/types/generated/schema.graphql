@@ -30,12 +30,22 @@ enum JobStatus {
 }
 
 type Mutation {
+  cancelBoard(uuid: ID!): Board!
   createBoard(input: BoardInput!): Board!
   updateBoard(input: BoardInput!, uuid: ID!): Board!
 }
 
 type Query {
-  board: Board!
+  board(
+    """The id of the board"""
+    uuid: String!
+  ): Board!
   boards: [Board!]!
   hello(name: String): String!
+}
+
+type User {
+  email: String!
+  username: String!
+  uuid: ID!
 }

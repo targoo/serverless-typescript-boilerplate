@@ -1,10 +1,9 @@
-import { interfaceType } from 'nexus';
+import { interfaceType, objectType } from 'nexus';
 
 export const Node = interfaceType({
   name: 'Node',
-  description: 'This is a description of a Node',
   definition(t) {
-    t.id('id');
+    t.id('uuid', { description: 'Unique identifier for the resource' });
     t.resolveType(() => null);
   },
 });

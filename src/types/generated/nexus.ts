@@ -22,7 +22,6 @@ export interface NexusGenEnums {
 export interface NexusGenRootTypes {
   Board: {
     // root type
-    jobs?: NexusGenRootTypes['Job'][] | null; // [Job!]
     status: NexusGenEnums['BoardStatus']; // BoardStatus!
     title: string; // String!
     uuid: string; // ID!
@@ -33,6 +32,12 @@ export interface NexusGenRootTypes {
   };
   Mutation: {};
   Query: {};
+  User: {
+    // root type
+    email: string; // String!
+    username: string; // String!
+    uuid: string; // ID!
+  };
   String: string;
   Int: number;
   Float: number;
@@ -60,6 +65,7 @@ export interface NexusGenFieldTypes {
   };
   Mutation: {
     // field return type
+    cancelBoard: NexusGenRootTypes['Board']; // Board!
     createBoard: NexusGenRootTypes['Board']; // Board!
     updateBoard: NexusGenRootTypes['Board']; // Board!
   };
@@ -69,10 +75,20 @@ export interface NexusGenFieldTypes {
     boards: NexusGenRootTypes['Board'][]; // [Board!]!
     hello: string; // String!
   };
+  User: {
+    // field return type
+    email: string; // String!
+    username: string; // String!
+    uuid: string; // ID!
+  };
 }
 
 export interface NexusGenArgTypes {
   Mutation: {
+    cancelBoard: {
+      // args
+      uuid: string; // ID!
+    };
     createBoard: {
       // args
       input: NexusGenInputs['BoardInput']; // BoardInput!
@@ -84,6 +100,10 @@ export interface NexusGenArgTypes {
     };
   };
   Query: {
+    board: {
+      // args
+      uuid: string; // String!
+    };
     hello: {
       // args
       name?: string | null; // String
@@ -95,7 +115,7 @@ export interface NexusGenAbstractResolveReturnTypes {}
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = 'Board' | 'Job' | 'Mutation' | 'Query';
+export type NexusGenObjectNames = 'Board' | 'Job' | 'Mutation' | 'Query' | 'User';
 
 export type NexusGenInputNames = 'BoardInput';
 

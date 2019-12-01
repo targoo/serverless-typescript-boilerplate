@@ -12,6 +12,10 @@ export const Board = objectType({
     t.field('status', { type: BoardStatus });
     t.list.field('jobs', {
       type: Job,
+      resolve(root, args, ctx) {
+        console.log('root', root);
+        return null;
+      },
       nullable: true,
     });
   },
