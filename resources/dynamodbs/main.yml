@@ -17,3 +17,12 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
+
+Outputs:
+  TableArn:
+    Value:
+      Fn::GetAtt:
+        - MainTable
+        - Arn
+    Export:
+      Name: ${self:service}-table-arn

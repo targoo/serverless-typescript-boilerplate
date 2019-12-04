@@ -15,6 +15,7 @@ Resources:
           RequireNumbers: true
           RequireSymbols: false
           RequireUppercase: true
+
   WebUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
     Description: 'App Client used by AWS AppSync'
@@ -23,6 +24,7 @@ Resources:
       GenerateSecret: false
       RefreshTokenValidity: 30
       UserPoolId: { Ref: CognitoUserPool }
+
 Outputs:
   CognitoPoolId:
     Value: !Ref CognitoUserPool

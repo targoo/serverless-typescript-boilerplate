@@ -1,5 +1,3 @@
-// https://itnext.io/my-experience-with-severless-graphql-2e95e5a8bda7
-
 // eslint-disable-next-line no-unused-vars
 import { APIGatewayEvent, Context, Handler, Callback } from 'aws-lambda';
 import { ApolloServer } from 'apollo-server-lambda';
@@ -25,11 +23,8 @@ const schema = makeSchema({
 console.log('process.env.NODE_ENV', process.env.NODE_ENV);
 console.log('process.env.ENV', process.env.ENV);
 console.log('process.env.IS_OFFLINE', process.env.IS_OFFLINE);
-console.log('__dirname', __dirname);
 
 const graphqlRoutePrefix = process.env.IS_OFFLINE ? '' : `/${process.env.ENV}`;
-
-console.log(graphqlRoutePrefix + '/graphql');
 
 const server: ApolloServer = new ApolloServer({
   schema,

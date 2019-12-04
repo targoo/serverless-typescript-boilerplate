@@ -7,13 +7,13 @@ plugins:
   - serverless-prune-plugin
   - serverless-offline # serverless-offline needs to be last in the list.
 
-frameworkVersion: '>=1.42.0 <2.0.0'
+frameworkVersion: '>=1.44.0 <2.0.0'
 
 provider:
   name: aws
-  runtime: nodejs10.x # Latest version supported.
-  stage: local
-  region: eu-west-1 # Your chosen region.
+  runtime: nodejs12.x # Latest version supported.
+  stage: local # Default stage.
+  region: eu-west-1 # Default region.
   timeout: 10 # Default Lambda timeout.
   memorySize: 512 # Default Lambda Memory Size.
   profile: YOUR_PROFILE # Default profile to use. Don't forget to amend this value.
@@ -24,7 +24,16 @@ provider:
     env: ${self:custom.stage}
   logs:
     restApi: true
+  tracing:
+    apiGateway: true
+    lambda: true
   environment: ${file(./configs/${self:custom.stage}.yml)}
+  iamRoleStatements:
+    - Effect: 'Allow'
+      Action:
+        - xray:PutTraceSegments
+        - xray:PutTelemetryRecords
+      Resource: '*'
 
 package:
   individually: true
@@ -34,13 +43,17 @@ package:
     - .test/**
 
 custom:
-  region: ${self:provider.region}
+  # Our stage/region are based on what is passed in when running serverless
+  # commands. Or fallsback to what we have set in the provider section.
+  stage: ${opt:stage, self:provider.stage}
+  region: ${opt:region, self:provider.region}
+
+  serverless-iam-roles-per-function:
+    defaultInherit: true
 
   prune:
     automatic: true
     number: 5 # Number of versions of your lambda to keep.
-
-  stage: ${opt:stage, self:provider.stage}
 
   stackname: ${self:service}-${self:custom.stage}
 
