@@ -6,6 +6,7 @@ import { join } from 'path';
 
 import { types } from './nexusTypes';
 import dynamo from '../../utils/dynamo';
+import logger from '../../utils/logger';
 
 /**
  * When the schema starts and `process.env.NODE_ENV !== "production"`,
@@ -20,9 +21,9 @@ const schema = makeSchema({
   },
 });
 
-console.log('process.env.NODE_ENV', process.env.NODE_ENV);
-console.log('process.env.ENV', process.env.ENV);
-console.log('process.env.IS_OFFLINE', process.env.IS_OFFLINE);
+logger.debug(`process.env.NODE_ENV: ${process.env.NODE_ENV}`);
+logger.debug(`process.env.ENV: ${process.env.ENV}`);
+logger.debug(`process.env.IS_OFFLINE: ${process.env.IS_OFFLINE}`);
 
 const graphqlRoutePrefix = process.env.IS_OFFLINE ? '' : `/${process.env.ENV}`;
 
@@ -36,8 +37,13 @@ const server: ApolloServer = new ApolloServer({
     return error;
   },
   context: ({ event, context }) => {
+    logger.debug(event);
+    logger.debug(context);
     const { requestContext: { identity: { cognitoAuthenticationProvider = '' } = {} } = {} } = event;
     const userId = cognitoAuthenticationProvider ? cognitoAuthenticationProvider.split(':').pop() : null;
+
+    logger.debug(cognitoAuthenticationProvider);
+    logger.debug(`userId: ${userId}`);
 
     return {
       headers: event.headers,
