@@ -39,18 +39,23 @@ const server: ApolloServer = new ApolloServer({
   context: ({ event, context }) => {
     logger.debug(event);
     logger.debug(context);
-    const { requestContext: { identity: { cognitoAuthenticationProvider = '' } = {} } = {} } = event;
-    const userId = cognitoAuthenticationProvider ? cognitoAuthenticationProvider.split(':').pop() : null;
+    const {
+      headers: { Authorization = '' } = {},
+      requestContext: { authorizer: { claims: { sub = '', email = '', phone_number = '' } = {} } = {} } = {},
+    } = event;
 
-    logger.debug(cognitoAuthenticationProvider);
-    logger.debug(`userId: ${userId}`);
+    logger.debug(`Authorization: ${Authorization}`);
+    logger.debug(`Sub: ${sub}`);
+    logger.debug(`Email: ${email}`);
+
+    // const userId = cognitoAuthenticationProvider ? cognitoAuthenticationProvider.split(':').pop() : null;
 
     return {
       headers: event.headers,
       functionName: context.functionName,
       dynamo,
       event,
-      userId,
+      userId: sub,
       context,
     };
   },
