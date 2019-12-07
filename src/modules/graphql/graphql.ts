@@ -43,15 +43,13 @@ const server: ApolloServer = new ApolloServer({
     } = event;
 
     logger.debug(`Sub: ${sub}`);
-    logger.debug(`Email: ${email}`);
-    logger.debug(`Phone Number: ${phone_number}`);
 
     return {
       headers: event.headers,
       functionName: context.functionName,
       dynamo,
       event,
-      userId: sub,
+      userId: process.env.IS_OFFLINE ? '123456789' : sub,
       context,
     };
   },
