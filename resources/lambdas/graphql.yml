@@ -15,8 +15,8 @@ graphql:
         - dynamodb:BatchGetItem
         - dynamodb:BatchWriteItem
       Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.stackname}-main'
-  timeout: 29
-  memorySize: 128
+  timeout: 5
+  memorySize: 512
   reservedConcurrency: 5
   events:
     - http:

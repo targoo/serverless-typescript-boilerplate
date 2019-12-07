@@ -3,7 +3,6 @@ import { APIGatewayEvent, Context, Handler, Callback } from 'aws-lambda';
 import { ApolloServer } from 'apollo-server-lambda';
 import { makeSchema } from 'nexus';
 import { join } from 'path';
-
 import { types } from './nexusTypes';
 import dynamo from '../../utils/dynamo';
 import logger from '../../utils/logger';
@@ -49,7 +48,7 @@ const server: ApolloServer = new ApolloServer({
       functionName: context.functionName,
       dynamo,
       event,
-      userId: process.env.IS_OFFLINE ? '123456789' : sub,
+      userId: process.env.IS_OFFLINE ? '3b8ef697-536d-4626-a3e0-5e0b7ba4f14e' : sub,
       context,
     };
   },
