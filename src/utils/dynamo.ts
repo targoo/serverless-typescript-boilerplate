@@ -1,5 +1,5 @@
-const AWSXRay = require('aws-xray-sdk');
-const AWS = AWSXRay.captureAWS(require('aws-sdk'));
+import AWS from 'aws-sdk';
+import AWSXRay from 'aws-xray-sdk';
 
 const localConfig = {
   region: 'localhost',
@@ -17,7 +17,10 @@ const AWSConfig = {
 const dynamoConfig = process.env.IS_OFFLINE ? localConfig : AWSConfig;
 const DYNAMO_TABLE = process.env.DYNAMO_TABLE;
 
+AWSXRay.captureAWS(AWS);
+
 AWS.config.update(dynamoConfig);
+
 const dynamoClient = new AWS.DynamoDB.DocumentClient();
 
 /**
