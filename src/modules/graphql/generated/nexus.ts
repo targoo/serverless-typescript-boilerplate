@@ -67,7 +67,7 @@ export interface NexusGenFieldTypes {
   };
   Mutation: {
     // field return type
-    cancelBoard: NexusGenRootTypes['Board']; // Board!
+    archiveBoard: NexusGenRootTypes['Board']; // Board!
     createBoard: NexusGenRootTypes['Board']; // Board!
     updateBoard: NexusGenRootTypes['Board']; // Board!
   };
@@ -86,7 +86,7 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenArgTypes {
   Mutation: {
-    cancelBoard: {
+    archiveBoard: {
       // args
       uuid: string; // ID!
     };

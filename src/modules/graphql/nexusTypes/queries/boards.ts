@@ -1,4 +1,14 @@
 import { Board } from '../Board';
+import logger from '../../../../utils/logger';
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  for (var i = 0; i < 1e7; i++) {
+    if (new Date().getTime() - start > milliseconds) {
+      break;
+    }
+  }
+}
 
 export const boards = {
   type: Board,
@@ -15,8 +25,10 @@ export const boards = {
         ':relation': 'board-',
       },
     };
+    logger.debug(JSON.stringify(params));
 
     const { Items = [] } = await dynamo.query(params);
+    sleep(5000);
 
     return Items;
   },

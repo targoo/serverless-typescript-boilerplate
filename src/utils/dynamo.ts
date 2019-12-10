@@ -17,7 +17,9 @@ const AWSConfig = {
 const dynamoConfig = process.env.IS_OFFLINE ? localConfig : AWSConfig;
 const DYNAMO_TABLE = process.env.DYNAMO_TABLE;
 
-AWSXRay.captureAWS(AWS);
+if (!process.env.IS_OFFLINE) {
+  AWSXRay.captureAWS(AWS);
+}
 
 AWS.config.update(dynamoConfig);
 

@@ -37,9 +37,7 @@ const server: ApolloServer = new ApolloServer({
   },
   context: ({ event, context }) => {
     logger.debug(JSON.stringify(event));
-    const {
-      requestContext: { authorizer: { claims: { sub = '', email = '', phone_number = '' } = {} } = {} } = {},
-    } = event;
+    const { requestContext: { authorizer: { claims: { sub = '' } = {} } = {} } = {} } = event;
 
     logger.debug(`Sub: ${sub}`);
 

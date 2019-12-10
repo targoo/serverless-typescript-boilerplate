@@ -31,7 +31,7 @@ enum JobStatus {
 }
 
 type Mutation {
-  cancelBoard(uuid: ID!): Board!
+  archiveBoard(uuid: ID!): Board!
   createBoard(input: BoardInput!): Board!
   updateBoard(input: BoardInput!, uuid: ID!): Board!
 }

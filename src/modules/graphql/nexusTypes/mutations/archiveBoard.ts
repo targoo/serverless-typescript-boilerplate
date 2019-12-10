@@ -2,7 +2,7 @@ import { idArg } from 'nexus';
 
 import { Board, BoardStatus } from '../../../../types/types';
 
-export const cancelBoard = {
+export const archiveBoard = {
   type: 'Board' as 'Board',
 
   args: {
