@@ -1,3 +1,3 @@
-export * from './createBoard';
-export * from './updateBoard';
-export * from './archiveBoard';
+export { createBoard } from './createBoard';
+export { updateBoard } from './updateBoard';
+export { archiveBoard } from './archiveBoard';

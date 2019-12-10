@@ -3,42 +3,44 @@
  * Do not make changes to this file directly
  */
 
+
+
+
+
+
+
 declare global {
   interface NexusGen extends NexusGenTypes {}
 }
 
 export interface NexusGenInputs {
-  BoardInput: {
-    // input type
+  BoardInput: { // input type
     title: string; // String!
-  };
+  }
 }
 
 export interface NexusGenEnums {
-  BoardStatus: 'ACTIVE' | 'ARCHIVED';
-  JobStatus: 'ACTIVE' | 'ARCHIVED';
+  BoardStatus: "ACTIVE" | "ARCHIVED"
+  JobStatus: "ACTIVE" | "ARCHIVED"
 }
 
 export interface NexusGenRootTypes {
-  Board: {
-    // root type
+  Board: { // root type
     status: NexusGenEnums['BoardStatus']; // BoardStatus!
     title: string; // String!
     uuid: string; // ID!
-  };
-  Job: {
-    // root type
+  }
+  Job: { // root type
     status: NexusGenEnums['JobStatus']; // JobStatus!
     uuid: string; // ID!
-  };
+  }
   Mutation: {};
   Query: {};
-  User: {
-    // root type
+  User: { // root type
     email: string; // String!
     username: string; // String!
     uuid: string; // ID!
-  };
+  }
   String: string;
   Int: number;
   Float: number;
@@ -53,74 +55,66 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 }
 
 export interface NexusGenFieldTypes {
-  Board: {
-    // field return type
+  Board: { // field return type
     jobs: NexusGenRootTypes['Job'][] | null; // [Job!]
     status: NexusGenEnums['BoardStatus']; // BoardStatus!
     title: string; // String!
     uuid: string; // ID!
-  };
-  Job: {
-    // field return type
+  }
+  Job: { // field return type
     status: NexusGenEnums['JobStatus']; // JobStatus!
     uuid: string; // ID!
-  };
-  Mutation: {
-    // field return type
+  }
+  Mutation: { // field return type
     archiveBoard: NexusGenRootTypes['Board']; // Board!
     createBoard: NexusGenRootTypes['Board']; // Board!
     updateBoard: NexusGenRootTypes['Board']; // Board!
-  };
-  Query: {
-    // field return type
+  }
+  Query: { // field return type
     boards: NexusGenRootTypes['Board'][]; // [Board!]!
     hello: string; // String!
-  };
-  User: {
-    // field return type
+  }
+  User: { // field return type
     email: string; // String!
     username: string; // String!
     uuid: string; // ID!
-  };
+  }
 }
 
 export interface NexusGenArgTypes {
   Mutation: {
-    archiveBoard: {
-      // args
+    archiveBoard: { // args
       uuid: string; // ID!
-    };
-    createBoard: {
-      // args
+    }
+    createBoard: { // args
       input: NexusGenInputs['BoardInput']; // BoardInput!
-    };
-    updateBoard: {
-      // args
+    }
+    updateBoard: { // args
       input: NexusGenInputs['BoardInput']; // BoardInput!
       uuid: string; // ID!
-    };
-  };
+    }
+  }
   Query: {
-    hello: {
-      // args
+    hello: { // args
       name?: string | null; // String
-    };
-  };
+    }
+  }
 }
 
-export interface NexusGenAbstractResolveReturnTypes {}
+export interface NexusGenAbstractResolveReturnTypes {
+}
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = 'Board' | 'Job' | 'Mutation' | 'Query' | 'User';
+export type NexusGenObjectNames = "Board" | "Job" | "Mutation" | "Query" | "User";
 
-export type NexusGenInputNames = 'BoardInput';
+export type NexusGenInputNames = "BoardInput";
 
-export type NexusGenEnumNames = 'BoardStatus' | 'JobStatus';
+export type NexusGenEnumNames = "BoardStatus" | "JobStatus";
 
 export type NexusGenInterfaceNames = never;
 
-export type NexusGenScalarNames = 'Boolean' | 'Float' | 'ID' | 'Int' | 'String';
+export type NexusGenScalarNames = "Boolean" | "Float" | "ID" | "Int" | "String";
 
 export type NexusGenUnionNames = never;
 
@@ -139,19 +133,18 @@ export interface NexusGenTypes {
   scalarNames: NexusGenScalarNames;
   unionNames: NexusGenUnionNames;
   allInputTypes: NexusGenTypes['inputNames'] | NexusGenTypes['enumNames'] | NexusGenTypes['scalarNames'];
-  allOutputTypes:
-    | NexusGenTypes['objectNames']
-    | NexusGenTypes['enumNames']
-    | NexusGenTypes['unionNames']
-    | NexusGenTypes['interfaceNames']
-    | NexusGenTypes['scalarNames'];
-  allNamedTypes: NexusGenTypes['allInputTypes'] | NexusGenTypes['allOutputTypes'];
+  allOutputTypes: NexusGenTypes['objectNames'] | NexusGenTypes['enumNames'] | NexusGenTypes['unionNames'] | NexusGenTypes['interfaceNames'] | NexusGenTypes['scalarNames'];
+  allNamedTypes: NexusGenTypes['allInputTypes'] | NexusGenTypes['allOutputTypes']
   abstractTypes: NexusGenTypes['interfaceNames'] | NexusGenTypes['unionNames'];
   abstractResolveReturn: NexusGenAbstractResolveReturnTypes;
 }
 
+
 declare global {
-  interface NexusGenPluginTypeConfig<TypeName extends string> {}
-  interface NexusGenPluginFieldConfig<TypeName extends string, FieldName extends string> {}
-  interface NexusGenPluginSchemaConfig {}
+  interface NexusGenPluginTypeConfig<TypeName extends string> {
+  }
+  interface NexusGenPluginFieldConfig<TypeName extends string, FieldName extends string> {
+  }
+  interface NexusGenPluginSchemaConfig {
+  }
 }
