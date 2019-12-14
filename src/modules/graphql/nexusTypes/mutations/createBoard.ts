@@ -3,15 +3,7 @@ import { arg } from 'nexus';
 import { Board, BoardStatus } from '../../../../types/types';
 import id from '../../../../utils/id';
 import logger from '../../../../utils/logger';
-
-function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if (new Date().getTime() - start > milliseconds) {
-      break;
-    }
-  }
-}
+import { sleep } from '../../../../utils/helper';
 
 export const createBoard = {
   type: 'Board' as 'Board',
