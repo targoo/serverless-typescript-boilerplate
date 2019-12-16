@@ -1,14 +1,6 @@
 import { Board } from '../Board';
 import logger from '../../../../utils/logger';
-
-function sleep(milliseconds) {
-  var start = new Date().getTime();
-  for (var i = 0; i < 1e7; i++) {
-    if (new Date().getTime() - start > milliseconds) {
-      break;
-    }
-  }
-}
+import { sleep } from '../../../../utils/helper';
 
 export const boards = {
   type: Board,
@@ -17,6 +9,9 @@ export const boards = {
     const params = {
       KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
       ExpressionAttributeNames: {
+        '#uuid': 'uuid',
+        '#title': 'title',
+        '#status': 'status',
         '#id': 'id',
         '#relation': 'relation',
       },
@@ -24,11 +19,15 @@ export const boards = {
         ':userUUID': userId,
         ':relation': 'board-',
       },
+      ProjectionExpression: ['#title', '#uuid', '#status'],
     };
+
     logger.debug(JSON.stringify(params));
 
     const { Items = [] } = await dynamo.query(params);
+
     sleep(5000);
+    logger.debug(JSON.stringify(Items));
 
     return Items;
   },
