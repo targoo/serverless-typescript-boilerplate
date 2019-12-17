@@ -2,6 +2,8 @@ import AWS from 'aws-sdk';
 import DynamoDB from 'aws-sdk/clients/dynamodb';
 import AWSXRay from 'aws-xray-sdk';
 
+import { IEntityBase, IKeyBase } from '../types/types';
+
 const localConfig = {
   region: 'localhost',
   endpoint: 'http://localhost:8000',
@@ -33,12 +35,11 @@ const client = {
   /**
    * Save an item on DynamoDB
    */
-  saveItem: (item: any, tableName: string = DYNAMO_TABLE) => {
+  saveItem: (item: IEntityBase, tableName: string = DYNAMO_TABLE) => {
     const params = {
       TableName: tableName,
       Item: item,
     };
-    console.log('params', params);
 
     return dynamoClient.put(params).promise();
   },
@@ -46,12 +47,11 @@ const client = {
   /**
    * Find one item from DynamoDB
    */
-  getItem: (key: any, tableName: string = DYNAMO_TABLE) => {
+  getItem: (key: IKeyBase, tableName: string = DYNAMO_TABLE) => {
     const params = {
       TableName: tableName,
       Key: key,
     };
-    console.log('params', params);
 
     return dynamoClient.get(params).promise();
   },
@@ -59,13 +59,12 @@ const client = {
   /**
    * Remove one item from DynamoDB
    */
-  removeItem: (key: any, tableName: string = DYNAMO_TABLE) => {
+  removeItem: (key: IKeyBase, tableName: string = DYNAMO_TABLE) => {
     const params = {
       TableName: tableName,
       Key: key,
       ReturnValues: 'ALL_OLD',
     };
-    console.log('params', params);
 
     return dynamoClient.delete(params).promise();
   },
@@ -73,7 +72,7 @@ const client = {
   /**
    * Update an item identified by Key
    */
-  updateItem: (params, key, tableName: string = DYNAMO_TABLE) => {
+  updateItem: (params, key: IKeyBase, tableName: string = DYNAMO_TABLE) => {
     params.TableName = tableName;
     params.Key = key;
     params.ReturnValues = 'ALL_NEW';
@@ -87,8 +86,6 @@ const client = {
    */
   query: (where: any, tableName: string = DYNAMO_TABLE) => {
     where.TableName = tableName;
-    console.log('-------------');
-    console.log('where', where);
     return dynamoClient.query(where).promise();
   },
 };

@@ -3,9 +3,12 @@ export enum JobStatus {
   ARCHIVED = 'ARCHIVED',
 }
 
-export interface IEntityBase {
+export interface IKeyBase {
   id: string;
   relation: string;
+}
+
+export interface IEntityBase extends IKeyBase {
   created: number;
   updated?: number;
   isDeleted: boolean;
