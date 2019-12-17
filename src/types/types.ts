@@ -4,24 +4,19 @@ export enum JobStatus {
 }
 
 export interface IEntityBase {
+  id: string;
+  relation: string;
   created: number;
   updated?: number;
   isDeleted: boolean;
+  readonly uuid: string;
 }
 
 export interface IBoard extends IEntityBase {
-  id: string;
-  relation: string;
-  readonly uuid: string;
   title: string;
 }
 
-export interface IJob {
-  id: string;
-  relation: string;
-  created: number;
-  updated?: number;
-  readonly uuid: string;
+export interface IJob extends IEntityBase {
   title: string;
   status: JobStatus;
 }

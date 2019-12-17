@@ -28,11 +28,9 @@ export const boards = {
       },
       ProjectionExpression: ['#title', '#uuid', '#status', '#created', '#updated', 'isDeleted'],
     };
-
     logger.debug(JSON.stringify(params));
 
-    const response: { Items: Array<IBoard> } = await dynamo.query(params);
-    let items = response.Items;
+    let { Items: items }: { Items: IBoard[] } = await dynamo.query(params);
 
     if (args.isDeleted !== undefined) {
       items = items.filter(item => item.isDeleted === args.isDeleted);
