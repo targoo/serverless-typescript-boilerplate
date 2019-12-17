@@ -4,8 +4,8 @@
 
 """This is a description of a Board"""
 type Board {
+  isDeleted: Boolean!
   jobs: [Job!]
-  status: BoardStatus!
   title: String!
   uuid: ID!
 }
@@ -21,7 +21,9 @@ enum BoardStatus {
 
 """This is a description of a Job"""
 type Job {
+  isDeleted: Boolean!
   status: JobStatus!
+  title: String!
   uuid: ID!
 }
 
@@ -37,7 +39,7 @@ type Mutation {
 }
 
 type Query {
-  boards: [Board!]!
+  boards(isDeleted: Boolean): [Board!]!
   hello(name: String): String!
 }
 

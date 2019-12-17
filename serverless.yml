@@ -69,7 +69,7 @@ custom:
       - local
       - dev
     start:
-      port: 8001
+      port: 8000
       inMemory: true
       heapInitial: 200m
       heapMax: 1g

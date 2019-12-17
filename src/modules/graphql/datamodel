@@ -1,10 +1,5 @@
 https://nexus.js.org/converter
 
-enum BoardStatus {
-  ACTIVE
-  ARCHIVED
-}
-
 enum JobStatus {
   ACTIVE
   ARCHIVED
@@ -13,14 +8,17 @@ enum JobStatus {
 type Board {
   uuid: ID!
   title: String!
-  status: BoardStatus!
   jobs: [Job!]
   createdAt: DateTime!
   updatedAt: DateTime!
+  isDeleted: Boolean!
 }
 
 type Job {
   uuid: ID!
+  title: String!
+  status: JobStatus!
   createdAt: DateTime!
   updatedAt: DateTime!
+  isDeleted: Boolean!
 }

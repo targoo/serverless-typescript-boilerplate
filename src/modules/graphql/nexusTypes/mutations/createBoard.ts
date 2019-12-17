@@ -1,8 +1,7 @@
 import { arg } from 'nexus';
 
-import { Board, BoardStatus } from '../../../../types/types';
+import { IBoard } from '../../../../types/types';
 import id from '../../../../utils/id';
-import logger from '../../../../utils/logger';
 import { sleep } from '../../../../utils/helper';
 
 export const createBoard = {
@@ -18,22 +17,23 @@ export const createBoard = {
   resolve: async (_parent, { input: { title } }, { userId, dynamo }) => {
     const uuid = id();
 
-    const board: Board = {
+    const board: IBoard = {
       id: userId,
       relation: `board-${uuid}`,
       created: new Date().getTime(),
       uuid,
       title,
-      status: BoardStatus.ACTIVE,
+      isDeleted: false,
     };
 
     await dynamo.saveItem(board);
+
     sleep(5000);
 
     return {
       uuid: uuid,
       title: title,
-      status: BoardStatus.ACTIVE,
+      isDeleted: false,
     };
   },
 };

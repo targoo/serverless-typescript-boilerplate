@@ -1,17 +1,24 @@
+import { booleanArg } from 'nexus';
+
 import { Board } from '../Board';
+import { IBoard } from '../../../../types/types';
 import logger from '../../../../utils/logger';
 import { sleep } from '../../../../utils/helper';
 
 export const boards = {
   type: Board,
 
-  resolve: async (_parent, _args, { userId, dynamo }) => {
+  args: { isDeleted: booleanArg() },
+
+  resolve: async (_parent, args: Partial<IBoard>, { userId, dynamo }) => {
     const params = {
       KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
       ExpressionAttributeNames: {
         '#uuid': 'uuid',
         '#title': 'title',
         '#status': 'status',
+        '#created': 'created',
+        '#updated': 'updated',
         '#id': 'id',
         '#relation': 'relation',
       },
@@ -19,16 +26,21 @@ export const boards = {
         ':userUUID': userId,
         ':relation': 'board-',
       },
-      ProjectionExpression: ['#title', '#uuid', '#status'],
+      ProjectionExpression: ['#title', '#uuid', '#status', '#created', '#updated', 'isDeleted'],
     };
 
     logger.debug(JSON.stringify(params));
 
-    const { Items = [] } = await dynamo.query(params);
+    const response: { Items: Array<IBoard> } = await dynamo.query(params);
+    let items = response.Items;
 
-    sleep(5000);
-    logger.debug(JSON.stringify(Items));
+    if (args.isDeleted) {
+      items = items.filter(item => item.isDeleted === args.isDeleted);
+    }
 
-    return Items;
+    // sleep(5000);
+    logger.debug(JSON.stringify(items));
+
+    return items;
   },
 };

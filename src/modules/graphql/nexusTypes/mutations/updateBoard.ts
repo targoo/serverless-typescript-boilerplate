@@ -1,6 +1,6 @@
 import { arg, idArg } from 'nexus';
 
-import { Board } from '../../../../types/types';
+import { IBoard } from '../../../../types/types';
 
 export const updateBoard = {
   type: 'Board' as 'Board',
@@ -16,7 +16,7 @@ export const updateBoard = {
   },
 
   resolve: async (_parent, { uuid, input: { title } }, { userId, dynamo }) => {
-    const key = {
+    const key: Pick<IBoard, 'id' | 'relation'> = {
       id: userId,
       relation: `board-${uuid}`,
     };
@@ -32,6 +32,6 @@ export const updateBoard = {
 
     const { Attributes } = await dynamo.updateItem(params, key);
 
-    return Attributes as Board;
+    return Attributes as IBoard;
   },
 };

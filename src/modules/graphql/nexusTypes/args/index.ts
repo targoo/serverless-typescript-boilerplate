@@ -6,3 +6,10 @@ export const BoardInput = inputObjectType({
     t.string('title', { required: true });
   },
 });
+
+export const JobInput = inputObjectType({
+  name: 'BoardInput',
+  definition(t) {
+    t.string('title', { required: true });
+  },
+});

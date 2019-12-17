@@ -1,6 +1,6 @@
 import { idArg } from 'nexus';
 
-import { Board, BoardStatus } from '../../../../types/types';
+import { IBoard } from '../../../../types/types';
 
 export const archiveBoard = {
   type: 'Board' as 'Board',
@@ -18,16 +18,16 @@ export const archiveBoard = {
     };
 
     const params = {
-      UpdateExpression: 'set #status = :status, #updated = :updated',
-      ExpressionAttributeNames: { '#status': 'status', '#updated': 'updated' },
+      UpdateExpression: 'set #isDeleted = :isDeleted, #updated = :updated',
+      ExpressionAttributeNames: { '#isDeleted': 'isDeleted', '#updated': 'updated' },
       ExpressionAttributeValues: {
-        ':status': BoardStatus.ARCHIVED,
+        ':isDeleted': true,
         ':updated': new Date().getTime(),
       },
     };
 
     const { Attributes } = await dynamo.updateItem(params, key);
 
-    return Attributes as Board;
+    return Attributes as IBoard;
   },
 };

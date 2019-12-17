@@ -1,16 +1,29 @@
-export enum BoardStatus {
+export enum JobStatus {
   ACTIVE = 'ACTIVE',
   ARCHIVED = 'ARCHIVED',
 }
 
-export interface Board {
+export interface IEntityBase {
+  created: number;
+  updated?: number;
+  isDeleted: boolean;
+}
+
+export interface IBoard extends IEntityBase {
+  id: string;
+  relation: string;
+  readonly uuid: string;
+  title: string;
+}
+
+export interface IJob {
   id: string;
   relation: string;
   created: number;
   updated?: number;
-  uuid: string;
+  readonly uuid: string;
   title: string;
-  status: BoardStatus;
+  status: JobStatus;
 }
 
 export enum ICountryISO {

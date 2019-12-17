@@ -22,13 +22,15 @@ export interface NexusGenEnums {
 export interface NexusGenRootTypes {
   Board: {
     // root type
-    status: NexusGenEnums['BoardStatus']; // BoardStatus!
+    isDeleted: boolean; // Boolean!
     title: string; // String!
     uuid: string; // ID!
   };
   Job: {
     // root type
+    isDeleted: boolean; // Boolean!
     status: NexusGenEnums['JobStatus']; // JobStatus!
+    title: string; // String!
     uuid: string; // ID!
   };
   Mutation: {};
@@ -55,14 +57,16 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 export interface NexusGenFieldTypes {
   Board: {
     // field return type
+    isDeleted: boolean; // Boolean!
     jobs: NexusGenRootTypes['Job'][] | null; // [Job!]
-    status: NexusGenEnums['BoardStatus']; // BoardStatus!
     title: string; // String!
     uuid: string; // ID!
   };
   Job: {
     // field return type
+    isDeleted: boolean; // Boolean!
     status: NexusGenEnums['JobStatus']; // JobStatus!
+    title: string; // String!
     uuid: string; // ID!
   };
   Mutation: {
@@ -101,6 +105,10 @@ export interface NexusGenArgTypes {
     };
   };
   Query: {
+    boards: {
+      // args
+      isDeleted?: boolean | null; // Boolean
+    };
     hello: {
       // args
       name?: string | null; // String

@@ -1,4 +1,3 @@
-//https://qiita.com/daisukeArk/items/de9c92e6b650494bfb61
 import AWS from 'aws-sdk';
 import DynamoDB from 'aws-sdk/clients/dynamodb';
 import AWSXRay from 'aws-xray-sdk';
@@ -86,8 +85,10 @@ const client = {
    * Execute a Raw Select Query on DynamoTable.
    * You must inform the KeyConditionExpression and ExpressionAttributeNames
    */
-  query: (where: DynamoDB.DocumentClient.QueryInput, tableName: string = DYNAMO_TABLE) => {
+  query: (where: any, tableName: string = DYNAMO_TABLE) => {
     where.TableName = tableName;
+    console.log('-------------');
+    console.log('where', where);
     return dynamoClient.query(where).promise();
   },
 };
