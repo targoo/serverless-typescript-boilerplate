@@ -34,11 +34,11 @@ export const boards = {
     const response: { Items: Array<IBoard> } = await dynamo.query(params);
     let items = response.Items;
 
-    if (args.isDeleted) {
+    if (args.isDeleted !== undefined) {
       items = items.filter(item => item.isDeleted === args.isDeleted);
     }
 
-    // sleep(5000);
+    sleep(5000);
     logger.debug(JSON.stringify(items));
 
     return items;
