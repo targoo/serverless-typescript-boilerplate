@@ -22,6 +22,7 @@ export const handler: Handler = async (event: APIGatewayEvent, _context: Context
     created: new Date().getTime(),
     uuid,
     text,
+    isDeleted: true,
   };
 
   await dynamo.saveItem(job, DYNAMO_TABLE);

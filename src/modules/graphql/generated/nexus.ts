@@ -79,6 +79,7 @@ export interface NexusGenFieldTypes {
     // field return type
     boards: NexusGenRootTypes['Board'][]; // [Board!]!
     hello: string; // String!
+    jobs: NexusGenRootTypes['Job'][]; // [Job!]!
   };
   User: {
     // field return type
@@ -112,6 +113,10 @@ export interface NexusGenArgTypes {
     hello: {
       // args
       name?: string | null; // String
+    };
+    jobs: {
+      // args
+      isDeleted?: boolean | null; // Boolean
     };
   };
 }

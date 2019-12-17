@@ -1,7 +1,6 @@
 import { objectType } from 'nexus';
 
 import { JobStatus } from './enums/JobStatus';
-
 export const Job = objectType({
   name: 'Job',
 

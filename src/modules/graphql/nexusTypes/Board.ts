@@ -8,7 +8,7 @@ export const Board = objectType({
   description: 'This is a description of a Board',
 
   definition(t) {
-    t.id('uuid');
+    t.id('uuid', { description: 'UUID of the user' });
     t.string('title');
     t.boolean('isDeleted');
     t.list.field('jobs', {
