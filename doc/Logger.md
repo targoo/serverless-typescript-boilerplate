@@ -1,4 +1,4 @@
-# Logging
+# Logger
 
 Logging events is done by custom winston logger instance. Currently the following log transports are defined:
 
