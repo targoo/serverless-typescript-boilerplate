@@ -5,6 +5,10 @@ enum JobStatus {
   ARCHIVED
 }
 
+type BoardInputWhere {
+  isDeleted: Boolean!
+}
+
 type Board {
   uuid: ID!
   title: String!

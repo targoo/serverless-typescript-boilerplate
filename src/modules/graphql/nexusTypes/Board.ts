@@ -13,6 +13,7 @@ export const Board = objectType({
     t.boolean('isDeleted');
     t.list.field('jobs', {
       type: Job,
+      // resolve: (character) => getFriends(character),
       resolve(root, _args, _ctx) {
         console.log('root', root);
         return null;

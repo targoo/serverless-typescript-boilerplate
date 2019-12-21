@@ -14,6 +14,7 @@ import logger from '../../utils/logger';
  */
 const schema = makeSchema({
   types,
+  shouldGenerateArtifacts: process.env.NODE_ENV === 'development',
   outputs: {
     schema: join(__dirname, '../../../../../src/modules/graphql/generated/schema.graphql'),
     typegen: join(__dirname, '../../../../../src/modules/graphql/generated/nexus.ts'),

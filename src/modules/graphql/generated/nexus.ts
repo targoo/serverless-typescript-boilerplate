@@ -12,10 +12,13 @@ export interface NexusGenInputs {
     // input type
     title: string; // String!
   };
+  BoardInputWhere: {
+    // input type
+    isDeleted?: boolean | null; // Boolean
+  };
 }
 
 export interface NexusGenEnums {
-  BoardStatus: 'ACTIVE' | 'ARCHIVED';
   JobStatus: 'ACTIVE' | 'ARCHIVED';
 }
 
@@ -50,7 +53,7 @@ export interface NexusGenRootTypes {
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
   BoardInput: NexusGenInputs['BoardInput'];
-  BoardStatus: NexusGenEnums['BoardStatus'];
+  BoardInputWhere: NexusGenInputs['BoardInputWhere'];
   JobStatus: NexusGenEnums['JobStatus'];
 }
 
@@ -108,7 +111,7 @@ export interface NexusGenArgTypes {
   Query: {
     boards: {
       // args
-      isDeleted?: boolean | null; // Boolean
+      where?: NexusGenInputs['BoardInputWhere'] | null; // BoardInputWhere
     };
     hello: {
       // args
@@ -127,9 +130,9 @@ export interface NexusGenInheritedFields {}
 
 export type NexusGenObjectNames = 'Board' | 'Job' | 'Mutation' | 'Query' | 'User';
 
-export type NexusGenInputNames = 'BoardInput';
+export type NexusGenInputNames = 'BoardInput' | 'BoardInputWhere';
 
-export type NexusGenEnumNames = 'BoardStatus' | 'JobStatus';
+export type NexusGenEnumNames = 'JobStatus';
 
 export type NexusGenInterfaceNames = never;
 

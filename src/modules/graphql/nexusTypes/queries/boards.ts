@@ -1,4 +1,4 @@
-import { booleanArg } from 'nexus';
+import { arg } from 'nexus';
 
 import { Board } from '../Board';
 import { IBoard } from '../../../../types/types';
@@ -8,9 +8,13 @@ import { sleep } from '../../../../utils/helper';
 export const boards = {
   type: Board,
 
-  args: { isDeleted: booleanArg() },
+  args: {
+    where: arg({
+      type: 'BoardInputWhere',
+    }),
+  },
 
-  resolve: async (_parent, args: Partial<IBoard>, { userId, dynamo }) => {
+  resolve: async (_parent, args: { where: Partial<IBoard> }, { userId, dynamo }) => {
     const params = {
       KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
       ExpressionAttributeNames: {
@@ -32,8 +36,8 @@ export const boards = {
 
     let { Items: items }: { Items: IBoard[] } = await dynamo.query(params);
 
-    if (args.isDeleted !== undefined) {
-      items = items.filter(item => item.isDeleted === args.isDeleted);
+    if (args.where && args.where.isDeleted !== undefined) {
+      items = items.filter(item => item.isDeleted === args.where.isDeleted);
     }
 
     sleep(5000);

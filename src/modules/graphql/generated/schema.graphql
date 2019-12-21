@@ -16,9 +16,8 @@ input BoardInput {
   title: String!
 }
 
-enum BoardStatus {
-  ACTIVE
-  ARCHIVED
+input BoardInputWhere {
+  isDeleted: Boolean
 }
 
 """This is a description of a Job"""
@@ -41,7 +40,7 @@ type Mutation {
 }
 
 type Query {
-  boards(isDeleted: Boolean): [Board!]!
+  boards(where: BoardInputWhere): [Board!]!
   hello(name: String): String!
   jobs(isDeleted: Boolean): [Job!]!
 }

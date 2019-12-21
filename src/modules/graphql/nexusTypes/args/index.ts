@@ -7,8 +7,15 @@ export const BoardInput = inputObjectType({
   },
 });
 
+export const BoardInputWhere = inputObjectType({
+  name: 'BoardInputWhere',
+  definition(t) {
+    t.boolean('isDeleted');
+  },
+});
+
 export const JobInput = inputObjectType({
-  name: 'BoardInput',
+  name: 'JobInput',
   definition(t) {
     t.string('title', { required: true });
   },
