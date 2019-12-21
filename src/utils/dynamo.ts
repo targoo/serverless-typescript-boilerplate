@@ -39,11 +39,11 @@ const client = {
   saveItem: (item: IEntityBase, tableName: string = DYNAMO_TABLE) => {
     // @ts-ignore
     const itemCopy: IEntityBaseDynamo = { ...item, createdAt: item.createdAt.toISOString() };
-    logger.debug(`itemCopy: ${JSON.stringify(itemCopy)}`);
     const params = {
       TableName: tableName,
       Item: itemCopy,
     };
+    logger.debug(`params: ${JSON.stringify(params)}`);
 
     return dynamoClient.put(params).promise();
   },
@@ -80,6 +80,7 @@ const client = {
     params.TableName = tableName;
     params.Key = key;
     params.ReturnValues = 'ALL_NEW';
+    logger.debug(`params: ${JSON.stringify(params)}`);
 
     return dynamoClient.update(params).promise();
   },

@@ -10,14 +10,14 @@ export const Board = objectType({
   definition(t) {
     t.id('uuid', { description: 'UUID of the user' });
     t.string('title');
-    // t.datetime('createdAt');
-    // t.datetime('updatedAt');
+    t.datetime('createdAt');
+    t.datetime('updatedAt', { nullable: true });
     t.boolean('isDeleted');
     t.list.field('jobs', {
       type: Job,
       // resolve: (character) => getFriends(character),
       resolve(root, _args, _ctx) {
-        console.log('root', root);
+        // console.log('root', root);
         return null;
       },
       nullable: true,

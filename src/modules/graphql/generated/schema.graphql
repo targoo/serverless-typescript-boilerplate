@@ -4,9 +4,11 @@
 
 """This is a description of a Board"""
 type Board {
+  createdAt: Date!
   isDeleted: Boolean!
   jobs: [Job!]
   title: String!
+  updatedAt: Date
 
   """UUID of the user"""
   uuid: ID!
@@ -41,10 +43,13 @@ enum JobStatus {
 }
 
 type Mutation {
-  createBoard(input: BoardInputData!): Board!
+  archiveBoard(uuid: ID!): Board!
+  createBoard(data: BoardInputData!): Board!
+  updateBoard(data: BoardInputData!, uuid: ID!): Board!
 }
 
 type Query {
+  boards(where: BoardInputWhere): [Board!]!
   hello(name: String): String!
 }
 

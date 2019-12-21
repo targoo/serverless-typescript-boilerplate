@@ -40,8 +40,10 @@ export interface NexusGenEnums {
 export interface NexusGenRootTypes {
   Board: {
     // root type
+    createdAt: any; // Date!
     isDeleted: boolean; // Boolean!
     title: string; // String!
+    updatedAt?: any | null; // Date
     uuid: string; // ID!
   };
   Job: {
@@ -77,9 +79,11 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 export interface NexusGenFieldTypes {
   Board: {
     // field return type
+    createdAt: any; // Date!
     isDeleted: boolean; // Boolean!
     jobs: NexusGenRootTypes['Job'][] | null; // [Job!]
     title: string; // String!
+    updatedAt: any | null; // Date
     uuid: string; // ID!
   };
   Job: {
@@ -91,10 +95,13 @@ export interface NexusGenFieldTypes {
   };
   Mutation: {
     // field return type
+    archiveBoard: NexusGenRootTypes['Board']; // Board!
     createBoard: NexusGenRootTypes['Board']; // Board!
+    updateBoard: NexusGenRootTypes['Board']; // Board!
   };
   Query: {
     // field return type
+    boards: NexusGenRootTypes['Board'][]; // [Board!]!
     hello: string; // String!
   };
   User: {
@@ -107,12 +114,25 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenArgTypes {
   Mutation: {
+    archiveBoard: {
+      // args
+      uuid: string; // ID!
+    };
     createBoard: {
       // args
-      input: NexusGenInputs['BoardInputData']; // BoardInputData!
+      data: NexusGenInputs['BoardInputData']; // BoardInputData!
+    };
+    updateBoard: {
+      // args
+      data: NexusGenInputs['BoardInputData']; // BoardInputData!
+      uuid: string; // ID!
     };
   };
   Query: {
+    boards: {
+      // args
+      where?: NexusGenInputs['BoardInputWhere'] | null; // BoardInputWhere
+    };
     hello: {
       // args
       name?: string | null; // String

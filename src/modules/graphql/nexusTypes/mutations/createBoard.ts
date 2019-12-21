@@ -10,13 +10,13 @@ export const createBoard = {
   type: Board,
 
   args: {
-    input: arg({
+    data: arg({
       type: BoardInputData,
       required: true,
     }),
   },
 
-  resolve: async (_parent, { input: { title } }, { userId, dynamo }) => {
+  resolve: async (_parent, { data: { title } }, { userId, dynamo }) => {
     const uuid = id();
 
     const board: IBoard = {
@@ -25,7 +25,7 @@ export const createBoard = {
       uuid,
       title,
       isDeleted: false,
-      //      createdAt: new Date(),
+      createdAt: new Date(),
     };
 
     await dynamo.saveItem(board);

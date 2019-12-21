@@ -10,29 +10,33 @@ export const updateBoard = {
     uuid: idArg({
       required: true,
     }),
-    input: arg({
+    data: arg({
       type: BoardInputData,
       required: true,
     }),
   },
 
-  resolve: async (_parent, { uuid, input: { title } }, { userId, dynamo }) => {
+  resolve: async (_parent, { uuid, data: { title } }, { userId, dynamo }) => {
     const key: IKeyBase = {
       id: `USER#${userId}`,
       relation: `BOAD#${uuid}`,
     };
 
     const params = {
-      UpdateExpression: 'set #title = :title, #updated = :updated',
-      ExpressionAttributeNames: { '#title': 'title', '#updated': 'updated' },
+      UpdateExpression: 'set #title = :title, #updatedAt = :updatedAt',
+      ExpressionAttributeNames: { '#title': 'title', '#updatedAt': 'updatedAt' },
       ExpressionAttributeValues: {
         ':title': title,
-        ':updated': new Date().getTime(),
+        ':updatedAt': new Date().toISOString(),
       },
     };
 
-    const { Attributes } = await dynamo.updateItem(params, key);
+    await dynamo.updateItem(params, key);
 
-    return Attributes as IBoard;
+    const { Item }: { Item: IBoard } = await dynamo.getItem(key);
+    Item.createdAt = new Date(Item.createdAt);
+    Item.updatedAt = new Date(Item.updatedAt);
+
+    return Item;
   },
 };

@@ -19,16 +19,20 @@ export const archiveBoard = {
     };
 
     const params = {
-      UpdateExpression: 'set #isDeleted = :isDeleted, #updated = :updated',
-      ExpressionAttributeNames: { '#isDeleted': 'isDeleted', '#updated': 'updated' },
+      UpdateExpression: 'set #isDeleted = :isDeleted, #updatedAt = :updatedAt',
+      ExpressionAttributeNames: { '#isDeleted': 'isDeleted', '#updatedAt': 'updatedAt' },
       ExpressionAttributeValues: {
         ':isDeleted': true,
-        ':updated': new Date(),
+        ':updatedAt': new Date().toISOString(),
       },
     };
 
-    const { Attributes } = await dynamo.updateItem(params, key);
+    await dynamo.updateItem(params, key);
 
-    return Attributes as IBoard;
+    const { Item }: { Item: IBoard } = await dynamo.getItem(key);
+    Item.createdAt = new Date(Item.createdAt);
+    Item.updatedAt = new Date(Item.updatedAt);
+
+    return Item;
   },
 };
