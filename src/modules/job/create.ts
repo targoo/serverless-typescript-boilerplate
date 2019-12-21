@@ -19,13 +19,13 @@ export const handler: Handler = async (event: APIGatewayEvent, _context: Context
   const job = {
     id: userId,
     relation: `job-${board_relation}-${uuid}`,
-    created: new Date().getTime(),
+    createdAt: new Date().getTime(),
     uuid,
     text,
     isDeleted: true,
   };
 
-  await dynamo.saveItem(job, DYNAMO_TABLE);
+  //await dynamo.saveItem(job, DYNAMO_TABLE);
 
   const response = successResponse(job);
 

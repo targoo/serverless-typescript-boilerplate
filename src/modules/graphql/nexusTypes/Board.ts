@@ -10,6 +10,8 @@ export const Board = objectType({
   definition(t) {
     t.id('uuid', { description: 'UUID of the user' });
     t.string('title');
+    // t.datetime('createdAt');
+    // t.datetime('updatedAt');
     t.boolean('isDeleted');
     t.list.field('jobs', {
       type: Job,

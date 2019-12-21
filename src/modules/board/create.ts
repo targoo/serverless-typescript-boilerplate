@@ -16,7 +16,7 @@ export const handler: Handler = async (event: APIGatewayEvent, _context: Context
   const board: IBoard = {
     id: userId,
     relation: `board-${uuid}`,
-    created: new Date().getTime(),
+    createdAt: new Date(),
     uuid,
     title,
     isDeleted: true,

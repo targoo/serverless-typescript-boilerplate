@@ -1,9 +1,10 @@
 import { idArg } from 'nexus';
 
-import { IBoard } from '../../../../types/types';
+import { Board } from '../Board';
+import { IBoard, IKeyBase } from '../../../../types/types';
 
 export const archiveBoard = {
-  type: 'Board' as 'Board',
+  type: Board,
 
   args: {
     uuid: idArg({
@@ -12,9 +13,9 @@ export const archiveBoard = {
   },
 
   resolve: async (_parent, { uuid }, { userId, dynamo }) => {
-    const key = {
-      id: userId,
-      relation: `board-${uuid}`,
+    const key: IKeyBase = {
+      id: `USER#${userId}`,
+      relation: `BOAD#${uuid}`,
     };
 
     const params = {
@@ -22,7 +23,7 @@ export const archiveBoard = {
       ExpressionAttributeNames: { '#isDeleted': 'isDeleted', '#updated': 'updated' },
       ExpressionAttributeValues: {
         ':isDeleted': true,
-        ':updated': new Date().getTime(),
+        ':updated': new Date(),
       },
     };
 

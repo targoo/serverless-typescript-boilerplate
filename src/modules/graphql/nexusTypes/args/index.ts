@@ -1,7 +1,7 @@
 import { inputObjectType } from 'nexus';
 
-export const BoardInput = inputObjectType({
-  name: 'BoardInput',
+export const BoardInputData = inputObjectType({
+  name: 'BoardInputData',
   definition(t) {
     t.string('title', { required: true });
   },

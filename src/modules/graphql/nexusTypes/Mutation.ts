@@ -6,7 +6,9 @@ export const Mutation = objectType({
   name: 'Mutation',
   definition(t) {
     t.field('createBoard', createBoard);
-    t.field('updateBoard', updateBoard);
-    t.field('archiveBoard', archiveBoard);
+    // @ts-ignore
+    //t.field('updateBoard', updateBoard);
+    // @ts-ignore
+    //t.field('archiveBoard', archiveBoard);
   },
 });

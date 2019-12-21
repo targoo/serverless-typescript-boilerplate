@@ -1,3 +1,5 @@
+export type Modify<T, R> = Omit<T, keyof R> & R;
+
 export enum JobStatus {
   ACTIVE = 'ACTIVE',
   ARCHIVED = 'ARCHIVED',
@@ -9,11 +11,19 @@ export interface IKeyBase {
 }
 
 export interface IEntityBase extends IKeyBase {
-  created: number;
-  updated?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
   isDeleted: boolean;
   readonly uuid: string;
 }
+
+export type IEntityBaseDynamo = Modify<
+  IEntityBase,
+  {
+    createdAt: string;
+    updatedAt: string;
+  }
+>;
 
 export interface IBoard extends IEntityBase {
   title: string;

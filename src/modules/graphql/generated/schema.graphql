@@ -12,13 +12,20 @@ type Board {
   uuid: ID!
 }
 
-input BoardInput {
+input BoardInputData {
   title: String!
 }
 
 input BoardInputWhere {
   isDeleted: Boolean
 }
+
+"""
+A date string, such as 2007-12-03, compliant with the `full-date` format
+outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for
+representation of dates and times using the Gregorian calendar.
+"""
+scalar Date
 
 """This is a description of a Job"""
 type Job {
@@ -34,16 +41,15 @@ enum JobStatus {
 }
 
 type Mutation {
-  archiveBoard(uuid: ID!): Board!
-  createBoard(input: BoardInput!): Board!
-  updateBoard(input: BoardInput!, uuid: ID!): Board!
+  createBoard(input: BoardInputData!): Board!
 }
 
 type Query {
-  boards(where: BoardInputWhere): [Board!]!
   hello(name: String): String!
-  jobs(isDeleted: Boolean): [Job!]!
 }
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
 
 type User {
   email: String!

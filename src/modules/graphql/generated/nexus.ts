@@ -3,12 +3,27 @@
  * Do not make changes to this file directly
  */
 
+import { core } from 'nexus';
+declare global {
+  interface NexusGenCustomInputMethods<TypeName extends string> {
+    datetime<FieldName extends string>(
+      fieldName: FieldName,
+      opts?: core.ScalarInputFieldConfig<core.GetGen3<'inputTypes', TypeName, FieldName>>,
+    ): void; // "Date";
+  }
+}
+declare global {
+  interface NexusGenCustomOutputMethods<TypeName extends string> {
+    datetime<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void; // "Date";
+  }
+}
+
 declare global {
   interface NexusGen extends NexusGenTypes {}
 }
 
 export interface NexusGenInputs {
-  BoardInput: {
+  BoardInputData: {
     // input type
     title: string; // String!
   };
@@ -49,10 +64,12 @@ export interface NexusGenRootTypes {
   Float: number;
   Boolean: boolean;
   ID: string;
+  Date: any;
+  Upload: any;
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
-  BoardInput: NexusGenInputs['BoardInput'];
+  BoardInputData: NexusGenInputs['BoardInputData'];
   BoardInputWhere: NexusGenInputs['BoardInputWhere'];
   JobStatus: NexusGenEnums['JobStatus'];
 }
@@ -74,15 +91,11 @@ export interface NexusGenFieldTypes {
   };
   Mutation: {
     // field return type
-    archiveBoard: NexusGenRootTypes['Board']; // Board!
     createBoard: NexusGenRootTypes['Board']; // Board!
-    updateBoard: NexusGenRootTypes['Board']; // Board!
   };
   Query: {
     // field return type
-    boards: NexusGenRootTypes['Board'][]; // [Board!]!
     hello: string; // String!
-    jobs: NexusGenRootTypes['Job'][]; // [Job!]!
   };
   User: {
     // field return type
@@ -94,32 +107,15 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenArgTypes {
   Mutation: {
-    archiveBoard: {
-      // args
-      uuid: string; // ID!
-    };
     createBoard: {
       // args
-      input: NexusGenInputs['BoardInput']; // BoardInput!
-    };
-    updateBoard: {
-      // args
-      input: NexusGenInputs['BoardInput']; // BoardInput!
-      uuid: string; // ID!
+      input: NexusGenInputs['BoardInputData']; // BoardInputData!
     };
   };
   Query: {
-    boards: {
-      // args
-      where?: NexusGenInputs['BoardInputWhere'] | null; // BoardInputWhere
-    };
     hello: {
       // args
       name?: string | null; // String
-    };
-    jobs: {
-      // args
-      isDeleted?: boolean | null; // Boolean
     };
   };
 }
@@ -130,13 +126,13 @@ export interface NexusGenInheritedFields {}
 
 export type NexusGenObjectNames = 'Board' | 'Job' | 'Mutation' | 'Query' | 'User';
 
-export type NexusGenInputNames = 'BoardInput' | 'BoardInputWhere';
+export type NexusGenInputNames = 'BoardInputData' | 'BoardInputWhere';
 
 export type NexusGenEnumNames = 'JobStatus';
 
 export type NexusGenInterfaceNames = never;
 
-export type NexusGenScalarNames = 'Boolean' | 'Float' | 'ID' | 'Int' | 'String';
+export type NexusGenScalarNames = 'Boolean' | 'Date' | 'Float' | 'ID' | 'Int' | 'String' | 'Upload';
 
 export type NexusGenUnionNames = never;
 

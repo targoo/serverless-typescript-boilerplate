@@ -1,5 +1,6 @@
 import { arg } from 'nexus';
 
+import { BoardInputWhere } from '../args';
 import { Board } from '../Board';
 import { IBoard } from '../../../../types/types';
 import logger from '../../../../utils/logger';
@@ -10,7 +11,7 @@ export const boards = {
 
   args: {
     where: arg({
-      type: 'BoardInputWhere',
+      type: BoardInputWhere,
     }),
   },
 
@@ -27,14 +28,16 @@ export const boards = {
         '#relation': 'relation',
       },
       ExpressionAttributeValues: {
-        ':userUUID': userId,
-        ':relation': 'board-',
+        ':userUUID': `USER#${userId}`,
+        ':relation': 'BOAD#',
       },
       ProjectionExpression: ['#title', '#uuid', '#status', '#created', '#updated', 'isDeleted'],
     };
     logger.debug(JSON.stringify(params));
 
     let { Items: items }: { Items: IBoard[] } = await dynamo.query(params);
+
+    logger.debug(`items: ${JSON.stringify(items)}`);
 
     if (args.where && args.where.isDeleted !== undefined) {
       items = items.filter(item => item.isDeleted === args.where.isDeleted);

@@ -1,15 +1,17 @@
 import { arg } from 'nexus';
 
+import { BoardInputData } from '../args';
+import { Board } from '../Board';
 import { IBoard } from '../../../../types/types';
 import id from '../../../../utils/id';
 import { sleep } from '../../../../utils/helper';
 
 export const createBoard = {
-  type: 'Board' as 'Board',
+  type: Board,
 
   args: {
     input: arg({
-      type: 'BoardInput',
+      type: BoardInputData,
       required: true,
     }),
   },
@@ -18,22 +20,18 @@ export const createBoard = {
     const uuid = id();
 
     const board: IBoard = {
-      id: userId,
-      relation: `board-${uuid}`,
-      created: new Date().getTime(),
+      id: `USER#${userId}`,
+      relation: `BOAD#${uuid}`,
       uuid,
       title,
       isDeleted: false,
+      //      createdAt: new Date(),
     };
 
     await dynamo.saveItem(board);
 
-    sleep(5000);
+    sleep(3000);
 
-    return {
-      uuid: uuid,
-      title: title,
-      isDeleted: false,
-    };
+    return board;
   },
 };

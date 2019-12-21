@@ -1,8 +1,9 @@
 import AWS from 'aws-sdk';
 import DynamoDB from 'aws-sdk/clients/dynamodb';
 import AWSXRay from 'aws-xray-sdk';
+import logger from './logger';
 
-import { IEntityBase, IKeyBase } from '../types/types';
+import { IEntityBase, IEntityBaseDynamo, IKeyBase, Modify } from '../types/types';
 
 const localConfig = {
   region: 'localhost',
@@ -36,9 +37,12 @@ const client = {
    * Save an item on DynamoDB
    */
   saveItem: (item: IEntityBase, tableName: string = DYNAMO_TABLE) => {
+    // @ts-ignore
+    const itemCopy: IEntityBaseDynamo = { ...item, createdAt: item.createdAt.toISOString() };
+    logger.debug(`itemCopy: ${JSON.stringify(itemCopy)}`);
     const params = {
       TableName: tableName,
-      Item: item,
+      Item: itemCopy,
     };
 
     return dynamoClient.put(params).promise();

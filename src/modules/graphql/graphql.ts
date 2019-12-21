@@ -7,11 +7,6 @@ import { types } from './nexusTypes';
 import dynamo from '../../utils/dynamo';
 import logger from '../../utils/logger';
 
-/**
- * When the schema starts and `process.env.NODE_ENV !== "production"`,
- * artifact files are auto-generated containing the .graphql definitions of
- * the schema under .webpack/service/src/modules/graphql.
- */
 const schema = makeSchema({
   types,
   shouldGenerateArtifacts: process.env.NODE_ENV === 'development',
@@ -37,9 +32,7 @@ const server: ApolloServer = new ApolloServer({
     return error;
   },
   context: ({ event, context }) => {
-    logger.debug(JSON.stringify(event));
     const { requestContext: { authorizer: { claims: { sub = '' } = {} } = {} } = {} } = event;
-
     logger.debug(`Sub: ${sub}`);
 
     return {

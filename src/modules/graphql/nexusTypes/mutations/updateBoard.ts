@@ -1,6 +1,7 @@
 import { arg, idArg } from 'nexus';
 
-import { IBoard } from '../../../../types/types';
+import { BoardInputData } from '../args';
+import { IBoard, IKeyBase } from '../../../../types/types';
 
 export const updateBoard = {
   type: 'Board' as 'Board',
@@ -10,15 +11,15 @@ export const updateBoard = {
       required: true,
     }),
     input: arg({
-      type: 'BoardInput',
+      type: BoardInputData,
       required: true,
     }),
   },
 
   resolve: async (_parent, { uuid, input: { title } }, { userId, dynamo }) => {
-    const key: Pick<IBoard, 'id' | 'relation'> = {
-      id: userId,
-      relation: `board-${uuid}`,
+    const key: IKeyBase = {
+      id: `USER#${userId}`,
+      relation: `BOAD#${uuid}`,
     };
 
     const params = {
