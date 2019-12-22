@@ -1,6 +1,7 @@
 import AWS from 'aws-sdk';
 import DynamoDB from 'aws-sdk/clients/dynamodb';
-import AWSXRay from 'aws-xray-sdk';
+import { captureAWS } from 'aws-xray-sdk-core';
+
 import logger from './logger';
 
 import { IEntityBase, IEntityBaseDynamo, IKeyBase, Modify } from '../types/types';
@@ -22,7 +23,7 @@ const dynamoConfig = process.env.IS_OFFLINE ? localConfig : AWSConfig;
 const DYNAMO_TABLE = process.env.DYNAMO_TABLE;
 
 if (!process.env.IS_OFFLINE) {
-  AWSXRay.captureAWS(AWS);
+  captureAWS(AWS);
 }
 
 AWS.config.update(dynamoConfig);

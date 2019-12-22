@@ -24,10 +24,13 @@ provider:
     env: ${self:custom.stage}
   logs:
     restApi: true
+
   tracing:
     apiGateway: true
     lambda: true
+
   environment: ${file(./configs/${self:custom.stage}.yml)}
+
   iamRoleStatements:
     - Effect: 'Allow'
       Action:

@@ -4,13 +4,15 @@ const FriendlyErrorsWebpackPlugin = require('friendly-errors-webpack-plugin');
 
 module.exports = {
   entry: slsw.lib.entries,
-  target: 'node',
+  target: 'node', // in order to ignore built-in modules like path, fs, etc.
   // Generate sourcemaps for proper error messages
   devtool: 'source-map',
   mode: slsw.lib.webpack.isLocal ? 'development' : 'production',
-  // Since 'aws-sdk' is not compatible with webpack,
-  // we exclude all node dependencies
-  externals: [nodeExternals()],
+  externals: [
+    nodeExternals({
+      //      modulesFromFile: true, // Read the modules from the package.json file instead of the node_modules folder
+    }),
+  ],
   optimization: {
     // We no not want to minimize our code.
     minimize: false,
