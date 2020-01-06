@@ -2,13 +2,16 @@
 ### Do not make changes to this file directly
 
 
-"""This is a description of a Board"""
+"""Board"""
 type Board {
-  createdAt: Date!
+  createdAt: DateTime!
+  date: Date
   isDeleted: Boolean!
   jobs: [Job!]
+  json: JSON
+  time: Time
   title: String!
-  updatedAt: Date
+  updatedAt: DateTime
 
   """UUID of the user"""
   uuid: ID!
@@ -29,12 +32,30 @@ representation of dates and times using the Gregorian calendar.
 """
 scalar Date
 
-"""This is a description of a Job"""
+"""
+A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the
+`date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO
+8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar DateTime
+
+"""Job"""
 type Job {
+  createdAt: DateTime!
   isDeleted: Boolean!
   status: JobStatus!
   title: String!
+  updatedAt: DateTime
   uuid: ID!
+}
+
+input JobInputData {
+  boardUUID: ID!
+  title: String!
+}
+
+input JobInputWhere {
+  isDeleted: Boolean
 }
 
 enum JobStatus {
@@ -42,16 +63,30 @@ enum JobStatus {
   ARCHIVED
 }
 
+"""
+The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
+"""
+scalar JSON
+
 type Mutation {
   archiveBoard(uuid: ID!): Board!
   createBoard(data: BoardInputData!): Board!
+  createJob(data: JobInputData!): Job!
   updateBoard(data: BoardInputData!, uuid: ID!): Board!
 }
 
 type Query {
   getBoards(where: BoardInputWhere): [Board!]!
+  getJobs(where: JobInputWhere): [Job!]!
   hello(name: String): String!
 }
+
+"""
+A time string at UTC, such as 10:15:30Z, compliant with the `full-time` format
+outlined in section 5.6 of the RFC 3339profile of the ISO 8601 standard for
+representation of dates and times using the Gregorian calendar.
+"""
+scalar Time
 
 """The `Upload` scalar type represents a file upload."""
 scalar Upload

@@ -5,7 +5,7 @@ import { Job } from './Job';
 export const Board = objectType({
   name: 'Board',
 
-  description: 'This is a description of a Board',
+  description: 'Board',
 
   definition(t) {
     t.id('uuid', { description: 'UUID of the user' });
@@ -13,6 +13,9 @@ export const Board = objectType({
     t.datetime('createdAt');
     t.datetime('updatedAt', { nullable: true });
     t.boolean('isDeleted');
+    t.time('time', { nullable: true });
+    t.date('date', { nullable: true });
+    t.json('json', { nullable: true });
     t.list.field('jobs', {
       type: Job,
       // resolve: (character) => getFriends(character),

@@ -1,6 +1,8 @@
 import { asNexusMethod } from 'nexus';
-import { GraphQLDate } from 'graphql-iso-date';
+import { GraphQLDate, GraphQLTime, GraphQLDateTime } from 'graphql-iso-date';
+import GraphQLJSON from 'graphql-type-json';
 import { GraphQLUpload } from 'graphql-upload';
+
 import { Query } from './Query';
 import { Mutation } from './Mutation';
 import { Board } from './Board';
@@ -9,8 +11,10 @@ import { Job } from './Job';
 import { BoardInputData, BoardInputWhere } from './args/';
 import { JobStatus } from './enums/JobStatus';
 
+export const GQLDateTime = asNexusMethod(GraphQLDateTime, 'datetime');
 export const GQLDate = asNexusMethod(GraphQLDate, 'date');
-export const GQLDateTime = asNexusMethod(GraphQLDate, 'datetime');
+export const GQLTime = asNexusMethod(GraphQLTime, 'time');
+export const GQLJSON = asNexusMethod(GraphQLJSON, 'json');
 
 export const types = [
   Query,
@@ -22,5 +26,8 @@ export const types = [
   BoardInputWhere,
   JobStatus,
   GraphQLUpload,
+  GraphQLDateTime,
   GraphQLDate,
+  GraphQLTime,
+  GraphQLJSON,
 ];

@@ -9,12 +9,27 @@ declare global {
     datetime<FieldName extends string>(
       fieldName: FieldName,
       opts?: core.ScalarInputFieldConfig<core.GetGen3<'inputTypes', TypeName, FieldName>>,
+    ): void; // "DateTime";
+    date<FieldName extends string>(
+      fieldName: FieldName,
+      opts?: core.ScalarInputFieldConfig<core.GetGen3<'inputTypes', TypeName, FieldName>>,
     ): void; // "Date";
+    time<FieldName extends string>(
+      fieldName: FieldName,
+      opts?: core.ScalarInputFieldConfig<core.GetGen3<'inputTypes', TypeName, FieldName>>,
+    ): void; // "Time";
+    json<FieldName extends string>(
+      fieldName: FieldName,
+      opts?: core.ScalarInputFieldConfig<core.GetGen3<'inputTypes', TypeName, FieldName>>,
+    ): void; // "JSON";
   }
 }
 declare global {
   interface NexusGenCustomOutputMethods<TypeName extends string> {
-    datetime<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void; // "Date";
+    datetime<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void; // "DateTime";
+    date<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void; // "Date";
+    time<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void; // "Time";
+    json<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void; // "JSON";
   }
 }
 
@@ -31,6 +46,15 @@ export interface NexusGenInputs {
     // input type
     isDeleted?: boolean | null; // Boolean
   };
+  JobInputData: {
+    // input type
+    boardUUID: string; // ID!
+    title: string; // String!
+  };
+  JobInputWhere: {
+    // input type
+    isDeleted?: boolean | null; // Boolean
+  };
 }
 
 export interface NexusGenEnums {
@@ -40,17 +64,22 @@ export interface NexusGenEnums {
 export interface NexusGenRootTypes {
   Board: {
     // root type
-    createdAt: any; // Date!
+    createdAt: any; // DateTime!
+    date?: any | null; // Date
     isDeleted: boolean; // Boolean!
+    json?: any | null; // JSON
+    time?: any | null; // Time
     title: string; // String!
-    updatedAt?: any | null; // Date
+    updatedAt?: any | null; // DateTime
     uuid: string; // ID!
   };
   Job: {
     // root type
+    createdAt: any; // DateTime!
     isDeleted: boolean; // Boolean!
     status: NexusGenEnums['JobStatus']; // JobStatus!
     title: string; // String!
+    updatedAt?: any | null; // DateTime
     uuid: string; // ID!
   };
   Mutation: {};
@@ -67,41 +96,53 @@ export interface NexusGenRootTypes {
   Boolean: boolean;
   ID: string;
   Date: any;
+  DateTime: any;
+  JSON: any;
+  Time: any;
   Upload: any;
 }
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
   BoardInputData: NexusGenInputs['BoardInputData'];
   BoardInputWhere: NexusGenInputs['BoardInputWhere'];
+  JobInputData: NexusGenInputs['JobInputData'];
+  JobInputWhere: NexusGenInputs['JobInputWhere'];
   JobStatus: NexusGenEnums['JobStatus'];
 }
 
 export interface NexusGenFieldTypes {
   Board: {
     // field return type
-    createdAt: any; // Date!
+    createdAt: any; // DateTime!
+    date: any | null; // Date
     isDeleted: boolean; // Boolean!
     jobs: NexusGenRootTypes['Job'][] | null; // [Job!]
+    json: any | null; // JSON
+    time: any | null; // Time
     title: string; // String!
-    updatedAt: any | null; // Date
+    updatedAt: any | null; // DateTime
     uuid: string; // ID!
   };
   Job: {
     // field return type
+    createdAt: any; // DateTime!
     isDeleted: boolean; // Boolean!
     status: NexusGenEnums['JobStatus']; // JobStatus!
     title: string; // String!
+    updatedAt: any | null; // DateTime
     uuid: string; // ID!
   };
   Mutation: {
     // field return type
     archiveBoard: NexusGenRootTypes['Board']; // Board!
     createBoard: NexusGenRootTypes['Board']; // Board!
+    createJob: NexusGenRootTypes['Job']; // Job!
     updateBoard: NexusGenRootTypes['Board']; // Board!
   };
   Query: {
     // field return type
     getBoards: NexusGenRootTypes['Board'][]; // [Board!]!
+    getJobs: NexusGenRootTypes['Job'][]; // [Job!]!
     hello: string; // String!
   };
   User: {
@@ -122,6 +163,10 @@ export interface NexusGenArgTypes {
       // args
       data: NexusGenInputs['BoardInputData']; // BoardInputData!
     };
+    createJob: {
+      // args
+      data: NexusGenInputs['JobInputData']; // JobInputData!
+    };
     updateBoard: {
       // args
       data: NexusGenInputs['BoardInputData']; // BoardInputData!
@@ -132,6 +177,10 @@ export interface NexusGenArgTypes {
     getBoards: {
       // args
       where?: NexusGenInputs['BoardInputWhere'] | null; // BoardInputWhere
+    };
+    getJobs: {
+      // args
+      where?: NexusGenInputs['JobInputWhere'] | null; // JobInputWhere
     };
     hello: {
       // args
@@ -146,13 +195,23 @@ export interface NexusGenInheritedFields {}
 
 export type NexusGenObjectNames = 'Board' | 'Job' | 'Mutation' | 'Query' | 'User';
 
-export type NexusGenInputNames = 'BoardInputData' | 'BoardInputWhere';
+export type NexusGenInputNames = 'BoardInputData' | 'BoardInputWhere' | 'JobInputData' | 'JobInputWhere';
 
 export type NexusGenEnumNames = 'JobStatus';
 
 export type NexusGenInterfaceNames = never;
 
-export type NexusGenScalarNames = 'Boolean' | 'Date' | 'Float' | 'ID' | 'Int' | 'String' | 'Upload';
+export type NexusGenScalarNames =
+  | 'Boolean'
+  | 'Date'
+  | 'DateTime'
+  | 'Float'
+  | 'ID'
+  | 'Int'
+  | 'JSON'
+  | 'String'
+  | 'Time'
+  | 'Upload';
 
 export type NexusGenUnionNames = never;
 
