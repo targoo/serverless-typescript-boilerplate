@@ -41,6 +41,7 @@ scalar DateTime
 
 """Job"""
 type Job {
+  board: Board
   createdAt: DateTime!
   isDeleted: Boolean!
   status: JobStatus!

@@ -30,7 +30,7 @@ export const getJobs = {
         ':userUUID': `USER#${userId}`,
         ':relation': 'JOB#BOARD#',
       },
-      ProjectionExpression: ['#title', '#uuid', '#status', '#createdAt', '#updatedAt', 'isDeleted'],
+      ProjectionExpression: ['#relation', '#title', '#uuid', '#status', '#createdAt', '#updatedAt', 'isDeleted'],
     };
     logger.debug(JSON.stringify(params));
 

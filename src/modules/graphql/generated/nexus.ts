@@ -125,6 +125,7 @@ export interface NexusGenFieldTypes {
   };
   Job: {
     // field return type
+    board: NexusGenRootTypes['Board'] | null; // Board
     createdAt: any; // DateTime!
     isDeleted: boolean; // Boolean!
     status: NexusGenEnums['JobStatus']; // JobStatus!

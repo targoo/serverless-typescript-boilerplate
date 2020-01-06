@@ -28,7 +28,7 @@ export const getBoards = {
       },
       ExpressionAttributeValues: {
         ':userUUID': `USER#${userId}`,
-        ':relation': 'BOAD#',
+        ':relation': 'BOARD#',
       },
       ProjectionExpression: ['#title', '#uuid', '#status', '#createdAt', '#updatedAt', 'isDeleted'],
     };

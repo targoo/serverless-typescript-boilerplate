@@ -20,7 +20,7 @@ export const createBoard = {
 
     const board: IBoard = {
       id: `USER#${userId}`,
-      relation: `BOAD#${uuid}`,
+      relation: `BOARD#${uuid}`,
       uuid,
       title,
       isDeleted: false,

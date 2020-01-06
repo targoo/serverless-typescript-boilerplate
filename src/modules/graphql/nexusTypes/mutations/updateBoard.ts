@@ -19,7 +19,7 @@ export const updateBoard = {
   resolve: async (_parent, { uuid, data: { title } }, { userId, dynamo }) => {
     const key: IKeyBase = {
       id: `USER#${userId}`,
-      relation: `BOAD#${uuid}`,
+      relation: `BOARD#${uuid}`,
     };
 
     const params = {

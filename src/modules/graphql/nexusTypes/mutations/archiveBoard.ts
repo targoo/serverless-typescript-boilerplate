@@ -15,7 +15,7 @@ export const archiveBoard = {
   resolve: async (_parent, { uuid }, { userId, dynamo }) => {
     const key: IKeyBase = {
       id: `USER#${userId}`,
-      relation: `BOAD#${uuid}`,
+      relation: `BOARD#${uuid}`,
     };
 
     const params = {
