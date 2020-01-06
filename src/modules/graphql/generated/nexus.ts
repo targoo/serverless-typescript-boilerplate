@@ -101,7 +101,7 @@ export interface NexusGenFieldTypes {
   };
   Query: {
     // field return type
-    boards: NexusGenRootTypes['Board'][]; // [Board!]!
+    getBoards: NexusGenRootTypes['Board'][]; // [Board!]!
     hello: string; // String!
   };
   User: {
@@ -129,7 +129,7 @@ export interface NexusGenArgTypes {
     };
   };
   Query: {
-    boards: {
+    getBoards: {
       // args
       where?: NexusGenInputs['BoardInputWhere'] | null; // BoardInputWhere
     };

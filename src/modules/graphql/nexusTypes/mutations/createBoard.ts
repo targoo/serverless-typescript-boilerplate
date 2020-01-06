@@ -4,7 +4,6 @@ import { BoardInputData } from '../args';
 import { Board } from '../Board';
 import { IBoard } from '../../../../types/types';
 import id from '../../../../utils/id';
-import { sleep } from '../../../../utils/helper';
 
 export const createBoard = {
   type: Board,
@@ -29,8 +28,6 @@ export const createBoard = {
     };
 
     await dynamo.saveItem(board);
-
-    sleep(3000);
 
     return board;
   },
