@@ -82,8 +82,8 @@ type Query {
     uuid: String!
   ): Board!
   boards(where: BoardInputWhere): [Board!]!
-  getJobs(where: JobInputWhere): [Job!]!
   hello(name: String): String!
+  jobs(where: JobInputWhere): [Job!]!
 }
 
 """

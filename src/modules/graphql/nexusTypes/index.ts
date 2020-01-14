@@ -8,7 +8,7 @@ import { Mutation } from './Mutation';
 import { Board } from './Board';
 import { User } from './User';
 import { Job } from './Job';
-import { BoardInputData, BoardInputWhere } from './args/';
+import { BoardInputData, BoardInputWhere, JobInputData, JobInputWhere } from './args/';
 import { JobStatus } from './enums/JobStatus';
 
 export const GQLDateTime = asNexusMethod(GraphQLDateTime, 'datetime');
@@ -24,6 +24,8 @@ export const types = [
   User,
   BoardInputData,
   BoardInputWhere,
+  JobInputData,
+  JobInputWhere,
   JobStatus,
   GraphQLUpload,
   GraphQLDateTime,
