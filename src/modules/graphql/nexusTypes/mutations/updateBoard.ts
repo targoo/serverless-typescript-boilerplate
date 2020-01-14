@@ -2,6 +2,7 @@ import { arg, idArg } from 'nexus';
 
 import { BoardInputData } from '../args';
 import { IBoard, IKeyBase } from '../../../../types/types';
+import { sleep } from '../../../../utils/helper';
 
 export const updateBoard = {
   type: 'Board' as 'Board',
@@ -36,6 +37,8 @@ export const updateBoard = {
     const { Item }: { Item: IBoard } = await dynamo.getItem(key);
     Item.createdAt = new Date(Item.createdAt);
     Item.updatedAt = new Date(Item.updatedAt);
+
+    sleep(5000);
 
     return Item;
   },

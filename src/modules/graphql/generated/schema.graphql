@@ -77,7 +77,11 @@ type Mutation {
 }
 
 type Query {
-  getBoards(where: BoardInputWhere): [Board!]!
+  board(
+    """The id of the board"""
+    uuid: String!
+  ): Board!
+  boards(where: BoardInputWhere): [Board!]!
   getJobs(where: JobInputWhere): [Job!]!
   hello(name: String): String!
 }

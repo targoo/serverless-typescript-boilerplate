@@ -1,5 +1,7 @@
 import { stringArg } from 'nexus';
 
+import { sleep } from '../../../../utils/helper';
+
 const boardArgs = {
   uuid: stringArg({
     required: true,
@@ -8,15 +10,18 @@ const boardArgs = {
 };
 
 export const board = {
-  type: 'Board',
+  type: 'Board' as 'Board',
+
   args: boardArgs,
+
   resolve: async (_parent, { uuid }, { userId, dynamo }) => {
     const key = {
-      id: userId,
-      relation: `board-${uuid}`,
+      id: `USER#${userId}`,
+      relation: `BOARD#${uuid}`,
     };
-
     const { Item = {} } = await dynamo.getItem(key);
+
+    sleep(5000);
 
     return Item;
   },

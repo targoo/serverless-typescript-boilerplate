@@ -4,8 +4,9 @@ import { BoardInputWhere } from '../args';
 import { Board } from '../Board';
 import { IBoard } from '../../../../types/types';
 import logger from '../../../../utils/logger';
+import { sleep } from '../../../../utils/helper';
 
-export const getBoards = {
+export const boards = {
   type: Board,
 
   args: {
@@ -35,7 +36,6 @@ export const getBoards = {
     logger.debug(JSON.stringify(params));
 
     let { Items: items }: { Items: IBoard[] } = await dynamo.query(params);
-
     logger.debug(`items: ${JSON.stringify(items)}`);
 
     items = items.map(item => {
@@ -56,7 +56,7 @@ export const getBoards = {
 
     logger.debug(`items: ${JSON.stringify(items)}`);
 
-    logger.debug(JSON.stringify(items));
+    sleep(5000);
 
     return items;
   },
