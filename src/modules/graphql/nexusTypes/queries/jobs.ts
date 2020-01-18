@@ -5,6 +5,11 @@ import { Job } from '../Job';
 import { IJob } from '../../../../types/types';
 import logger from '../../../../utils/logger';
 
+interface JobInputWhere {
+  isDeleted?: boolean;
+  boardUUID?: string;
+}
+
 export const jobs = {
   type: Job,
 
@@ -14,7 +19,7 @@ export const jobs = {
     }),
   },
 
-  resolve: async (_parent, args: { where: Partial<IJob> }, { userId, dynamo }) => {
+  resolve: async (_parent, args: { where: JobInputWhere }, { userId, dynamo }) => {
     const params = {
       KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
       ExpressionAttributeNames: {
@@ -28,7 +33,7 @@ export const jobs = {
       },
       ExpressionAttributeValues: {
         ':userUUID': `USER#${userId}`,
-        ':relation': 'JOB#BOARD#',
+        ':relation': args.where.boardUUID ? `JOB#BOARD#${args.where.boardUUID}` : 'JOB#BOARD#',
       },
       ProjectionExpression: ['#relation', '#title', '#uuid', '#status', '#createdAt', '#updatedAt', 'isDeleted'],
     };

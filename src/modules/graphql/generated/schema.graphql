@@ -41,21 +41,31 @@ scalar DateTime
 
 """Job"""
 type Job {
-  board: Board
+  board: Board!
+  company: String
   createdAt: DateTime!
+  duration: String
   isDeleted: Boolean!
+  location: String
+  position: String
+  rate: String
   status: JobStatus!
-  title: String!
   updatedAt: DateTime
   uuid: ID!
 }
 
 input JobInputData {
   boardUUID: ID!
-  title: String!
+  company: String
+  duration: String
+  location: String
+  position: String
+  rate: String
+  status: JobStatus!
 }
 
 input JobInputWhere {
+  boardUUID: ID!
   isDeleted: Boolean
 }
 
@@ -79,7 +89,7 @@ type Mutation {
 type Query {
   board(
     """The id of the board"""
-    uuid: String!
+    uuid: ID!
   ): Board!
   boards(where: BoardInputWhere): [Board!]!
   hello(name: String): String!

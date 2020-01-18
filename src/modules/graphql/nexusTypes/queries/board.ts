@@ -1,9 +1,9 @@
-import { stringArg } from 'nexus';
+import { idArg } from 'nexus';
 
 import { sleep } from '../../../../utils/helper';
 
 const boardArgs = {
-  uuid: stringArg({
+  uuid: idArg({
     required: true,
     description: 'The id of the board',
   }),
