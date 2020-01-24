@@ -8,6 +8,7 @@ import { Mutation } from './Mutation';
 import { Board } from './Board';
 import { User } from './User';
 import { Job } from './Job';
+import { File } from './File';
 import { BoardInputData, BoardInputWhere, JobInputData, JobInputWhere } from './args/';
 import { JobStatus } from './enums/JobStatus';
 
@@ -22,6 +23,7 @@ export const types = [
   Board,
   Job,
   User,
+  File,
   BoardInputData,
   BoardInputWhere,
   JobInputData,

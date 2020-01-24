@@ -13,6 +13,7 @@ const Query = queryType({
 
     t.list.field('boards', boards);
 
+    // @ts-ignore
     t.list.field('jobs', jobs);
   },
 });

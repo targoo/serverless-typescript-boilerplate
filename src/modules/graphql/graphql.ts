@@ -6,6 +6,7 @@ import { join } from 'path';
 import { types } from './nexusTypes';
 import dynamo from '../../utils/dynamo';
 import logger from '../../utils/logger';
+import healthcheck from '../../utils/healthcheck';
 
 const schema = makeSchema({
   types,
@@ -50,5 +51,14 @@ export const handler: Handler = server.createHandler({
   cors: {
     origin: '*',
     credentials: true,
+  },
+  onHealthCheck: () => {
+    return new Promise((resolve, reject) => {
+      if (healthcheck()) {
+        resolve();
+      } else {
+        reject();
+      }
+    });
   },
 });

@@ -79,6 +79,13 @@ export interface NexusGenRootTypes {
     updatedAt?: any | null; // DateTime
     uuid: string; // ID!
   };
+  File: {
+    // root type
+    encoding: string; // String!
+    filename: string; // String!
+    id: string; // ID!
+    mimetype: string; // String!
+  };
   Job: {
     // root type
     company?: string | null; // String
@@ -133,6 +140,13 @@ export interface NexusGenFieldTypes {
     updatedAt: any | null; // DateTime
     uuid: string; // ID!
   };
+  File: {
+    // field return type
+    encoding: string; // String!
+    filename: string; // String!
+    id: string; // ID!
+    mimetype: string; // String!
+  };
   Job: {
     // field return type
     board: NexusGenRootTypes['Board']; // Board!
@@ -153,6 +167,7 @@ export interface NexusGenFieldTypes {
     createBoard: NexusGenRootTypes['Board']; // Board!
     createJob: NexusGenRootTypes['Job']; // Job!
     updateBoard: NexusGenRootTypes['Board']; // Board!
+    uploadFile: NexusGenRootTypes['File']; // File!
   };
   Query: {
     // field return type
@@ -188,6 +203,10 @@ export interface NexusGenArgTypes {
       data: NexusGenInputs['BoardInputData']; // BoardInputData!
       uuid: string; // ID!
     };
+    uploadFile: {
+      // args
+      file: any; // Upload!
+    };
   };
   Query: {
     board: {
@@ -213,7 +232,7 @@ export interface NexusGenAbstractResolveReturnTypes {}
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = 'Board' | 'Job' | 'Mutation' | 'Query' | 'User';
+export type NexusGenObjectNames = 'Board' | 'File' | 'Job' | 'Mutation' | 'Query' | 'User';
 
 export type NexusGenInputNames = 'BoardInputData' | 'BoardInputWhere' | 'JobInputData' | 'JobInputWhere';
 

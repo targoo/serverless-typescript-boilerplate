@@ -54,6 +54,10 @@ custom:
   serverless-iam-roles-per-function:
     defaultInherit: true
 
+  apigwBinary:
+    types:
+      - 'multipart/form-data'
+
   prune:
     automatic: true
     number: 5 # Number of versions of your lambda to keep.
