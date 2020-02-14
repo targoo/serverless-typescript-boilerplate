@@ -88,6 +88,7 @@ scalar JSON
 
 type Mutation {
   archiveBoard(uuid: ID!): Board!
+  archiveJob(boardUUID: ID!, uuid: ID!): Job!
   createBoard(data: BoardInputData!): Board!
   createJob(data: JobInputData!): Job!
   updateBoard(data: BoardInputData!, uuid: ID!): Board!

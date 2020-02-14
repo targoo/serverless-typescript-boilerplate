@@ -30,7 +30,11 @@ export interface IBoard extends IEntityBase {
 }
 
 export interface IJob extends IEntityBase {
-  title: string;
+  company: string;
+  duration: string;
+  rate: string;
+  location: string;
+  position: string;
   status: JobStatus;
 }
 

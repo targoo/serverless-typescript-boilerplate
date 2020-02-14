@@ -1,16 +1,8 @@
 import AWS from 'aws-sdk';
-import checker from './lib/envVarsChecker';
 
 export const handler = async event => {
   const bucket = process.env.BUCKET;
   const region = process.env.REGION;
-
-  const missing = checker(process.env);
-
-  if (missing.length) {
-    const vars = missing.join(', ');
-    return `Missing required environment variables: ${vars}`;
-  }
 
   const S3 = new AWS.S3({ signatureVersion: 'v4', region });
 

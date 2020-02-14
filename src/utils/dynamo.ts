@@ -1,5 +1,4 @@
 import AWS from 'aws-sdk';
-import DynamoDB from 'aws-sdk/clients/dynamodb';
 import { captureAWS } from 'aws-xray-sdk-core';
 
 import logger from './logger';
@@ -28,7 +27,7 @@ if (!process.env.IS_OFFLINE) {
 
 AWS.config.update(dynamoConfig);
 
-const dynamoClient = new DynamoDB.DocumentClient();
+const dynamoClient = new AWS.DynamoDB.DocumentClient();
 
 /**
  * DynamoDB Client Abstraction

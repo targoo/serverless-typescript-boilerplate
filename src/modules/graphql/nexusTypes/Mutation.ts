@@ -1,6 +1,6 @@
 import { objectType } from 'nexus';
 
-import { createBoard, updateBoard, archiveBoard, createJob, uploadFile } from './mutations';
+import { createBoard, updateBoard, archiveBoard, createJob, archiveJob, uploadFile } from './mutations';
 
 export const Mutation = objectType({
   name: 'Mutation',
@@ -12,5 +12,6 @@ export const Mutation = objectType({
     t.field('uploadFile', uploadFile);
     // @ts-ignore
     t.field('createJob', createJob);
+    t.field('archiveJob', archiveJob);
   },
 });

@@ -164,6 +164,7 @@ export interface NexusGenFieldTypes {
   Mutation: {
     // field return type
     archiveBoard: NexusGenRootTypes['Board']; // Board!
+    archiveJob: NexusGenRootTypes['Job']; // Job!
     createBoard: NexusGenRootTypes['Board']; // Board!
     createJob: NexusGenRootTypes['Job']; // Job!
     updateBoard: NexusGenRootTypes['Board']; // Board!
@@ -188,6 +189,11 @@ export interface NexusGenArgTypes {
   Mutation: {
     archiveBoard: {
       // args
+      uuid: string; // ID!
+    };
+    archiveJob: {
+      // args
+      boardUUID: string; // ID!
       uuid: string; // ID!
     };
     createBoard: {

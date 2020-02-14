@@ -20,22 +20,32 @@ export const jobs = {
   },
 
   resolve: async (_parent, args: { where: JobInputWhere }, { userId, dynamo }) => {
+    const properties = [
+      'id',
+      'relation',
+      'uuid',
+      'company',
+      'duration',
+      'rate',
+      'location',
+      'position',
+      'status',
+      'createdAt',
+      'isDeleted',
+      'updatedAt',
+    ];
+
     const params = {
       KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
-      ExpressionAttributeNames: {
-        '#uuid': 'uuid',
-        '#title': 'title',
-        '#status': 'status',
-        '#createdAt': 'createdAt',
-        '#updatedAt': 'updatedAt',
-        '#id': 'id',
-        '#relation': 'relation',
-      },
+      ExpressionAttributeNames: properties.reduce((acc, cur) => {
+        acc[`#${cur}`] = cur;
+        return acc;
+      }, {}),
       ExpressionAttributeValues: {
         ':userUUID': `USER#${userId}`,
         ':relation': args.where.boardUUID ? `JOB#BOARD#${args.where.boardUUID}` : 'JOB#BOARD#',
       },
-      ProjectionExpression: ['#relation', '#title', '#uuid', '#status', '#createdAt', '#updatedAt', 'isDeleted'],
+      ProjectionExpression: properties.map(property => `#${property}`),
     };
     logger.debug(JSON.stringify(params));
 
