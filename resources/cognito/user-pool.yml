@@ -18,11 +18,11 @@ Resources:
 
   WebUserPoolClient:
     Type: AWS::Cognito::UserPoolClient
-    Description: 'App Client used by AWS AppSync'
+    Description: 'App Client'
     Properties:
       ClientName: ${self:custom.stackname}-user-pool-client
       GenerateSecret: false
-      RefreshTokenValidity: 30
+      RefreshTokenValidity: 30 # Refresh token expiration (days)
       UserPoolId: { Ref: CognitoUserPool }
 
 Outputs:

@@ -15,7 +15,7 @@ graphql:
         - dynamodb:BatchGetItem
         - dynamodb:BatchWriteItem
       Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.stackname}-main'
-  timeout: 5
+  timeout: 10
   memorySize: 512
   reservedConcurrency: 5
   events:
@@ -26,9 +26,7 @@ graphql:
           type: COGNITO_USER_POOLS
           authorizerId:
             Ref: ApiGatewayAuthorizer
-        cors:
-          origins:
-            - '*'
+        cors: true
   package:
     include:
       - src/graphql/**

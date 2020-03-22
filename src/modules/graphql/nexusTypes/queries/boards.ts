@@ -53,7 +53,7 @@ export const boards = {
 
     logger.debug(`items: ${JSON.stringify(items)}`);
 
-    sleep(5000);
+    sleep(2000);
 
     return items;
   },
