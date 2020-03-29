@@ -48,11 +48,18 @@ export interface NexusGenInputs {
   };
   JobInputData: {
     // input type
+    agencyName?: string | null; // String
+    agentEmail?: string | null; // String
+    agentName?: string | null; // String
+    agentPhone?: string | null; // String
     boardUUID: string; // ID!
     company?: string | null; // String
+    companyLocation?: string | null; // String
+    companyWebsite?: string | null; // String
     duration?: string | null; // String
-    location?: string | null; // String
-    position?: string | null; // String
+    ir35?: string | null; // String
+    jobDescription?: string | null; // String
+    jobTitle?: string | null; // String
     rate?: string | null; // String
     status: NexusGenEnums['JobStatus']; // JobStatus!
   };
@@ -61,10 +68,16 @@ export interface NexusGenInputs {
     boardUUID: string; // ID!
     isDeleted?: boolean | null; // Boolean
   };
+  UserInputData: {
+    // input type
+    email?: string | null; // String
+    name?: string | null; // String
+  };
 }
 
 export interface NexusGenEnums {
   JobStatus: 'ACTIVE' | 'ARCHIVED';
+  JobType: 'CONTRACT' | 'PERMANENT';
 }
 
 export interface NexusGenRootTypes {
@@ -88,12 +101,20 @@ export interface NexusGenRootTypes {
   };
   Job: {
     // root type
+    agencyName?: string | null; // String
+    agentEmail?: string | null; // String
+    agentName?: string | null; // String
+    agentPhone?: string | null; // String
     company?: string | null; // String
+    companyLocation?: string | null; // String
+    companyWebsite?: string | null; // String
     createdAt: any; // DateTime!
     duration?: string | null; // String
+    ir35?: string | null; // String
     isDeleted: boolean; // Boolean!
-    location?: string | null; // String
-    position?: string | null; // String
+    jobDescription?: string | null; // String
+    jobTitle?: string | null; // String
+    jobType: NexusGenEnums['JobType']; // JobType!
     rate?: string | null; // String
     status: NexusGenEnums['JobStatus']; // JobStatus!
     updatedAt?: any | null; // DateTime
@@ -103,8 +124,11 @@ export interface NexusGenRootTypes {
   Query: {};
   User: {
     // root type
+    createdAt: any; // DateTime!
     email: string; // String!
-    username: string; // String!
+    isDeleted: boolean; // Boolean!
+    name: string; // String!
+    updatedAt?: any | null; // DateTime
     uuid: string; // ID!
   };
   String: string;
@@ -124,7 +148,9 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
   BoardInputWhere: NexusGenInputs['BoardInputWhere'];
   JobInputData: NexusGenInputs['JobInputData'];
   JobInputWhere: NexusGenInputs['JobInputWhere'];
+  UserInputData: NexusGenInputs['UserInputData'];
   JobStatus: NexusGenEnums['JobStatus'];
+  JobType: NexusGenEnums['JobType'];
 }
 
 export interface NexusGenFieldTypes {
@@ -133,7 +159,6 @@ export interface NexusGenFieldTypes {
     createdAt: any; // DateTime!
     date: any | null; // Date
     isDeleted: boolean; // Boolean!
-    jobs: NexusGenRootTypes['Job'][] | null; // [Job!]
     json: any | null; // JSON
     time: any | null; // Time
     title: string; // String!
@@ -149,13 +174,21 @@ export interface NexusGenFieldTypes {
   };
   Job: {
     // field return type
+    agencyName: string | null; // String
+    agentEmail: string | null; // String
+    agentName: string | null; // String
+    agentPhone: string | null; // String
     board: NexusGenRootTypes['Board']; // Board!
     company: string | null; // String
+    companyLocation: string | null; // String
+    companyWebsite: string | null; // String
     createdAt: any; // DateTime!
     duration: string | null; // String
+    ir35: string | null; // String
     isDeleted: boolean; // Boolean!
-    location: string | null; // String
-    position: string | null; // String
+    jobDescription: string | null; // String
+    jobTitle: string | null; // String
+    jobType: NexusGenEnums['JobType']; // JobType!
     rate: string | null; // String
     status: NexusGenEnums['JobStatus']; // JobStatus!
     updatedAt: any | null; // DateTime
@@ -164,23 +197,23 @@ export interface NexusGenFieldTypes {
   Mutation: {
     // field return type
     archiveBoard: NexusGenRootTypes['Board']; // Board!
-    archiveJob: NexusGenRootTypes['Job']; // Job!
     createBoard: NexusGenRootTypes['Board']; // Board!
-    createJob: NexusGenRootTypes['Job']; // Job!
     updateBoard: NexusGenRootTypes['Board']; // Board!
-    uploadFile: NexusGenRootTypes['File']; // File!
   };
   Query: {
     // field return type
     board: NexusGenRootTypes['Board']; // Board!
     boards: NexusGenRootTypes['Board'][]; // [Board!]!
     hello: string; // String!
-    jobs: NexusGenRootTypes['Job'][]; // [Job!]!
+    me: NexusGenRootTypes['User']; // User!
   };
   User: {
     // field return type
+    createdAt: any; // DateTime!
     email: string; // String!
-    username: string; // String!
+    isDeleted: boolean; // Boolean!
+    name: string; // String!
+    updatedAt: any | null; // DateTime
     uuid: string; // ID!
   };
 }
@@ -191,27 +224,14 @@ export interface NexusGenArgTypes {
       // args
       uuid: string; // ID!
     };
-    archiveJob: {
-      // args
-      boardUUID: string; // ID!
-      uuid: string; // ID!
-    };
     createBoard: {
       // args
       data: NexusGenInputs['BoardInputData']; // BoardInputData!
-    };
-    createJob: {
-      // args
-      data: NexusGenInputs['JobInputData']; // JobInputData!
     };
     updateBoard: {
       // args
       data: NexusGenInputs['BoardInputData']; // BoardInputData!
       uuid: string; // ID!
-    };
-    uploadFile: {
-      // args
-      file: any; // Upload!
     };
   };
   Query: {
@@ -227,10 +247,6 @@ export interface NexusGenArgTypes {
       // args
       name?: string | null; // String
     };
-    jobs: {
-      // args
-      where?: NexusGenInputs['JobInputWhere'] | null; // JobInputWhere
-    };
   };
 }
 
@@ -240,9 +256,14 @@ export interface NexusGenInheritedFields {}
 
 export type NexusGenObjectNames = 'Board' | 'File' | 'Job' | 'Mutation' | 'Query' | 'User';
 
-export type NexusGenInputNames = 'BoardInputData' | 'BoardInputWhere' | 'JobInputData' | 'JobInputWhere';
+export type NexusGenInputNames =
+  | 'BoardInputData'
+  | 'BoardInputWhere'
+  | 'JobInputData'
+  | 'JobInputWhere'
+  | 'UserInputData';
 
-export type NexusGenEnumNames = 'JobStatus';
+export type NexusGenEnumNames = 'JobStatus' | 'JobType';
 
 export type NexusGenInterfaceNames = never;
 

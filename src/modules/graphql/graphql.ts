@@ -19,7 +19,6 @@ const schema = makeSchema({
 
 logger.debug(`process.env.NODE_ENV: ${process.env.NODE_ENV}`);
 logger.debug(`process.env.ENV: ${process.env.ENV}`);
-logger.debug(`process.env.IS_OFFLINE: ${process.env.IS_OFFLINE}`);
 
 const graphqlRoutePrefix = process.env.IS_OFFLINE ? '' : `/${process.env.ENV}`;
 
@@ -33,7 +32,7 @@ const server: ApolloServer = new ApolloServer({
     return error;
   },
   context: ({ event, context }) => {
-    const { requestContext: { authorizer: { claims: { sub = '' } = {} } = {} } = {} } = event;
+    const { requestContext: { authorizer: { claims: { sub = '', email = '' } = {} } = {} } = {} } = event;
     logger.debug(`Sub: ${sub}`);
 
     return {
@@ -41,7 +40,8 @@ const server: ApolloServer = new ApolloServer({
       functionName: context.functionName,
       dynamo,
       event,
-      userId: process.env.IS_OFFLINE ? '3b8ef697-536d-4626-a3e0-5e0b7ba4f14e' : sub,
+      userId: process.env.ENV === 'local' ? '3b8ef697-536d-4626-a3e0-5e0b7ba4f14e' : sub,
+      userEmail: process.env.ENV === 'local' ? 'targoo@gmail.com' : email,
       context,
     };
   },

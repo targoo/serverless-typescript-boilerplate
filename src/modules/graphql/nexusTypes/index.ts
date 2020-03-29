@@ -9,8 +9,9 @@ import { Board } from './Board';
 import { User } from './User';
 import { Job } from './Job';
 import { File } from './File';
-import { BoardInputData, BoardInputWhere, JobInputData, JobInputWhere } from './args/';
+import { BoardInputData, BoardInputWhere, JobInputData, JobInputWhere, UserInputData } from './args/';
 import { JobStatus } from './enums/JobStatus';
+import { JobType } from './enums/JobType';
 
 export const GQLDateTime = asNexusMethod(GraphQLDateTime, 'datetime');
 export const GQLDate = asNexusMethod(GraphQLDate, 'date');
@@ -28,7 +29,9 @@ export const types = [
   BoardInputWhere,
   JobInputData,
   JobInputWhere,
+  UserInputData,
   JobStatus,
+  JobType,
   GraphQLUpload,
   GraphQLDateTime,
   GraphQLDate,

@@ -17,11 +17,22 @@ export const BoardInputWhere = inputObjectType({
 export const JobInputData = inputObjectType({
   name: 'JobInputData',
   definition(t) {
-    t.string('company', { required: false });
-    t.string('duration', { required: false });
-    t.string('rate', { required: false });
-    t.string('location', { required: false });
-    t.string('position', { required: false });
+    t.string('agencyName');
+    t.string('agentName');
+    t.string('agentEmail');
+    t.string('agentPhone');
+    t.string('jobTitle');
+    t.string('company');
+    t.string('companyWebsite');
+    t.string('companyLocation');
+    t.string('jobDescription');
+    // t.field('JobType', {
+    //   type: 'jobType',
+    //   required: true,
+    // });
+    t.string('duration');
+    t.string('rate');
+    t.string('ir35');
     t.id('boardUUID', { required: true });
     t.field('status', {
       type: 'JobStatus',
@@ -35,5 +46,13 @@ export const JobInputWhere = inputObjectType({
   definition(t) {
     t.boolean('isDeleted');
     t.id('boardUUID', { required: true });
+  },
+});
+
+export const UserInputData = inputObjectType({
+  name: 'UserInputData',
+  definition(t) {
+    t.string('email', { required: false });
+    t.string('name', { required: false });
   },
 });

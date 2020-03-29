@@ -1,7 +1,5 @@
 import { idArg } from 'nexus';
 
-import { sleep } from '../../../../utils/helper';
-
 const boardArgs = {
   uuid: idArg({
     required: true,
@@ -19,9 +17,8 @@ export const board = {
       id: `USER#${userId}`,
       relation: `BOARD#${uuid}`,
     };
-    const { Item = {} } = await dynamo.getItem(key);
 
-    sleep(5000);
+    const { Item = {} } = await dynamo.getItem(key);
 
     return Item;
   },

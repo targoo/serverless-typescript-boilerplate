@@ -38,8 +38,6 @@ export const updateBoard = {
     Item.createdAt = new Date(Item.createdAt);
     Item.updatedAt = new Date(Item.updatedAt);
 
-    sleep(5000);
-
     return Item;
   },
 };

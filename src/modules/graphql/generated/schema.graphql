@@ -7,13 +7,12 @@ type Board {
   createdAt: DateTime!
   date: Date
   isDeleted: Boolean!
-  jobs: [Job!]
   json: JSON
   time: Time
   title: String!
   updatedAt: DateTime
 
-  """UUID of the user"""
+  """UUID of the board"""
   uuid: ID!
 }
 
@@ -48,25 +47,42 @@ type File {
 
 """Job"""
 type Job {
+  agencyName: String
+  agentEmail: String
+  agentName: String
+  agentPhone: String
   board: Board!
   company: String
+  companyLocation: String
+  companyWebsite: String
   createdAt: DateTime!
   duration: String
+  ir35: String
   isDeleted: Boolean!
-  location: String
-  position: String
+  jobDescription: String
+  jobTitle: String
+  jobType: JobType!
   rate: String
   status: JobStatus!
   updatedAt: DateTime
+
+  """UUID of the job"""
   uuid: ID!
 }
 
 input JobInputData {
+  agencyName: String
+  agentEmail: String
+  agentName: String
+  agentPhone: String
   boardUUID: ID!
   company: String
+  companyLocation: String
+  companyWebsite: String
   duration: String
-  location: String
-  position: String
+  ir35: String
+  jobDescription: String
+  jobTitle: String
   rate: String
   status: JobStatus!
 }
@@ -81,6 +97,11 @@ enum JobStatus {
   ARCHIVED
 }
 
+enum JobType {
+  CONTRACT
+  PERMANENT
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -88,11 +109,8 @@ scalar JSON
 
 type Mutation {
   archiveBoard(uuid: ID!): Board!
-  archiveJob(boardUUID: ID!, uuid: ID!): Job!
   createBoard(data: BoardInputData!): Board!
-  createJob(data: JobInputData!): Job!
   updateBoard(data: BoardInputData!, uuid: ID!): Board!
-  uploadFile(file: Upload!): File!
 }
 
 type Query {
@@ -102,7 +120,7 @@ type Query {
   ): Board!
   boards(where: BoardInputWhere): [Board!]!
   hello(name: String): String!
-  jobs(where: JobInputWhere): [Job!]!
+  me: User!
 }
 
 """
@@ -116,7 +134,17 @@ scalar Time
 scalar Upload
 
 type User {
+  createdAt: DateTime!
   email: String!
-  username: String!
+  isDeleted: Boolean!
+  name: String!
+  updatedAt: DateTime
+
+  """UUID of the user (Cognito Sub)"""
   uuid: ID!
+}
+
+input UserInputData {
+  email: String
+  name: String
 }

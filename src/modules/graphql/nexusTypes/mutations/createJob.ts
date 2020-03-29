@@ -17,7 +17,23 @@ export const createJob = {
 
   resolve: async (
     _parent,
-    { data: { boardUUID, company, duration, rate, location, position, status } },
+    {
+      data: {
+        boardUUID,
+        agency_name,
+        agent_name,
+        agent_email,
+        agent_phone,
+        job_title,
+        type,
+        company,
+        company_website,
+        company_location,
+        duration,
+        rate,
+        ir35,
+      },
+    },
     { userId, dynamo },
   ) => {
     const uuid = id();
@@ -26,12 +42,19 @@ export const createJob = {
       id: `USER#${userId}`,
       relation: `JOB#BOARD#${boardUUID}#${uuid}`,
       uuid,
+      agency_name,
+      agent_name,
+      agent_email,
+      agent_phone,
+      job_title,
+      type,
       company,
+      company_website,
+      company_location,
       duration,
       rate,
-      location,
-      position,
-      status,
+      ir35,
+      status: JobStatus.ACTIVE,
       isDeleted: false,
       createdAt: new Date(),
     };

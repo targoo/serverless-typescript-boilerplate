@@ -5,6 +5,11 @@ export enum JobStatus {
   ARCHIVED = 'ARCHIVED',
 }
 
+export enum JobType {
+  CONTRACT = 'CONTRACT',
+  PERMANENT = 'PERMANENT',
+}
+
 export interface IKeyBase {
   id: string;
   relation: string;
@@ -29,12 +34,24 @@ export interface IBoard extends IEntityBase {
   title: string;
 }
 
+export interface IUser extends IEntityBase {
+  name: string;
+  email: string;
+}
+
 export interface IJob extends IEntityBase {
+  agency_name: string;
+  agent_name: string;
+  agent_email: string;
+  agent_phone: string;
+  job_title: string;
   company: string;
+  company_website: string;
+  company_location: string;
   duration: string;
   rate: string;
-  location: string;
-  position: string;
+  ir35: string;
+  type: JobType;
   status: JobStatus;
 }
 

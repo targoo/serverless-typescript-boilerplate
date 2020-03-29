@@ -1,5 +1,5 @@
 import AWS from 'aws-sdk';
-import { captureAWS } from 'aws-xray-sdk-core';
+// import { captureAWS } from 'aws-xray-sdk-core';
 
 import logger from './logger';
 
@@ -18,12 +18,12 @@ const AWSConfig = {
   api_version: '2012-08-10',
 };
 
-const dynamoConfig = process.env.IS_OFFLINE ? localConfig : AWSConfig;
+const dynamoConfig = process.env.ENV === 'local' ? localConfig : AWSConfig;
 const DYNAMO_TABLE = process.env.DYNAMO_TABLE;
 
-if (!process.env.IS_OFFLINE) {
-  captureAWS(AWS);
-}
+// if (!process.env.IS_OFFLINE) {
+//   captureAWS(AWS);
+// }
 
 AWS.config.update(dynamoConfig);
 

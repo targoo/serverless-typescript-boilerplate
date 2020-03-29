@@ -2,8 +2,7 @@ import { objectType } from 'nexus';
 
 import { Board } from './Board';
 import { JobStatus } from './enums/JobStatus';
-import logger from '../../../utils/logger';
-import { IBoard } from '../../../types/types';
+import { JobType } from './enums/JobType';
 
 export const Job = objectType({
   name: 'Job',
@@ -11,17 +10,36 @@ export const Job = objectType({
   description: 'Job',
 
   definition(t) {
-    t.id('uuid');
+    t.id('uuid', { description: 'UUID of the job' });
+
+    // Agency
+    t.string('agencyName', { nullable: true });
+
+    t.string('agentName', { nullable: true });
+
+    t.string('agentEmail', { nullable: true });
+
+    t.string('agentPhone', { nullable: true });
+
+    // Job
+    t.string('jobTitle', { nullable: true });
 
     t.string('company', { nullable: true });
+
+    t.string('companyWebsite', { nullable: true });
+
+    t.string('companyLocation', { nullable: true });
+
+    t.string('jobDescription', { nullable: true });
+
+    // Money
+    t.field('jobType', { type: JobType });
 
     t.string('duration', { nullable: true });
 
     t.string('rate', { nullable: true });
 
-    t.string('location', { nullable: true });
-
-    t.string('position', { nullable: true });
+    t.string('ir35', { nullable: true });
 
     t.field('status', { type: JobStatus });
 

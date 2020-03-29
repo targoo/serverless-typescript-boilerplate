@@ -4,7 +4,6 @@ import { BoardInputWhere } from '../args';
 import { Board } from '../Board';
 import { IBoard } from '../../../../types/types';
 import logger from '../../../../utils/logger';
-import { sleep } from '../../../../utils/helper';
 
 export const boards = {
   type: Board,
@@ -52,8 +51,6 @@ export const boards = {
     }
 
     logger.debug(`items: ${JSON.stringify(items)}`);
-
-    sleep(2000);
 
     return items;
   },
