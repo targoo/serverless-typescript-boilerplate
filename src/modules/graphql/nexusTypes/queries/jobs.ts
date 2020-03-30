@@ -7,7 +7,7 @@ import logger from '../../../../utils/logger';
 
 interface JobInputWhere {
   isDeleted?: boolean;
-  boardUUID?: string;
+  boardUuid?: string;
 }
 
 export const jobs = {
@@ -23,15 +23,22 @@ export const jobs = {
     const properties = [
       'id',
       'relation',
-      'uuid',
+      'agencyName',
+      'agentName',
+      'agentEmail',
+      'agentPhone',
+      'jobTitle',
       'company',
+      'companyWebsite',
+      'companyLocation',
+      'jobDescription',
+      'employmentType',
       'duration',
       'rate',
-      'location',
-      'position',
+      'ir35',
       'status',
-      'createdAt',
       'isDeleted',
+      'createdAt',
       'updatedAt',
     ];
 
@@ -43,7 +50,7 @@ export const jobs = {
       }, {}),
       ExpressionAttributeValues: {
         ':userUUID': `USER#${userId}`,
-        ':relation': args.where.boardUUID ? `JOB#BOARD#${args.where.boardUUID}` : 'JOB#BOARD#',
+        ':relation': args.where.boardUuid ? `JOB#BOARD#${args.where.boardUuid}` : 'JOB#BOARD#',
       },
       ProjectionExpression: properties.map(property => `#${property}`),
     };

@@ -8,7 +8,6 @@ export const updateUser = {
 
   args: {
     data: arg({
-      // @ts-ignore
       type: UserInputData,
       required: true,
     }),

@@ -19,16 +19,20 @@ export const createJob = {
     _parent,
     {
       data: {
-        boardUUID,
-        agency_name,
-        agent_name,
-        agent_email,
-        agent_phone,
-        job_title,
-        type,
+        boardUuid,
+        // Agency
+        agencyName,
+        agentName,
+        agentEmail,
+        agentPhone,
+        // Job
+        jobTitle,
         company,
-        company_website,
-        company_location,
+        companyWebsite,
+        companyLocation,
+        jobDescription,
+        // Money
+        employmentType,
         duration,
         rate,
         ir35,
@@ -40,20 +44,25 @@ export const createJob = {
 
     const job: IJob = {
       id: `USER#${userId}`,
-      relation: `JOB#BOARD#${boardUUID}#${uuid}`,
+      relation: `JOB#BOARD#${boardUuid}#${uuid}`,
       uuid,
-      agency_name,
-      agent_name,
-      agent_email,
-      agent_phone,
-      job_title,
-      type,
+      // Agency
+      agencyName,
+      agentName,
+      agentEmail,
+      agentPhone,
+      // Job
+      jobTitle,
       company,
-      company_website,
-      company_location,
+      companyWebsite,
+      companyLocation,
+      jobDescription,
+      // Money
+      employmentType,
       duration,
       rate,
       ir35,
+      // Extra
       status: JobStatus.ACTIVE,
       isDeleted: false,
       createdAt: new Date(),

@@ -2,7 +2,7 @@ import { objectType } from 'nexus';
 
 import { Board } from './Board';
 import { JobStatus } from './enums/JobStatus';
-import { JobType } from './enums/JobType';
+import { EmploymentType } from './enums/EmploymentType';
 
 export const Job = objectType({
   name: 'Job',
@@ -33,7 +33,7 @@ export const Job = objectType({
     t.string('jobDescription', { nullable: true });
 
     // Money
-    t.field('jobType', { type: JobType });
+    t.field('employmentType', { type: EmploymentType });
 
     t.string('duration', { nullable: true });
 

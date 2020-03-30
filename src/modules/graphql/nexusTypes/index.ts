@@ -11,7 +11,7 @@ import { Job } from './Job';
 import { File } from './File';
 import { BoardInputData, BoardInputWhere, JobInputData, JobInputWhere, UserInputData } from './args/';
 import { JobStatus } from './enums/JobStatus';
-import { JobType } from './enums/JobType';
+import { EmploymentType } from './enums/EmploymentType';
 
 export const GQLDateTime = asNexusMethod(GraphQLDateTime, 'datetime');
 export const GQLDate = asNexusMethod(GraphQLDate, 'date');
@@ -31,7 +31,7 @@ export const types = [
   JobInputWhere,
   UserInputData,
   JobStatus,
-  JobType,
+  EmploymentType,
   GraphQLUpload,
   GraphQLDateTime,
   GraphQLDate,

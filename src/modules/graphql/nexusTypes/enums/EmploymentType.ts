@@ -1,6 +1,6 @@
 import { enumType } from 'nexus/dist';
 
-export const JobType = enumType({
-  name: 'JobType',
+export const EmploymentType = enumType({
+  name: 'EmploymentType',
   members: ['CONTRACT', 'PERMANENT'],
 });

@@ -7,7 +7,7 @@ export const archiveJob = {
   type: Job,
 
   args: {
-    boardUUID: idArg({
+    boardUuid: idArg({
       required: true,
     }),
     uuid: idArg({
@@ -15,10 +15,10 @@ export const archiveJob = {
     }),
   },
 
-  resolve: async (_parent, { boardUUID, uuid }, { userId, dynamo }) => {
+  resolve: async (_parent, { boardUuid, uuid }, { userId, dynamo }) => {
     const key: IKeyBase = {
       id: `USER#${userId}`,
-      relation: `JOB#BOARD#${boardUUID}#${uuid}`,
+      relation: `JOB#BOARD#${boardUuid}#${uuid}`,
     };
 
     const params = {

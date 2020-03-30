@@ -6,8 +6,8 @@ import {
   archiveBoard,
   createJob,
   archiveJob,
+  updateJob,
   uploadFile,
-  createUser,
   updateUser,
 } from './mutations';
 
@@ -20,12 +20,15 @@ export const Mutation = objectType({
 
     t.field('archiveBoard', archiveBoard);
 
-    // // @ts-ignore
-    // t.field('uploadFile', uploadFile);
-    // // @ts-ignore
-    // t.field('createJob', createJob);
-    // t.field('archiveJob', archiveJob);
-    // t.field('createUser', createUser);
-    // t.field('updateUser', updateUser);
+    t.field('createJob', createJob);
+
+    t.field('archiveJob', archiveJob);
+
+    t.field('updateJob', updateJob);
+
+    t.field('updateUser', updateUser);
+
+    // @ts-ignore
+    t.field('uploadFile', uploadFile);
   },
 });
