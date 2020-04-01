@@ -2,7 +2,6 @@ import { arg, idArg } from 'nexus';
 
 import { BoardInputData } from '../args';
 import { IBoard, IKeyBase } from '../../../../types/types';
-import { sleep } from '../../../../utils/helper';
 
 export const updateBoard = {
   type: 'Board' as 'Board',

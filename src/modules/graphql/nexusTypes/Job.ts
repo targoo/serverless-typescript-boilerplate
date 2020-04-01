@@ -4,6 +4,29 @@ import { Board } from './Board';
 import { JobStatus } from './enums/JobStatus';
 import { EmploymentType } from './enums/EmploymentType';
 
+export const jobProperties = [
+  'id',
+  'relation',
+  'uuid',
+  'agencyName',
+  'agentName',
+  'agentEmail',
+  'agentPhone',
+  'jobTitle',
+  'company',
+  'companyWebsite',
+  'companyLocation',
+  'jobDescription',
+  'employmentType',
+  'duration',
+  'rate',
+  'ir35',
+  'status',
+  'isDeleted',
+  'createdAt',
+  'updatedAt',
+];
+
 export const Job = objectType({
   name: 'Job',
 
@@ -33,7 +56,7 @@ export const Job = objectType({
     t.string('jobDescription', { nullable: true });
 
     // Money
-    t.field('employmentType', { type: EmploymentType });
+    t.field('employmentType', { type: EmploymentType, nullable: true });
 
     t.string('duration', { nullable: true });
 

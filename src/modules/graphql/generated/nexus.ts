@@ -52,7 +52,6 @@ export interface NexusGenInputs {
     agentEmail?: string | null; // String
     agentName?: string | null; // String
     agentPhone?: string | null; // String
-    boardUuid: string; // ID!
     company?: string | null; // String
     companyLocation?: string | null; // String
     companyWebsite?: string | null; // String
@@ -111,7 +110,7 @@ export interface NexusGenRootTypes {
     companyWebsite?: string | null; // String
     createdAt: any; // DateTime!
     duration?: string | null; // String
-    employmentType: NexusGenEnums['EmploymentType']; // EmploymentType!
+    employmentType?: NexusGenEnums['EmploymentType'] | null; // EmploymentType
     ir35?: string | null; // String
     isDeleted: boolean; // Boolean!
     jobDescription?: string | null; // String
@@ -185,7 +184,7 @@ export interface NexusGenFieldTypes {
     companyWebsite: string | null; // String
     createdAt: any; // DateTime!
     duration: string | null; // String
-    employmentType: NexusGenEnums['EmploymentType']; // EmploymentType!
+    employmentType: NexusGenEnums['EmploymentType'] | null; // EmploymentType
     ir35: string | null; // String
     isDeleted: boolean; // Boolean!
     jobDescription: string | null; // String
@@ -211,6 +210,7 @@ export interface NexusGenFieldTypes {
     board: NexusGenRootTypes['Board']; // Board!
     boards: NexusGenRootTypes['Board'][]; // [Board!]!
     hello: string; // String!
+    job: NexusGenRootTypes['Job']; // Job!
     jobs: NexusGenRootTypes['Job'][]; // [Job!]!
     me: NexusGenRootTypes['User']; // User!
   };
@@ -242,6 +242,7 @@ export interface NexusGenArgTypes {
     };
     createJob: {
       // args
+      boardUuid: string; // ID!
       data: NexusGenInputs['JobInputData']; // JobInputData!
     };
     updateBoard: {
@@ -252,7 +253,7 @@ export interface NexusGenArgTypes {
     updateJob: {
       // args
       boardUuid: string; // ID!
-      data?: NexusGenInputs['JobInputData'] | null; // JobInputData
+      data: NexusGenInputs['JobInputData']; // JobInputData!
       uuid: string; // ID!
     };
     updateUser: {
@@ -277,9 +278,14 @@ export interface NexusGenArgTypes {
       // args
       name?: string | null; // String
     };
+    job: {
+      // args
+      boardUuid: string; // ID!
+      uuid: string; // ID!
+    };
     jobs: {
       // args
-      where?: NexusGenInputs['JobInputWhere'] | null; // JobInputWhere
+      where: NexusGenInputs['JobInputWhere']; // JobInputWhere!
     };
   };
 }

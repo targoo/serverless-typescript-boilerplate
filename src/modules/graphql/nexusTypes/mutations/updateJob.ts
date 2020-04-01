@@ -13,7 +13,10 @@ export const updateJob = {
     uuid: idArg({
       required: true,
     }),
-    data: arg({ type: JobInputData }),
+    data: arg({
+      type: JobInputData,
+      required: true,
+    }),
   },
 
   resolve: async (_parent, { boardUuid, uuid, data }, { userId, dynamo }) => {

@@ -21,10 +21,6 @@ const AWSConfig = {
 const dynamoConfig = process.env.ENV === 'local' ? localConfig : AWSConfig;
 const DYNAMO_TABLE = process.env.DYNAMO_TABLE;
 
-// if (!process.env.IS_OFFLINE) {
-//   captureAWS(AWS);
-// }
-
 AWS.config.update(dynamoConfig);
 
 const dynamoClient = new AWS.DynamoDB.DocumentClient();
@@ -37,13 +33,14 @@ const client = {
    * Save an item on DynamoDB
    */
   saveItem: (item: IEntityBase, tableName: string = DYNAMO_TABLE) => {
-    // @ts-ignore
-    const itemCopy: IEntityBaseDynamo = { ...item, createdAt: item.createdAt.toISOString() };
+    let itemCopy = Object.entries(item).reduce((a, [k, v]) => (v === '' ? a : { ...a, [k]: v }), {});
+
+    itemCopy = ({ ...itemCopy, createdAt: item.createdAt.toISOString() } as unknown) as IEntityBaseDynamo;
     const params = {
       TableName: tableName,
       Item: itemCopy,
     };
-    logger.debug(`params: ${JSON.stringify(params)}`);
+    logger.debug(`Dynamo: saveItem : params: ${JSON.stringify(params)}`);
 
     return dynamoClient.put(params).promise();
   },

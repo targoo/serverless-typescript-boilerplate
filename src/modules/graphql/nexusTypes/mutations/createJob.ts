@@ -1,4 +1,4 @@
-import { arg } from 'nexus';
+import { arg, idArg } from 'nexus';
 
 import { JobInputData } from '../args';
 import { Job } from '../Job';
@@ -9,6 +9,9 @@ export const createJob = {
   type: Job,
 
   args: {
+    boardUuid: idArg({
+      required: true,
+    }),
     data: arg({
       type: JobInputData,
       required: true,
@@ -18,8 +21,8 @@ export const createJob = {
   resolve: async (
     _parent,
     {
+      boardUuid,
       data: {
-        boardUuid,
         // Agency
         agencyName,
         agentName,

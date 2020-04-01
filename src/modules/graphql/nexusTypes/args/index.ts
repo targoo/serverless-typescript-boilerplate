@@ -29,12 +29,10 @@ export const JobInputData = inputObjectType({
     t.string('companyLocation');
     t.string('jobDescription');
     // Money
-    // @ts-ignore
     t.field('employmentType', { type: 'EmploymentType' });
     t.string('duration');
     t.string('rate');
     t.string('ir35');
-    t.id('boardUuid', { required: true });
     t.field('status', { type: 'JobStatus' });
   },
 });

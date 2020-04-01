@@ -1,7 +1,7 @@
 import { arg } from 'nexus';
 
 import { JobInputWhere } from '../args';
-import { Job } from '../Job';
+import { Job, jobProperties } from '../Job';
 import { IJob } from '../../../../types/types';
 import logger from '../../../../utils/logger';
 
@@ -16,31 +16,12 @@ export const jobs = {
   args: {
     where: arg({
       type: JobInputWhere,
+      required: true,
     }),
   },
 
   resolve: async (_parent, args: { where: JobInputWhere }, { userId, dynamo }) => {
-    const properties = [
-      'id',
-      'relation',
-      'agencyName',
-      'agentName',
-      'agentEmail',
-      'agentPhone',
-      'jobTitle',
-      'company',
-      'companyWebsite',
-      'companyLocation',
-      'jobDescription',
-      'employmentType',
-      'duration',
-      'rate',
-      'ir35',
-      'status',
-      'isDeleted',
-      'createdAt',
-      'updatedAt',
-    ];
+    const properties = jobProperties;
 
     const params = {
       KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
@@ -74,10 +55,7 @@ export const jobs = {
     if (args.where && args.where.isDeleted !== undefined) {
       items = items.filter(item => item.isDeleted === args.where.isDeleted);
     }
-
     logger.debug(`items: ${JSON.stringify(items)}`);
-
-    logger.debug(JSON.stringify(items));
 
     return items;
   },
