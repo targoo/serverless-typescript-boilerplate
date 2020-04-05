@@ -1,9 +1,18 @@
 import { arg, idArg } from 'nexus';
 
 import { JobInputData } from '../args';
-import { Job } from '../Job';
+import { Job, jobFormProperties } from '../Job';
 import { IJob, JobStatus } from '../../../../types/types';
 import id from '../../../../utils/id';
+
+function validedFormInput(myObj: string, validKeys: string[]) {
+  return Object.keys(myObj)
+    .filter(key => validKeys.includes(key))
+    .reduce((result, current) => {
+      result[current] = myObj[current] || null;
+      return result;
+    }, {});
+}
 
 export const createJob = {
   type: Job,
@@ -18,58 +27,18 @@ export const createJob = {
     }),
   },
 
-  resolve: async (
-    _parent,
-    {
-      boardUuid,
-      data: {
-        // Agency
-        agencyName,
-        agentName,
-        agentEmail,
-        agentPhone,
-        // Job
-        jobTitle,
-        company,
-        companyWebsite,
-        companyLocation,
-        jobDescription,
-        // Money
-        employmentType,
-        duration,
-        rate,
-        ir35,
-      },
-    },
-    { userId, dynamo },
-  ) => {
+  resolve: async (_parent, { boardUuid, data }, { userId, dynamo }) => {
     const uuid = id();
 
-    const job: IJob = {
+    const job = {
+      ...validedFormInput(data, jobFormProperties),
       id: `USER#${userId}`,
       relation: `JOB#BOARD#${boardUuid}#${uuid}`,
       uuid,
-      // Agency
-      agencyName,
-      agentName,
-      agentEmail,
-      agentPhone,
-      // Job
-      jobTitle,
-      company,
-      companyWebsite,
-      companyLocation,
-      jobDescription,
-      // Money
-      employmentType,
-      duration,
-      rate,
-      ir35,
-      // Extra
       status: JobStatus.ACTIVE,
       isDeleted: false,
       createdAt: new Date(),
-    };
+    } as IJob;
 
     await dynamo.saveItem(job);
 

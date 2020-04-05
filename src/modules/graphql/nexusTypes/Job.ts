@@ -4,10 +4,7 @@ import { Board } from './Board';
 import { JobStatus } from './enums/JobStatus';
 import { EmploymentType } from './enums/EmploymentType';
 
-export const jobProperties = [
-  'id',
-  'relation',
-  'uuid',
+export const jobFormProperties = [
   'agencyName',
   'agentName',
   'agentEmail',
@@ -21,6 +18,13 @@ export const jobProperties = [
   'duration',
   'rate',
   'ir35',
+];
+
+export const jobProperties = [
+  ...jobFormProperties,
+  'id',
+  'relation',
+  'uuid',
   'status',
   'isDeleted',
   'createdAt',
@@ -64,6 +68,7 @@ export const Job = objectType({
 
     t.string('ir35', { nullable: true });
 
+    // Extra
     t.field('status', { type: JobStatus });
 
     t.datetime('createdAt');

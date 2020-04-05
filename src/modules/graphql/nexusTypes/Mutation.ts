@@ -9,11 +9,14 @@ import {
   updateJob,
   uploadFile,
   updateUser,
+  passwordlessSignIn,
 } from './mutations';
 
 export const Mutation = objectType({
   name: 'Mutation',
   definition(t) {
+    t.field('passwordlessSignIn', passwordlessSignIn);
+
     t.field('createBoard', createBoard);
 
     t.field('updateBoard', updateBoard);

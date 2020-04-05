@@ -200,6 +200,7 @@ export interface NexusGenFieldTypes {
     archiveJob: NexusGenRootTypes['Job']; // Job!
     createBoard: NexusGenRootTypes['Board']; // Board!
     createJob: NexusGenRootTypes['Job']; // Job!
+    passwordlessSignIn: boolean; // Boolean!
     updateBoard: NexusGenRootTypes['Board']; // Board!
     updateJob: NexusGenRootTypes['Job']; // Job!
     updateUser: NexusGenRootTypes['User']; // User!
@@ -244,6 +245,10 @@ export interface NexusGenArgTypes {
       // args
       boardUuid: string; // ID!
       data: NexusGenInputs['JobInputData']; // JobInputData!
+    };
+    passwordlessSignIn: {
+      // args
+      email: string; // String!
     };
     updateBoard: {
       // args
