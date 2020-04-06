@@ -16,6 +16,10 @@ export const createBoard = {
   },
 
   resolve: async (_parent, { data: { title } }, { userId, dynamo }) => {
+    if (!userId) {
+      throw new Error('cannot create a new board');
+    }
+
     const uuid = id();
 
     const board: IBoard = {

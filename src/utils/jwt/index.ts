@@ -18,7 +18,12 @@ export function sign(user): string {
   // audience
   // issuer
   return jwt.sign(
-    { exp: Math.floor(Date.now() / 1000) + 60 * 60, data: user, audience: 'audience', issuer: 'https://jobpod.com' },
+    {
+      ...user,
+      exp: Math.floor(Date.now() / 1000) + 60 * 60 * 3,
+      audience: 'audience',
+      issuer: 'https://jobpod.com',
+    },
     'shhhhh',
   );
 }
@@ -26,11 +31,12 @@ export function sign(user): string {
 export function verify(token): boolean {
   try {
     jwt.verify(token, 'shhhhh', {
-      audience: 'audience',
-      issuer: 'https://jobpod.com',
+      // audience: 'audience',
+      // issuer: 'https://jobpod.com',
     });
     return true;
   } catch (err) {
+    console.error(err);
     return false;
   }
 }

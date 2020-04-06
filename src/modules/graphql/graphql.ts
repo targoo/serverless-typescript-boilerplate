@@ -7,6 +7,7 @@ import { types } from './nexusTypes';
 import dynamo from '../../utils/dynamo';
 import logger from '../../utils/logger';
 import healthcheck from '../../utils/healthcheck';
+import { verify, decode } from '../../utils/jwt';
 
 const schema = makeSchema({
   types,
@@ -16,9 +17,6 @@ const schema = makeSchema({
     typegen: join(__dirname, '../../../../../src/modules/graphql/generated/nexus.ts'),
   },
 });
-
-logger.debug(`process.env.NODE_ENV: ${process.env.NODE_ENV}`);
-logger.debug(`process.env.ENV: ${process.env.ENV}`);
 
 const graphqlRoutePrefix = process.env.IS_OFFLINE ? '' : `/${process.env.ENV}`;
 
@@ -32,16 +30,28 @@ const server: ApolloServer = new ApolloServer({
     return error;
   },
   context: ({ event, context }) => {
-    const { requestContext: { authorizer: { claims: { sub = '', email = '' } = {} } = {} } = {} } = event;
-    logger.debug(`Sub: ${sub}`);
+    console.log('event.headers', event.headers);
+    const {
+      headers: { authorization },
+    } = event;
+    console.log('authorization', authorization);
+
+    const isTokenValid = verify(authorization);
+    console.log('isTokenValid', isTokenValid);
+
+    const { sub, email, email_verified, nickname, name } = isTokenValid
+      ? decode(authorization)
+      : { sub: undefined, email: undefined, email_verified: undefined, nickname: undefined, name: undefined };
+    console.log('sub', sub);
+    console.log('email', email);
 
     return {
       headers: event.headers,
       functionName: context.functionName,
       dynamo,
       event,
-      userId: process.env.ENV === 'local' ? '3b8ef697-536d-4626-a3e0-5e0b7ba4f14e' : sub,
-      userEmail: process.env.ENV === 'local' ? 'targoo@gmail.com' : email,
+      userId: sub,
+      userEmail: email,
       context,
     };
   },
