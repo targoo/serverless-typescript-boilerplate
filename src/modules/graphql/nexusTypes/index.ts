@@ -7,6 +7,7 @@ import { Query } from './Query';
 import { Mutation } from './Mutation';
 import { Board } from './Board';
 import { User } from './User';
+import { Autho0User } from './Autho0User';
 import { Job } from './Job';
 import { File } from './File';
 import { BoardInputData, BoardInputWhere, JobInputData, JobInputWhere, UserInputData } from './args/';
@@ -24,6 +25,7 @@ export const types = [
   Board,
   Job,
   User,
+  Autho0User,
   File,
   BoardInputData,
   BoardInputWhere,

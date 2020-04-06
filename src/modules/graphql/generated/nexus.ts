@@ -81,6 +81,16 @@ export interface NexusGenEnums {
 }
 
 export interface NexusGenRootTypes {
+  Autho0User: {
+    // root type
+    email?: string | null; // String
+    email_verified?: boolean | null; // Boolean
+    jwt: string; // String!
+    name?: string | null; // String
+    nickname?: string | null; // String
+    picture?: string | null; // String
+    uuid: string; // ID!
+  };
   Board: {
     // root type
     createdAt: any; // DateTime!
@@ -154,6 +164,16 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 }
 
 export interface NexusGenFieldTypes {
+  Autho0User: {
+    // field return type
+    email: string | null; // String
+    email_verified: boolean | null; // Boolean
+    jwt: string; // String!
+    name: string | null; // String
+    nickname: string | null; // String
+    picture: string | null; // String
+    uuid: string; // ID!
+  };
   Board: {
     // field return type
     createdAt: any; // DateTime!
@@ -201,6 +221,7 @@ export interface NexusGenFieldTypes {
     createBoard: NexusGenRootTypes['Board']; // Board!
     createJob: NexusGenRootTypes['Job']; // Job!
     passwordlessSignIn: boolean; // Boolean!
+    passwordlessSignInConfirm: NexusGenRootTypes['Autho0User']; // Autho0User!
     updateBoard: NexusGenRootTypes['Board']; // Board!
     updateJob: NexusGenRootTypes['Job']; // Job!
     updateUser: NexusGenRootTypes['User']; // User!
@@ -249,6 +270,11 @@ export interface NexusGenArgTypes {
     passwordlessSignIn: {
       // args
       email: string; // String!
+    };
+    passwordlessSignInConfirm: {
+      // args
+      accessToken: string; // String!
+      state: string; // String!
     };
     updateBoard: {
       // args
@@ -299,7 +325,7 @@ export interface NexusGenAbstractResolveReturnTypes {}
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = 'Board' | 'File' | 'Job' | 'Mutation' | 'Query' | 'User';
+export type NexusGenObjectNames = 'Autho0User' | 'Board' | 'File' | 'Job' | 'Mutation' | 'Query' | 'User';
 
 export type NexusGenInputNames =
   | 'BoardInputData'

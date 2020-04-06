@@ -7,3 +7,4 @@ export { archiveJob } from './archiveJob';
 export { uploadFile } from './uploadFile';
 export { updateUser } from './updateUser';
 export { passwordlessSignIn } from './passwordlessSignIn';
+export { passwordlessSignInConfirm } from './passwordlessSignInConfirm';

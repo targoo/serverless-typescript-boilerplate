@@ -1,5 +1,6 @@
 import { stringArg } from 'nexus';
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
+import generateID from '../../../../utils/id';
 
 export const passwordlessSignIn = {
   type: 'Boolean' as 'Boolean',
@@ -24,12 +25,13 @@ export const passwordlessSignIn = {
           email,
           send: 'link',
           authParams: {
-            scope: 'openid',
-            state: 'state',
+            scope: 'openid profile email',
+            state: generateID(),
+            redirect_uri: `${process.env.APP_URL}`,
           },
         },
       });
-      console.log(result);
+      console.log(result.data);
     } catch (error) {
       console.log('error', error);
     }
