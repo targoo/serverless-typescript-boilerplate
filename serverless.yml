@@ -91,5 +91,3 @@ functions: ${file(resources/lambdas/loader.js)}
 resources:
   - ${file(resources/api/api.yml)}
   - ${file(resources/dynamodbs/main.yml)}
-  - ${file(resources/cognito/user-pool.yml)}
-  - ${file(resources/cognito/identity-pool.yml)}

@@ -1,4 +1,5 @@
 import { idArg } from 'nexus';
+import { Job } from '../Job';
 
 const jobArgs = {
   boardUuid: idArg({
@@ -12,7 +13,7 @@ const jobArgs = {
 };
 
 export const job = {
-  type: 'Job' as 'Job',
+  type: Job,
 
   args: jobArgs,
 

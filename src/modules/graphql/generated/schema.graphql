@@ -60,6 +60,49 @@ enum EmploymentType {
   PERMANENT
 }
 
+"""
+Event
+"""
+type Event {
+  createdAt: DateTime!
+  date: DateTime!
+  description: String!
+  isDeleted: Boolean!
+  type: EventType!
+  updatedAt: DateTime
+
+  """
+  UUID of the board
+  """
+  uuid: ID!
+}
+
+input EventInputData {
+  date: DateTime
+  description: String
+  type: EventType
+}
+
+input EventInputWhere {
+  boardUuid: ID!
+  isDeleted: Boolean
+  jobUuid: ID!
+}
+
+enum EventType {
+  CALL
+  FACE2FACE
+  ONLINETEST
+  VIDEOCALL
+}
+
+enum Feeling {
+  ECSTATIC
+  HAPPY
+  NORMAL
+  SAD
+}
+
 type File {
   encoding: String!
   filename: String!
@@ -82,6 +125,7 @@ type Job {
   createdAt: DateTime!
   duration: String
   employmentType: EmploymentType
+  feeling: Feeling!
   ir35: String
   isDeleted: Boolean!
   jobDescription: String
@@ -106,6 +150,7 @@ input JobInputData {
   companyWebsite: String
   duration: String
   employmentType: EmploymentType
+  feeling: Feeling
   ir35: String
   jobDescription: String
   jobTitle: String

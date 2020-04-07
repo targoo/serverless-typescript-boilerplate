@@ -10,6 +10,20 @@ export enum EmploymentType {
   PERMANENT = 'PERMANENT',
 }
 
+export enum EventType {
+  FACE2FACE = 'FACE2FACE',
+  ONLINETEST = 'ONLINETEST',
+  VIDEOCALL = 'VIDEOCALL',
+  CALL = 'CALL',
+}
+
+export enum Feeling {
+  ECSTATIC = 'ECSTATIC',
+  HAPPY = 'HAPPY',
+  NORMAL = 'NORMAL',
+  SAD = 'SAD',
+}
+
 export interface IKeyBase {
   id: string;
   relation: string;
@@ -56,7 +70,14 @@ export interface IJob extends IEntityBase {
   duration: string;
   rate: string;
   ir35: string;
+  // Extra
+  feeling: Feeling;
   status: JobStatus;
+}
+
+export interface IEvent extends IEntityBase {
+  date: string;
+  type: EventType;
 }
 
 export enum ICountryISO {

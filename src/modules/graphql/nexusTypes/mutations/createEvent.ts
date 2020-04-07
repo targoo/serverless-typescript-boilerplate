@@ -1,8 +1,8 @@
 import { arg, idArg } from 'nexus';
 
-import { JobInputData } from '../args';
-import { Job, jobFormProperties } from '../Job';
-import { IJob, JobStatus, Feeling } from '../../../../types/types';
+import { EventInputData } from '../args';
+import { Event, eventFormProperties } from '../Event';
+import { IEvent } from '../../../../types/types';
 import id from '../../../../utils/id';
 
 function validedFormInput(myObj: string, validKeys: string[]) {
@@ -14,35 +14,36 @@ function validedFormInput(myObj: string, validKeys: string[]) {
     }, {});
 }
 
-export const createJob = {
-  type: Job,
+export const createEvent = {
+  type: Event,
 
   args: {
     boardUuid: idArg({
       required: true,
     }),
+    jobUuid: idArg({
+      required: true,
+    }),
     data: arg({
-      type: JobInputData,
+      type: EventInputData,
       required: true,
     }),
   },
 
-  resolve: async (_parent, { boardUuid, data }, { userId, dynamo }) => {
+  resolve: async (_parent, { boardUuid, jobUuid, data }, { userId, dynamo }) => {
     const uuid = id();
 
-    const job = {
-      ...validedFormInput(data, jobFormProperties),
+    const event = {
+      ...validedFormInput(data, eventFormProperties),
       id: `USER#${userId}`,
-      relation: `JOB#BOARD#${boardUuid}#${uuid}`,
+      relation: `EVENT#JOB#BOARD#${boardUuid}#${jobUuid}#${uuid}`,
       uuid,
-      status: JobStatus.ACTIVE,
-      feeling: Feeling.NORMAL,
       isDeleted: false,
       createdAt: new Date(),
-    } as IJob;
+    } as IEvent;
 
-    await dynamo.saveItem(job);
+    await dynamo.saveItem(event);
 
-    return job;
+    return event;
   },
 };

@@ -5,14 +5,28 @@ import { GraphQLUpload } from 'graphql-upload';
 
 import { Query } from './Query';
 import { Mutation } from './Mutation';
+
 import { Board } from './Board';
 import { User } from './User';
 import { Autho0User } from './Autho0User';
 import { Job } from './Job';
 import { File } from './File';
-import { BoardInputData, BoardInputWhere, JobInputData, JobInputWhere, UserInputData } from './args/';
+import { Event } from './Event';
+
+import {
+  BoardInputData,
+  BoardInputWhere,
+  JobInputData,
+  JobInputWhere,
+  UserInputData,
+  EventInputData,
+  EventInputWhere,
+} from './args/';
+
 import { JobStatus } from './enums/JobStatus';
+import { Feeling } from './enums/Feeling';
 import { EmploymentType } from './enums/EmploymentType';
+import { EventType } from './enums/EventType';
 
 export const GQLDateTime = asNexusMethod(GraphQLDateTime, 'datetime');
 export const GQLDate = asNexusMethod(GraphQLDate, 'date');
@@ -24,6 +38,7 @@ export const types = [
   Mutation,
   Board,
   Job,
+  Event,
   User,
   Autho0User,
   File,
@@ -32,8 +47,12 @@ export const types = [
   JobInputData,
   JobInputWhere,
   UserInputData,
+  EventInputData,
+  EventInputWhere,
   JobStatus,
+  Feeling,
   EmploymentType,
+  EventType,
   GraphQLUpload,
   GraphQLDateTime,
   GraphQLDate,

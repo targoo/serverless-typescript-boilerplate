@@ -33,6 +33,7 @@ export const JobInputData = inputObjectType({
     t.string('duration');
     t.string('rate');
     t.string('ir35');
+    t.field('feeling', { type: 'Feeling' });
     t.field('status', { type: 'JobStatus' });
   },
 });
@@ -50,5 +51,23 @@ export const UserInputData = inputObjectType({
   definition(t) {
     t.string('email', { required: false });
     t.string('name', { required: false });
+  },
+});
+
+export const EventInputData = inputObjectType({
+  name: 'EventInputData',
+  definition(t) {
+    t.datetime('date', { required: false });
+    t.field('type', { type: 'EventType', required: false });
+    t.string('description', { required: false });
+  },
+});
+
+export const EventInputWhere = inputObjectType({
+  name: 'EventInputWhere',
+  definition(t) {
+    t.boolean('isDeleted');
+    t.id('boardUuid', { required: true });
+    t.id('jobUuid', { required: true });
   },
 });

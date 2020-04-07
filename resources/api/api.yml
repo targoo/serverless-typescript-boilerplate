@@ -23,18 +23,18 @@ Resources:
       PathPart: board
 
   # API Gateway authorizer pointing to the User Pool
-  ApiGatewayAuthorizer:
-    DependsOn:
-      - ApiGatewayRestApi
-    Type: AWS::ApiGateway::Authorizer
-    Properties:
-      Name: ${self:service}-${self:custom.stage}-cognito-authorizer
-      Type: COGNITO_USER_POOLS
-      IdentitySource: method.request.header.Authorization
-      RestApiId:
-        Ref: ApiGatewayRestApi
-      ProviderARNs:
-        - Fn::GetAtt: [CognitoUserPool, Arn]
+  # ApiGatewayAuthorizer:
+  #   DependsOn:
+  #     - ApiGatewayRestApi
+  #   Type: AWS::ApiGateway::Authorizer
+  #   Properties:
+  #     Name: ${self:service}-${self:custom.stage}-cognito-authorizer
+  #     Type: COGNITO_USER_POOLS
+  #     IdentitySource: method.request.header.Authorization
+  #     RestApiId:
+  #       Ref: ApiGatewayRestApi
+  #     ProviderARNs:
+  #       - Fn::GetAtt: [CognitoUserPool, Arn]
 
 Outputs:
   # RestApi resource ID (e.g. ei829oe)

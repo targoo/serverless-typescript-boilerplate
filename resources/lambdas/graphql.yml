@@ -22,10 +22,6 @@ graphql:
     - http:
         method: ANY
         path: /graphql
-        authorizer:
-          type: COGNITO_USER_POOLS
-          authorizerId:
-            Ref: ApiGatewayAuthorizer
         cors: true
   package:
     include:

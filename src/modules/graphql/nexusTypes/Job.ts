@@ -3,6 +3,7 @@ import { objectType } from 'nexus';
 import { Board } from './Board';
 import { JobStatus } from './enums/JobStatus';
 import { EmploymentType } from './enums/EmploymentType';
+import { Feeling } from './enums/Feeling';
 
 export const jobFormProperties = [
   'agencyName',
@@ -18,6 +19,7 @@ export const jobFormProperties = [
   'duration',
   'rate',
   'ir35',
+  'feeling',
 ];
 
 export const jobProperties = [
@@ -69,6 +71,8 @@ export const Job = objectType({
     t.string('ir35', { nullable: true });
 
     // Extra
+    t.field('feeling', { type: Feeling });
+
     t.field('status', { type: JobStatus });
 
     t.datetime('createdAt');

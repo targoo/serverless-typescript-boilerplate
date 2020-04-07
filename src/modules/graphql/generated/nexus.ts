@@ -46,6 +46,18 @@ export interface NexusGenInputs {
     // input type
     isDeleted?: boolean | null; // Boolean
   };
+  EventInputData: {
+    // input type
+    date?: any | null; // DateTime
+    description?: string | null; // String
+    type?: NexusGenEnums['EventType'] | null; // EventType
+  };
+  EventInputWhere: {
+    // input type
+    boardUuid: string; // ID!
+    isDeleted?: boolean | null; // Boolean
+    jobUuid: string; // ID!
+  };
   JobInputData: {
     // input type
     agencyName?: string | null; // String
@@ -57,6 +69,7 @@ export interface NexusGenInputs {
     companyWebsite?: string | null; // String
     duration?: string | null; // String
     employmentType?: NexusGenEnums['EmploymentType'] | null; // EmploymentType
+    feeling?: NexusGenEnums['Feeling'] | null; // Feeling
     ir35?: string | null; // String
     jobDescription?: string | null; // String
     jobTitle?: string | null; // String
@@ -77,6 +90,8 @@ export interface NexusGenInputs {
 
 export interface NexusGenEnums {
   EmploymentType: 'CONTRACT' | 'PERMANENT';
+  EventType: 'CALL' | 'FACE2FACE' | 'ONLINETEST' | 'VIDEOCALL';
+  Feeling: 'ECSTATIC' | 'HAPPY' | 'NORMAL' | 'SAD';
   JobStatus: 'ACTIVE' | 'ARCHIVED';
 }
 
@@ -102,6 +117,16 @@ export interface NexusGenRootTypes {
     updatedAt?: any | null; // DateTime
     uuid: string; // ID!
   };
+  Event: {
+    // root type
+    createdAt: any; // DateTime!
+    date: any; // DateTime!
+    description: string; // String!
+    isDeleted: boolean; // Boolean!
+    type: NexusGenEnums['EventType']; // EventType!
+    updatedAt?: any | null; // DateTime
+    uuid: string; // ID!
+  };
   File: {
     // root type
     encoding: string; // String!
@@ -121,6 +146,7 @@ export interface NexusGenRootTypes {
     createdAt: any; // DateTime!
     duration?: string | null; // String
     employmentType?: NexusGenEnums['EmploymentType'] | null; // EmploymentType
+    feeling: NexusGenEnums['Feeling']; // Feeling!
     ir35?: string | null; // String
     isDeleted: boolean; // Boolean!
     jobDescription?: string | null; // String
@@ -156,10 +182,14 @@ export interface NexusGenRootTypes {
 export interface NexusGenAllTypes extends NexusGenRootTypes {
   BoardInputData: NexusGenInputs['BoardInputData'];
   BoardInputWhere: NexusGenInputs['BoardInputWhere'];
+  EventInputData: NexusGenInputs['EventInputData'];
+  EventInputWhere: NexusGenInputs['EventInputWhere'];
   JobInputData: NexusGenInputs['JobInputData'];
   JobInputWhere: NexusGenInputs['JobInputWhere'];
   UserInputData: NexusGenInputs['UserInputData'];
   EmploymentType: NexusGenEnums['EmploymentType'];
+  EventType: NexusGenEnums['EventType'];
+  Feeling: NexusGenEnums['Feeling'];
   JobStatus: NexusGenEnums['JobStatus'];
 }
 
@@ -185,6 +215,16 @@ export interface NexusGenFieldTypes {
     updatedAt: any | null; // DateTime
     uuid: string; // ID!
   };
+  Event: {
+    // field return type
+    createdAt: any; // DateTime!
+    date: any; // DateTime!
+    description: string; // String!
+    isDeleted: boolean; // Boolean!
+    type: NexusGenEnums['EventType']; // EventType!
+    updatedAt: any | null; // DateTime
+    uuid: string; // ID!
+  };
   File: {
     // field return type
     encoding: string; // String!
@@ -205,6 +245,7 @@ export interface NexusGenFieldTypes {
     createdAt: any; // DateTime!
     duration: string | null; // String
     employmentType: NexusGenEnums['EmploymentType'] | null; // EmploymentType
+    feeling: NexusGenEnums['Feeling']; // Feeling!
     ir35: string | null; // String
     isDeleted: boolean; // Boolean!
     jobDescription: string | null; // String
@@ -325,16 +366,18 @@ export interface NexusGenAbstractResolveReturnTypes {}
 
 export interface NexusGenInheritedFields {}
 
-export type NexusGenObjectNames = 'Autho0User' | 'Board' | 'File' | 'Job' | 'Mutation' | 'Query' | 'User';
+export type NexusGenObjectNames = 'Autho0User' | 'Board' | 'Event' | 'File' | 'Job' | 'Mutation' | 'Query' | 'User';
 
 export type NexusGenInputNames =
   | 'BoardInputData'
   | 'BoardInputWhere'
+  | 'EventInputData'
+  | 'EventInputWhere'
   | 'JobInputData'
   | 'JobInputWhere'
   | 'UserInputData';
 
-export type NexusGenEnumNames = 'EmploymentType' | 'JobStatus';
+export type NexusGenEnumNames = 'EmploymentType' | 'EventType' | 'Feeling' | 'JobStatus';
 
 export type NexusGenInterfaceNames = never;
 
