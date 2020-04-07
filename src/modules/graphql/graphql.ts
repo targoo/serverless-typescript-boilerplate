@@ -30,14 +30,14 @@ const server: ApolloServer = new ApolloServer({
     return error;
   },
   context: ({ event, context }) => {
-    console.log('event.headers', event.headers);
+    // console.log('event.headers', event.headers);
     const {
       headers: { authorization },
     } = event;
-    console.log('authorization', authorization);
+    // console.log('authorization', authorization);
 
     const isTokenValid = verify(authorization);
-    console.log('isTokenValid', isTokenValid);
+    // console.log('isTokenValid', isTokenValid);
 
     const { sub, email, email_verified, nickname, name } = isTokenValid
       ? decode(authorization)

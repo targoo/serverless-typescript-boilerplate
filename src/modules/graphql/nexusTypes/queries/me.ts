@@ -4,6 +4,10 @@ export const me = {
   type: 'User' as 'User',
 
   resolve: async (_parent, _arg, { userId, userEmail, dynamo }) => {
+    if (!userId || !userEmail) {
+      throw new Error('cannot create a new user');
+    }
+
     const key = {
       id: `USER#${userId}`,
       relation: `USER`,
