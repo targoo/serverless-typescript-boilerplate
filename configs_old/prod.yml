@@ -1,8 +1,0 @@
-ENV: prod
-MESSAGE: 'loko é poko'
-DYNAMO_TABLE_BOOKS: ${self:custom.dynamo-books} # Reference to Custom Env
-SQS_QUEUE_URL: 'https://sqs.${self:provider.region}.amazonaws.com/#{AWS::AccountId}/${self:custom.sqs-logs}'
-REGION: ${self:custom.region}
-AUTH0_DOMAIN: jobpod.eu.auth0.com
-AUTH0_CLIENT_ID: qHfTsQJqfAZHhnl7zgzMYhRQtChxQlTx
-APP_URL: https://jobpod.com

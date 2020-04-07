@@ -30,6 +30,12 @@ yarn-error.log*
 
 coverage/
 
+configs/dev.yml
+configs/local.yml
+configs/prod.yml
+configs/stage.yml
+configs/test.yml
+
 # Others
 .eslintcache
 .DS_Store
