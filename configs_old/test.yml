@@ -5,3 +5,4 @@ SQS_QUEUE_URL: 'https://sqs.${self:provider.region}.amazonaws.com/#{AWS::Account
 REGION: ${self:custom.region}
 AUTH0_DOMAIN: jobpod.eu.auth0.com
 AUTH0_CLIENT_ID: qHfTsQJqfAZHhnl7zgzMYhRQtChxQlTx
+APP_URL: https://jobpod.com
