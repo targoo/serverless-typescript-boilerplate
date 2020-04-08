@@ -82,7 +82,7 @@
     "husky": "4.2.3",
     "jest": "25.3.0",
     "lint-staged": "10.1.2",
-    "prettier": "1.19.1",
+    "prettier": "2.0.4",
     "serverless": "1.67.3",
     "serverless-apigw-binary": "0.4.4",
     "serverless-dynamodb-local": "0.2.39",
