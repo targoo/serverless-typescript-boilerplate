@@ -35,10 +35,8 @@ export const jobs = {
       },
       ProjectionExpression: properties.map(property => `#${property}`),
     };
-    logger.debug(JSON.stringify(params));
 
     let { Items: items }: { Items: IJob[] } = await dynamo.query(params);
-    logger.debug(`items: ${JSON.stringify(items)}`);
 
     items = items.map(item => {
       if (item.createdAt) {
@@ -50,12 +48,9 @@ export const jobs = {
       return item;
     });
 
-    logger.debug(`items: ${JSON.stringify(items)}`);
-
     if (args.where && args.where.isDeleted !== undefined) {
       items = items.filter(item => item.isDeleted === args.where.isDeleted);
     }
-    logger.debug(`items: ${JSON.stringify(items)}`);
 
     return items;
   },

@@ -19,7 +19,6 @@ export const jobFormProperties = [
   'duration',
   'rate',
   'ir35',
-  'feeling',
 ];
 
 export const jobProperties = [
@@ -27,6 +26,7 @@ export const jobProperties = [
   'id',
   'relation',
   'uuid',
+  'feeling',
   'status',
   'isDeleted',
   'createdAt',
