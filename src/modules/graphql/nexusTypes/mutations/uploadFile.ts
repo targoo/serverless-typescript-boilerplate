@@ -10,7 +10,6 @@ import { arg } from 'nexus';
 // import PublicError from '../../lib/PublicError';
 // import { ErrorCode } from '../../types';
 
-// POC For Now. Will be improved in the backend ticket.
 // @todo create uploadFiles
 // @todo create renameFile?
 // @todo create deleteFile?
@@ -24,11 +23,6 @@ export const uploadFile = {
     console.log('_args', _args);
     console.log('_context', _context);
     console.log('_info', _info);
-    // const { prisma, auth } = context;
-    // // Authentification
-    // if (!auth || !auth.userId) {
-    //   throw new PublicError('User not authenticated', ErrorCode.VDASH_214);
-    // }
     // const { filename, mimetype, encoding, size, createReadStream } = await file;
     // console.log('filename', filename);
     // console.log('mimetype', mimetype);
@@ -36,7 +30,7 @@ export const uploadFile = {
     // console.log('size', size);
     // console.log('createReadStream', createReadStream);
     // console.log('process.env.DIGITAL_UPLOAD_BUCKET_NAME', process.env.DIGITAL_UPLOAD_BUCKET_NAME);
-    // const AWS_S3_BUCKET_NAME = 'vdash-test-upload';
+    // const AWS_S3_BUCKET_NAME = 'test-upload';
     // const s3 = new AWS.S3();
     // if (process.env.ENVIRONMENT === 'local') {
     //   AWS.config.update({
