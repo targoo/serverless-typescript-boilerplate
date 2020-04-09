@@ -26,7 +26,7 @@ const server: ApolloServer = new ApolloServer({
   playground: {
     endpoint: graphqlRoutePrefix + '/graphql',
   },
-  formatError: error => {
+  formatError: (error) => {
     return error;
   },
   context: ({ event, context }) => {

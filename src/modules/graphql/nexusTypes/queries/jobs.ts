@@ -33,12 +33,12 @@ export const jobs = {
         ':userUUID': `USER#${userId}`,
         ':relation': args.where.boardUuid ? `JOB#BOARD#${args.where.boardUuid}` : 'JOB#BOARD#',
       },
-      ProjectionExpression: properties.map(property => `#${property}`),
+      ProjectionExpression: properties.map((property) => `#${property}`),
     };
 
     let { Items: items }: { Items: IJob[] } = await dynamo.query(params);
 
-    items = items.map(item => {
+    items = items.map((item) => {
       if (item.createdAt) {
         item.createdAt = new Date(item.createdAt);
       }
@@ -49,7 +49,7 @@ export const jobs = {
     });
 
     if (args.where && args.where.isDeleted !== undefined) {
-      items = items.filter(item => item.isDeleted === args.where.isDeleted);
+      items = items.filter((item) => item.isDeleted === args.where.isDeleted);
     }
 
     return items;

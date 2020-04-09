@@ -1,6 +1,6 @@
 import AWS from 'aws-sdk';
 
-export const handler = async event => {
+export const handler = async (event) => {
   const bucket = process.env.BUCKET;
   const region = process.env.REGION;
 

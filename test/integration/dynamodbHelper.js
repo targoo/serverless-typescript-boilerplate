@@ -12,10 +12,10 @@ export const stage = test;
 // Save set of data
 export const setData = (dataSet, done) => {
   const buildSetData = { RequestItems: {} };
-  dataSet.forEach(data => {
-    buildSetData.RequestItems[data.table] = data.items.map(Item => ({ PutRequest: { Item } }));
+  dataSet.forEach((data) => {
+    buildSetData.RequestItems[data.table] = data.items.map((Item) => ({ PutRequest: { Item } }));
   });
-  docClient.batchWriteItem(buildSetData, err => {
+  docClient.batchWriteItem(buildSetData, (err) => {
     if (err) return done(err);
     return done();
   });
@@ -35,14 +35,14 @@ export const emptyTables = (tableNames, done) => {
     const buildDeleteData = {
       RequestItems: { [scanParams.TableName]: [] },
     };
-    data.Items.forEach(obj => {
+    data.Items.forEach((obj) => {
       const hashkeys = {};
-      tableName.hashKey.forEach(key => {
+      tableName.hashKey.forEach((key) => {
         hashkeys[key] = obj[key];
       });
       buildDeleteData.RequestItems[scanParams.TableName].push({ DeleteRequest: { Key: hashkeys } });
     });
-    return docClient.batchWriteItem(buildDeleteData, error => {
+    return docClient.batchWriteItem(buildDeleteData, (error) => {
       if (error) return done(error);
       return that.emptyTables(reduceTableNames, done);
     });

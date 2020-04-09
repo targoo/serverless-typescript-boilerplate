@@ -1,6 +1,6 @@
 import * as os from 'os';
 
-const formatDuration = ms => {
+const formatDuration = (ms) => {
   ms = Math.abs(ms);
   const time = {
     day: Math.floor(ms / 86400000),
@@ -10,7 +10,7 @@ const formatDuration = ms => {
     millisecond: Math.floor(ms) % 1000,
   };
   return Object.entries(time)
-    .filter(val => val[1] !== 0)
+    .filter((val) => val[1] !== 0)
     .map(([key, val]) => `${val} ${key}${val !== 1 ? 's' : ''}`)
     .join(', ');
 };
@@ -24,7 +24,7 @@ async function processHeathCheck(fn) {
   }
 }
 
-export default function() {
+export default function () {
   const healthcheck = {
     appVersion: process.env.APP_VERSION,
     uptime: formatDuration(process.uptime()),

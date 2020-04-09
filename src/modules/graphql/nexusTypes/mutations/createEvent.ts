@@ -7,7 +7,7 @@ import id from '../../../../utils/id';
 
 function validedFormInput(myObj: string, validKeys: string[]) {
   return Object.keys(myObj)
-    .filter(key => validKeys.includes(key))
+    .filter((key) => validKeys.includes(key))
     .reduce((result, current) => {
       result[current] = myObj[current] || null;
       return result;
