@@ -1,5 +1,10 @@
 export type Modify<T, R> = Omit<T, keyof R> & R;
 
+export enum BoardStatus {
+  ACTIVE = 'ACTIVELYSEEKING',
+  ARCHIVED = 'OPENTPOPPORTUNITY',
+}
+
 export enum JobStatus {
   ACTIVE = 'ACTIVE',
   ARCHIVED = 'ARCHIVED',
@@ -46,6 +51,9 @@ export type IEntityBaseDynamo = Modify<
 
 export interface IBoard extends IEntityBase {
   title: string;
+  description: string;
+  availableDate: string;
+  location: string;
 }
 
 export interface IUser extends IEntityBase {

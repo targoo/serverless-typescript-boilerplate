@@ -33,12 +33,9 @@ const client = {
    * Save an item on DynamoDB
    */
   saveItem: (item: IEntityBase, tableName: string = DYNAMO_TABLE) => {
-    let itemCopy = Object.entries(item).reduce((a, [k, v]) => (v === '' ? a : { ...a, [k]: v }), {});
-
-    itemCopy = ({ ...itemCopy, createdAt: item.createdAt.toISOString() } as unknown) as IEntityBaseDynamo;
     const params = {
       TableName: tableName,
-      Item: itemCopy,
+      Item: item,
     };
     logger.debug(`Dynamo: saveItem : params: ${JSON.stringify(params)}`);
 

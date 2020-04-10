@@ -28,6 +28,10 @@ export const createJob = {
   },
 
   resolve: async (_parent, { boardUuid, data }, { userId, dynamo }) => {
+    if (!userId) {
+      throw new Error('cannot create a new job');
+    }
+
     const uuid = id();
 
     const job = {

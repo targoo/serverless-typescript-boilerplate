@@ -1,9 +1,10 @@
 import { arg } from 'nexus';
 
 import { BoardInputWhere } from '../args';
-import { Board } from '../Board';
+import { Board, boardProperties } from '../Board';
 import { IBoard } from '../../../../types/types';
 import logger from '../../../../utils/logger';
+import { prepareResponseDate } from '../utils/form';
 
 export const boards = {
   type: Board,
@@ -15,7 +16,11 @@ export const boards = {
   },
 
   resolve: async (_parent, args: { where: Partial<IBoard> }, { userId, dynamo }) => {
-    const properties = ['id', 'relation', 'uuid', 'title', 'status', 'createdAt', 'isDeleted', 'updatedAt'];
+    if (!userId) {
+      throw new Error('cannot list the boards');
+    }
+
+    const properties = Object.keys(boardProperties);
 
     const params = {
       KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
@@ -34,23 +39,12 @@ export const boards = {
     let { Items: items }: { Items: IBoard[] } = await dynamo.query(params);
     logger.debug(`items: ${JSON.stringify(items)}`);
 
-    items = items.map((item) => {
-      if (item.createdAt) {
-        item.createdAt = new Date(item.createdAt);
-      }
-      if (item.updatedAt) {
-        item.updatedAt = new Date(item.updatedAt);
-      }
-      return item;
-    });
-
+    items = items.map((item) => prepareResponseDate(item)) as IBoard[];
     logger.debug(`items: ${JSON.stringify(items)}`);
 
     if (args.where && args.where.isDeleted !== undefined) {
       items = items.filter((item) => item.isDeleted === args.where.isDeleted);
     }
-
-    logger.debug(`items: ${JSON.stringify(items)}`);
 
     return items;
   },

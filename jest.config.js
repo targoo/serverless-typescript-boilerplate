@@ -1,5 +1,5 @@
 module.exports = {
-  roots: ['<rootDir>/test/unit'],
+  roots: ['<rootDir>/src'],
   testRegex: '(.*\\.test\\.(jsx?|tsx?))$',
   transform: {
     '^.+\\.tsx?$': 'ts-jest',

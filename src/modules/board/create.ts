@@ -13,6 +13,7 @@ export const handler: Handler = async (event: APIGatewayEvent, _context: Context
   const { title = '' } = JSON.parse(body);
   const uuid: string = v4();
 
+  //@ts-ignore
   const board: IBoard = {
     id: userId,
     relation: `board-${uuid}`,

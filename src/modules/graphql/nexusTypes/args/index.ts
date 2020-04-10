@@ -4,6 +4,10 @@ export const BoardInputData = inputObjectType({
   name: 'BoardInputData',
   definition(t) {
     t.string('title', { required: true });
+    t.string('description');
+    t.date('availableDate');
+    t.string('location');
+    t.boolean('isDeleted');
   },
 });
 

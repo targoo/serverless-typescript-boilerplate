@@ -40,6 +40,10 @@ declare global {
 export interface NexusGenInputs {
   BoardInputData: {
     // input type
+    availableDate?: any | null; // Date
+    description?: string | null; // String
+    isDeleted?: boolean | null; // Boolean
+    location?: string | null; // String
     title: string; // String!
   };
   BoardInputWhere: {
@@ -108,11 +112,11 @@ export interface NexusGenRootTypes {
   };
   Board: {
     // root type
+    availableDate?: any | null; // Date
     createdAt: any; // DateTime!
-    date?: any | null; // Date
+    description?: string | null; // String
     isDeleted: boolean; // Boolean!
-    json?: any | null; // JSON
-    time?: any | null; // Time
+    location?: string | null; // String
     title: string; // String!
     updatedAt?: any | null; // DateTime
     uuid: string; // ID!
@@ -206,11 +210,11 @@ export interface NexusGenFieldTypes {
   };
   Board: {
     // field return type
+    availableDate: any | null; // Date
     createdAt: any; // DateTime!
-    date: any | null; // Date
+    description: string | null; // String
     isDeleted: boolean; // Boolean!
-    json: any | null; // JSON
-    time: any | null; // Time
+    location: string | null; // String
     title: string; // String!
     updatedAt: any | null; // DateTime
     uuid: string; // ID!

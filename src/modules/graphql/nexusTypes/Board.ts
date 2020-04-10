@@ -1,8 +1,30 @@
 import { objectType } from 'nexus';
 
-import { Job } from './Job';
-import logger from '../../../utils/logger';
-import { IJob } from '../../../types/types';
+// import { Job } from './Job';
+// import logger from '../../../utils/logger';
+// import { IJob } from '../../../types/types';
+
+export const boardFormProperties = {
+  title: 'string',
+  description: 'string',
+  availableDate: 'date',
+  location: 'string',
+  isDeleted: 'boolean',
+  // 'locationName',
+  // 'locationAddress',
+  // 'locationRangeKey',
+  // 'locationHash',
+  // 'locationGeoJson',
+};
+
+export const boardProperties = {
+  ...boardFormProperties,
+  id: 'key',
+  relation: 'key',
+  uuid: 'string',
+  createdAt: 'datetime',
+  updatedAt: 'datetime',
+};
 
 export const Board = objectType({
   name: 'Board',
@@ -14,17 +36,33 @@ export const Board = objectType({
 
     t.string('title');
 
+    t.string('description', { nullable: true });
+
+    t.date('availableDate', { nullable: true });
+
+    t.string('location', { nullable: true });
+
+    t.boolean('isDeleted');
+
     t.datetime('createdAt');
 
     t.datetime('updatedAt', { nullable: true });
 
-    t.boolean('isDeleted');
+    // t.string('locationName', { nullable: true });
 
-    t.time('time', { nullable: true });
+    // t.string('locationAddress', { nullable: true });
 
-    t.date('date', { nullable: true });
+    // t.string('locationRangekey', { nullable: true });
 
-    t.json('json', { nullable: true });
+    // t.string('locationHash', { nullable: true });
+
+    // t.json('locationGeoJson', { nullable: true });
+
+    // t.time('time', { nullable: true });
+
+    // t.date('date', { nullable: true });
+
+    // t.json('json', { nullable: true });
 
     // t.list.field('jobs', {
     //   type: Job,
