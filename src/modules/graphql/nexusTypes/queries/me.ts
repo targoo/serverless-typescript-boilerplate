@@ -1,9 +1,12 @@
 import { IUser } from '../../../../types/types';
+import { prepareFormInput, prepareResponseDate } from '../utils/form';
+import { User, userFormProperties } from '../User';
+import logger from '../../../../utils/logger';
 
 export const me = {
-  type: 'User' as 'User',
+  type: User,
 
-  resolve: async (_parent, _arg, { userId, userEmail, dynamo }) => {
+  resolve: async (_parent, _arg, { userId, userEmail, userName, dynamo }) => {
     if (!userId || !userEmail) {
       throw new Error('cannot create a new user');
     }
@@ -16,34 +19,28 @@ export const me = {
     const { Item } = await dynamo.getItem(key);
 
     if (Item) {
-      if (Item.createdAt) {
-        Item.createdAt = new Date(Item.createdAt);
-      }
-      if (Item.updatedAt) {
-        Item.updatedAt = new Date(Item.updatedAt);
-      }
-      return Item;
+      const response = prepareResponseDate(Item);
+      logger.debug(JSON.stringify(response));
+
+      return response;
     } else {
-      const user: IUser = {
+      const nickname = userName ? userName : userEmail;
+      const user = ({
+        ...prepareFormInput({ nickname, email: userEmail }, userFormProperties),
         id: `USER#${userId}`,
         relation: `USER`,
-        uuid: userId,
-        name: userEmail,
-        email: userEmail,
-        isDeleted: false,
-        createdAt: new Date(),
-      };
+        uuid: JSON.stringify({ format: 'string', value: userId }),
+        isDeleted: JSON.stringify({ format: 'boolean', value: false }),
+        createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
+      } as unknown) as IUser;
 
+      logger.debug(JSON.stringify(user));
       await dynamo.saveItem(user);
 
-      const { Item } = await dynamo.getItem(key);
-      if (Item.createdAt) {
-        Item.createdAt = new Date(Item.createdAt);
-      }
-      if (Item.updatedAt) {
-        Item.updatedAt = new Date(Item.updatedAt);
-      }
-      return Item;
+      const response = prepareResponseDate(user);
+      logger.debug(JSON.stringify(response));
+
+      return response;
     }
   },
 };

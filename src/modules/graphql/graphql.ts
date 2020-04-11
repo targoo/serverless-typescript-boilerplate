@@ -52,6 +52,7 @@ const server: ApolloServer = new ApolloServer({
       event,
       userId: sub,
       userEmail: email,
+      userName: nickname,
       context,
     };
   },

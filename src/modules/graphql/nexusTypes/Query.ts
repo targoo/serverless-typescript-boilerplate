@@ -9,6 +9,7 @@ const Query = queryType({
       resolve: (_parent, { name }) => `Hello ${name || 'World'}!!!`,
     });
 
+    // @ts-ignore
     t.field('me', me);
 
     // @ts-ignore

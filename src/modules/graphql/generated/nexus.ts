@@ -167,7 +167,7 @@ export interface NexusGenRootTypes {
     createdAt: any; // DateTime!
     email: string; // String!
     isDeleted: boolean; // Boolean!
-    name: string; // String!
+    nickname: string; // String!
     updatedAt?: any | null; // DateTime
     uuid: string; // ID!
   };
@@ -285,7 +285,7 @@ export interface NexusGenFieldTypes {
     createdAt: any; // DateTime!
     email: string; // String!
     isDeleted: boolean; // Boolean!
-    name: string; // String!
+    nickname: string; // String!
     updatedAt: any | null; // DateTime
     uuid: string; // ID!
   };

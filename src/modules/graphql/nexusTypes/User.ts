@@ -1,7 +1,8 @@
 import { objectType } from 'nexus';
 
 export const userFormProperties = {
-  name: 'string',
+  nickname: 'string',
+  email: 'string',
   isDeleted: 'boolean',
 };
 
@@ -9,7 +10,6 @@ export const userProperties = {
   ...userFormProperties,
   id: 'key',
   relation: 'key',
-  email: 'email',
   uuid: 'string',
   createdAt: 'datetime',
   updatedAt: 'datetime',
@@ -18,7 +18,7 @@ export const userProperties = {
 export const User = objectType({
   name: 'User',
   definition(t) {
-    t.string('name');
+    t.string('nickname');
 
     t.string('email');
 

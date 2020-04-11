@@ -203,7 +203,7 @@ type User {
   createdAt: DateTime!
   email: String!
   isDeleted: Boolean!
-  name: String!
+  nickname: String!
   updatedAt: DateTime
 
   """UUID of the user (Cognito Sub)"""
