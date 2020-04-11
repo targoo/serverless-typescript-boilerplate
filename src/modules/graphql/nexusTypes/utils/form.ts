@@ -5,32 +5,33 @@ export function prepareFormInput(myObj: any, formProperties: any) {
     .filter((key) => validKeys.includes(key))
     .reduce((result, key) => {
       const currentObject = myObj[key];
+      console.log('key', key);
+      console.log('currentObject', currentObject);
+      console.log('formProperties[key]', formProperties[key]);
       switch (formProperties[key]) {
         case 'date':
           result[key] = JSON.stringify({
             format: 'date',
             value: currentObject.toISOString(),
           });
-          return result;
+          break;
         case 'datetime':
           result[key] = JSON.stringify({
             format: 'datetime',
             value: currentObject.toISOString(),
           });
-          return result;
+          break;
         case 'string':
           result[key] = JSON.stringify({
             format: 'string',
             value: currentObject,
           });
-          return result;
+          break;
         case 'boolean':
           result[key] = JSON.stringify({
             format: 'boolean',
             value: currentObject,
           });
-          return result;
-        default:
           break;
       }
       return result;

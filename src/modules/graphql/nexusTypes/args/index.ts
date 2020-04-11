@@ -37,6 +37,8 @@ export const JobInputData = inputObjectType({
     t.string('duration');
     t.string('rate');
     t.string('ir35');
+    // Extra
+    t.boolean('isDeleted');
     t.field('feeling', { type: 'Feeling' });
     t.field('status', { type: 'JobStatus' });
   },

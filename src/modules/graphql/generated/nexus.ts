@@ -75,6 +75,7 @@ export interface NexusGenInputs {
     employmentType?: NexusGenEnums['EmploymentType'] | null; // EmploymentType
     feeling?: NexusGenEnums['Feeling'] | null; // Feeling
     ir35?: string | null; // String
+    isDeleted?: boolean | null; // Boolean
     jobDescription?: string | null; // String
     jobTitle?: string | null; // String
     rate?: string | null; // String
@@ -242,7 +243,6 @@ export interface NexusGenFieldTypes {
     agentEmail: string | null; // String
     agentName: string | null; // String
     agentPhone: string | null; // String
-    board: NexusGenRootTypes['Board']; // Board!
     company: string | null; // String
     companyLocation: string | null; // String
     companyWebsite: string | null; // String

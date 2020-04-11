@@ -4,11 +4,7 @@ import { JobInputWhere } from '../args';
 import { Job, jobProperties } from '../Job';
 import { IJob } from '../../../../types/types';
 import logger from '../../../../utils/logger';
-
-interface JobInputWhere {
-  isDeleted?: boolean;
-  boardUuid?: string;
-}
+import { prepareResponseDate } from '../utils/form';
 
 export const jobs = {
   type: Job,
@@ -20,8 +16,21 @@ export const jobs = {
     }),
   },
 
-  resolve: async (_parent, args: { where: JobInputWhere }, { userId, dynamo }) => {
-    const properties = jobProperties;
+  resolve: async (
+    _parent,
+    args: {
+      where: {
+        isDeleted?: boolean;
+        boardUuid: string;
+      };
+    },
+    { userId, dynamo },
+  ) => {
+    if (!userId) {
+      throw new Error('Not authorized to list the jobs');
+    }
+
+    const properties = Object.keys(jobProperties);
 
     const params = {
       KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
@@ -35,18 +44,13 @@ export const jobs = {
       },
       ProjectionExpression: properties.map((property) => `#${property}`),
     };
+    logger.debug(JSON.stringify(params));
 
     let { Items: items }: { Items: IJob[] } = await dynamo.query(params);
+    logger.debug(`items: ${JSON.stringify(items)}`);
 
-    items = items.map((item) => {
-      if (item.createdAt) {
-        item.createdAt = new Date(item.createdAt);
-      }
-      if (item.updatedAt) {
-        item.updatedAt = new Date(item.updatedAt);
-      }
-      return item;
-    });
+    items = items.map((item) => prepareResponseDate(item)) as IJob[];
+    logger.debug(`items: ${JSON.stringify(items)}`);
 
     if (args.where && args.where.isDeleted !== undefined) {
       items = items.filter((item) => item.isDeleted === args.where.isDeleted);

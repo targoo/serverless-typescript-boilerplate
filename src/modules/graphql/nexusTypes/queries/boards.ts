@@ -15,9 +15,17 @@ export const boards = {
     }),
   },
 
-  resolve: async (_parent, args: { where: Partial<IBoard> }, { userId, dynamo }) => {
+  resolve: async (
+    _parent,
+    args: {
+      where: {
+        isDeleted?: boolean;
+      };
+    },
+    { userId, dynamo },
+  ) => {
     if (!userId) {
-      throw new Error('cannot list the boards');
+      throw new Error('Not authorized to list the boards');
     }
 
     const properties = Object.keys(boardProperties);

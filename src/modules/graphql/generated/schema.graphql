@@ -118,7 +118,6 @@ type Job {
   agentEmail: String
   agentName: String
   agentPhone: String
-  board: Board!
   company: String
   companyLocation: String
   companyWebsite: String
@@ -152,6 +151,7 @@ input JobInputData {
   employmentType: EmploymentType
   feeling: Feeling
   ir35: String
+  isDeleted: Boolean
   jobDescription: String
   jobTitle: String
   rate: String
@@ -189,7 +189,7 @@ type Mutation {
 type Query {
   board(
     """
-    The id of the board
+    The unique id of the board
     """
     uuid: ID!
   ): Board!

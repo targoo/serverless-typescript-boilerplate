@@ -4,15 +4,8 @@ import { JobInputData } from '../args';
 import { Job, jobFormProperties } from '../Job';
 import { IJob, JobStatus, Feeling } from '../../../../types/types';
 import id from '../../../../utils/id';
-
-function validedFormInput(myObj: string, validKeys: string[]) {
-  return Object.keys(myObj)
-    .filter((key) => validKeys.includes(key))
-    .reduce((result, current) => {
-      result[current] = myObj[current] || null;
-      return result;
-    }, {});
-}
+import logger from '../../../../utils/logger';
+import { prepareFormInput, prepareResponseDate } from '../utils/form';
 
 export const createJob = {
   type: Job,
@@ -29,23 +22,27 @@ export const createJob = {
 
   resolve: async (_parent, { boardUuid, data }, { userId, dynamo }) => {
     if (!userId) {
-      throw new Error('cannot create a new job');
+      throw new Error('Not authorized to create a new job');
     }
 
     const uuid = id();
 
-    const job = {
-      ...validedFormInput(data, jobFormProperties),
+    const job = ({
+      ...prepareFormInput(data, jobFormProperties),
       id: `USER#${userId}`,
       relation: `JOB#BOARD#${boardUuid}#${uuid}`,
-      uuid,
-      status: JobStatus.ACTIVE,
-      feeling: Feeling.NORMAL,
-      isDeleted: false,
-      createdAt: new Date(),
-    } as IJob;
+      uuid: JSON.stringify({ format: 'string', value: uuid }),
+      status: JSON.stringify({ format: 'string', value: JobStatus.ACTIVE }),
+      feeling: JSON.stringify({ format: 'string', value: Feeling.NORMAL }),
+      isDeleted: JSON.stringify({ format: 'boolean', value: false }),
+      createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
+    } as unknown) as IJob;
 
+    logger.debug(JSON.stringify(job));
     await dynamo.saveItem(job);
+
+    const response = prepareResponseDate(job);
+    logger.debug(JSON.stringify(response));
 
     return job;
   },

@@ -19,7 +19,7 @@ export const createBoard = {
 
   resolve: async (_parent, { data }, { userId, dynamo }) => {
     if (!userId) {
-      throw new Error('cannot create a new board');
+      throw new Error('Not authorized to create a new board');
     }
 
     const uuid = id();
@@ -30,7 +30,7 @@ export const createBoard = {
       relation: `BOARD#${uuid}`,
       uuid: JSON.stringify({ format: 'string', value: uuid }),
       isDeleted: JSON.stringify({ format: 'boolean', value: false }),
-      createdAt: JSON.stringify({ format: 'date', value: new Date().toISOString() }),
+      createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
     } as unknown) as IBoard;
 
     logger.debug(JSON.stringify(board));

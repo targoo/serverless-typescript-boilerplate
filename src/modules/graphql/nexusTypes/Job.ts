@@ -5,33 +5,33 @@ import { JobStatus } from './enums/JobStatus';
 import { EmploymentType } from './enums/EmploymentType';
 import { Feeling } from './enums/Feeling';
 
-export const jobFormProperties = [
-  'agencyName',
-  'agentName',
-  'agentEmail',
-  'agentPhone',
-  'jobTitle',
-  'company',
-  'companyWebsite',
-  'companyLocation',
-  'jobDescription',
-  'employmentType',
-  'duration',
-  'rate',
-  'ir35',
-];
+export const jobFormProperties = {
+  agencyName: 'string',
+  agentName: 'string',
+  agentEmail: 'string',
+  agentPhone: 'string',
+  jobTitle: 'string',
+  company: 'string',
+  companyWebsite: 'string',
+  companyLocation: 'string',
+  jobDescription: 'string',
+  employmentType: 'string',
+  duration: 'string',
+  rate: 'string',
+  ir35: 'boolean',
+  feeling: 'string',
+  status: 'string',
+  isDeleted: 'boolean',
+};
 
-export const jobProperties = [
+export const jobProperties = {
   ...jobFormProperties,
-  'id',
-  'relation',
-  'uuid',
-  'feeling',
-  'status',
-  'isDeleted',
-  'createdAt',
-  'updatedAt',
-];
+  id: 'key',
+  relation: 'key',
+  uuid: 'string',
+  createdAt: 'datetime',
+  updatedAt: 'datetime',
+};
 
 export const Job = objectType({
   name: 'Job',
@@ -81,21 +81,21 @@ export const Job = objectType({
 
     t.boolean('isDeleted');
 
-    t.field('board', {
-      type: Board,
-      resolve: async (parent, _args, { userId, dynamo }) => {
-        // @ts-ignore
-        const { uuid, relation } = parent;
+    // t.field('board', {
+    //   type: Board,
+    //   resolve: async (parent, _args, { userId, dynamo }) => {
+    //     // @ts-ignore
+    //     const { uuid, relation } = parent;
 
-        const key = {
-          id: `USER#${userId}`,
-          relation: `BOARD#${relation.split('#')[2]}`,
-        };
+    //     const key = {
+    //       id: `USER#${userId}`,
+    //       relation: `BOARD#${relation.split('#')[2]}`,
+    //     };
 
-        const { Item = {} } = await dynamo.getItem(key);
+    //     const { Item = {} } = await dynamo.getItem(key);
 
-        return Item;
-      },
-    });
+    //     return Item;
+    //   },
+    // });
   },
 });
