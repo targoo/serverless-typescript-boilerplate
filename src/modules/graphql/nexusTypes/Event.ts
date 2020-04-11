@@ -2,17 +2,21 @@ import { objectType } from 'nexus';
 
 import { EventType } from './enums/EventType';
 
-export const eventFormProperties = ['date', 'type', 'description'];
+export const eventFormProperties = {
+  description: 'string',
+  type: 'string',
+  date: 'datetime',
+  isDeleted: 'boolean',
+};
 
-export const eventProperties = [
+export const eventProperties = {
   ...eventFormProperties,
-  'id',
-  'relation',
-  'uuid',
-  'isDeleted',
-  'createdAt',
-  'updatedAt',
-];
+  id: 'key',
+  relation: 'key',
+  uuid: 'string',
+  createdAt: 'datetime',
+  updatedAt: 'datetime',
+};
 
 export const Event = objectType({
   name: 'Event',

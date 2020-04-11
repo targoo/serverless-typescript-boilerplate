@@ -21,7 +21,7 @@ export const updateBoard = {
 
   resolve: async (_parent, { uuid, data }, { userId, dynamo }) => {
     if (!userId) {
-      throw new Error('cannot archive the board');
+      throw new Error('Not authorized to update the board');
     }
 
     const key: IKeyBase = {

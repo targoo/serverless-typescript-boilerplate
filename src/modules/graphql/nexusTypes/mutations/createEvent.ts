@@ -4,15 +4,8 @@ import { EventInputData } from '../args';
 import { Event, eventFormProperties } from '../Event';
 import { IEvent } from '../../../../types/types';
 import id from '../../../../utils/id';
-
-function validedFormInput(myObj: string, validKeys: string[]) {
-  return Object.keys(myObj)
-    .filter((key) => validKeys.includes(key))
-    .reduce((result, current) => {
-      result[current] = myObj[current] || null;
-      return result;
-    }, {});
-}
+import logger from '../../../../utils/logger';
+import { prepareFormInput, prepareResponseDate } from '../utils/form';
 
 export const createEvent = {
   type: Event,
@@ -31,18 +24,26 @@ export const createEvent = {
   },
 
   resolve: async (_parent, { boardUuid, jobUuid, data }, { userId, dynamo }) => {
+    if (!userId) {
+      throw new Error('Not authorized to create a new event');
+    }
+
     const uuid = id();
 
-    const event = {
-      ...validedFormInput(data, eventFormProperties),
+    const event = ({
+      ...prepareFormInput(data, eventFormProperties),
       id: `USER#${userId}`,
       relation: `EVENT#JOB#BOARD#${boardUuid}#${jobUuid}#${uuid}`,
-      uuid,
-      isDeleted: false,
-      createdAt: new Date(),
-    } as IEvent;
+      uuid: JSON.stringify({ format: 'string', value: uuid }),
+      isDeleted: JSON.stringify({ format: 'boolean', value: false }),
+      createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
+    } as unknown) as IEvent;
 
+    logger.debug(JSON.stringify(event));
     await dynamo.saveItem(event);
+
+    const response = prepareResponseDate(event);
+    logger.debug(JSON.stringify(response));
 
     return event;
   },

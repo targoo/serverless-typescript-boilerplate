@@ -1,5 +1,9 @@
 import { idArg } from 'nexus';
+
 import { Job } from '../Job';
+import logger from '../../../../utils/logger';
+import { prepareResponseDate } from '../utils/form';
+import { IJob } from '../../../../types/types';
 
 const jobArgs = {
   boardUuid: idArg({
@@ -18,13 +22,21 @@ export const job = {
   args: jobArgs,
 
   resolve: async (_parent, { boardUuid, uuid }, { userId, dynamo }) => {
+    if (!userId) {
+      throw new Error('Not authorized to get the board');
+    }
+
     const key = {
       id: `USER#${userId}`,
       relation: `JOB#BOARD#${boardUuid}#${uuid}`,
     };
 
-    const { Item = {} } = await dynamo.getItem(key);
+    const { Item }: { Item: IJob } = await dynamo.getItem(key);
+    logger.debug(`item: ${JSON.stringify(Item)}`);
 
-    return Item;
+    const item = prepareResponseDate(Item);
+    logger.debug(`item: ${JSON.stringify(item)}`);
+
+    return item;
   },
 };

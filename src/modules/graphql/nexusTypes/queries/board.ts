@@ -1,9 +1,9 @@
 import { idArg } from 'nexus';
 
 import { IBoard } from '../../../../types/types';
+import { Board } from '../Board';
 import logger from '../../../../utils/logger';
 import { prepareResponseDate } from '../utils/form';
-import { Board } from '../Board';
 
 const boardArgs = {
   uuid: idArg({
@@ -19,7 +19,7 @@ export const board = {
 
   resolve: async (_parent, { uuid }, { userId, dynamo }) => {
     if (!userId) {
-      throw new Error('cannot get the board');
+      throw new Error('Not authorized to get the board');
     }
 
     const key = {

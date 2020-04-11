@@ -55,7 +55,6 @@ export const JobInputWhere = inputObjectType({
 export const UserInputData = inputObjectType({
   name: 'UserInputData',
   definition(t) {
-    t.string('email', { required: false });
     t.string('name', { required: false });
   },
 });

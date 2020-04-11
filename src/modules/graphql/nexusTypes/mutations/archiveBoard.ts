@@ -16,7 +16,7 @@ export const archiveBoard = {
 
   resolve: async (_parent, { uuid }, { userId, dynamo }) => {
     if (!userId) {
-      throw new Error('cannot archive the board');
+      throw new Error('Not authorized to archive the board');
     }
 
     const key: IKeyBase = {

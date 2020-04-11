@@ -4,6 +4,7 @@ import { JobInputData } from '../args';
 import { Job, jobFormProperties } from '../Job';
 import { IJob, IKeyBase } from '../../../../types/types';
 import logger from '../../../../utils/logger';
+import { prepareFormInput, prepareResponseDate } from '../utils/form';
 
 export const updateJob = {
   type: Job,
@@ -22,12 +23,18 @@ export const updateJob = {
   },
 
   resolve: async (_parent, { boardUuid, uuid, data }, { userId, dynamo }) => {
+    if (!userId) {
+      throw new Error('Not authorized to update the job');
+    }
+
     const key: IKeyBase = {
       id: `USER#${userId}`,
       relation: `JOB#BOARD#${boardUuid}#${uuid}`,
     };
 
-    const jobFormPropertiesWithUpdateAt = [...jobFormProperties, 'updatedAt'];
+    const prepData = prepareFormInput(data, jobFormProperties);
+
+    const jobFormPropertiesWithUpdateAt = [...Object.keys(prepData), 'updatedAt'];
 
     const UpdateExpression = jobFormPropertiesWithUpdateAt.reduce((acc, cur, index) => {
       acc = index === 0 ? `${acc} #${cur} = :${cur}` : `${acc}, #${cur} = :${cur}`;
@@ -57,9 +64,11 @@ export const updateJob = {
     await dynamo.updateItem(params, key);
 
     const { Item }: { Item: IJob } = await dynamo.getItem(key);
-    Item.createdAt = new Date(Item.createdAt);
-    Item.updatedAt = new Date(Item.updatedAt);
+    logger.debug(`item: ${JSON.stringify(Item)}`);
 
-    return Item;
+    const item = prepareResponseDate(Item);
+    logger.debug(`item: ${JSON.stringify(item)}`);
+
+    return item;
   },
 };

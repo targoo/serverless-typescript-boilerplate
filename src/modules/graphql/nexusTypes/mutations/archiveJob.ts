@@ -2,6 +2,8 @@ import { idArg } from 'nexus';
 
 import { Job } from '../Job';
 import { IJob, IKeyBase } from '../../../../types/types';
+import { prepareResponseDate } from '../utils/form';
+import logger from '../../../../utils/logger';
 
 export const archiveJob = {
   type: Job,
@@ -16,6 +18,10 @@ export const archiveJob = {
   },
 
   resolve: async (_parent, { boardUuid, uuid }, { userId, dynamo }) => {
+    if (!userId) {
+      throw new Error('Not authorized to archive the job');
+    }
+
     const key: IKeyBase = {
       id: `USER#${userId}`,
       relation: `JOB#BOARD#${boardUuid}#${uuid}`,
@@ -25,17 +31,19 @@ export const archiveJob = {
       UpdateExpression: 'set #isDeleted = :isDeleted, #updatedAt = :updatedAt',
       ExpressionAttributeNames: { '#isDeleted': 'isDeleted', '#updatedAt': 'updatedAt' },
       ExpressionAttributeValues: {
-        ':isDeleted': true,
-        ':updatedAt': new Date().toISOString(),
+        ':isDeleted': JSON.stringify({ format: 'boolean', value: true }),
+        ':updatedAt': JSON.stringify({ format: 'date', value: new Date().toISOString() }),
       },
     };
 
     await dynamo.updateItem(params, key);
 
     const { Item }: { Item: IJob } = await dynamo.getItem(key);
-    Item.createdAt = new Date(Item.createdAt);
-    Item.updatedAt = new Date(Item.updatedAt);
+    logger.debug(`item: ${JSON.stringify(Item)}`);
 
-    return Item;
+    const item = prepareResponseDate(Item);
+    logger.debug(`item: ${JSON.stringify(item)}`);
+
+    return item;
   },
 };
