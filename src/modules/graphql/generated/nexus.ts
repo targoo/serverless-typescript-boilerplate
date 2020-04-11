@@ -88,7 +88,6 @@ export interface NexusGenInputs {
   };
   UserInputData: {
     // input type
-    email?: string | null; // String
     name?: string | null; // String
   };
 }

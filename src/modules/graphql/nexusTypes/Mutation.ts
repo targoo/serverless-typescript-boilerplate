@@ -20,18 +20,25 @@ export const Mutation = objectType({
 
     t.field('passwordlessSignIn', passwordlessSignIn);
 
+    // @ts-ignore
     t.field('createBoard', createBoard);
 
+    // @ts-ignore
     t.field('updateBoard', updateBoard);
 
+    // @ts-ignore
     t.field('archiveBoard', archiveBoard);
 
+    // @ts-ignore
     t.field('createJob', createJob);
 
+    // @ts-ignore
     t.field('archiveJob', archiveJob);
 
+    // @ts-ignore
     t.field('updateJob', updateJob);
 
+    // @ts-ignore
     t.field('updateUser', updateUser);
 
     // @ts-ignore

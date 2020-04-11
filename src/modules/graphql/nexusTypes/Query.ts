@@ -11,12 +11,16 @@ const Query = queryType({
 
     t.field('me', me);
 
+    // @ts-ignore
     t.field('board', board);
 
+    // @ts-ignore
     t.list.field('boards', boards);
 
+    // @ts-ignore
     t.field('job', job);
 
+    // @ts-ignore
     t.list.field('jobs', jobs);
   },
 });
