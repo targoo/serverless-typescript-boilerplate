@@ -16,8 +16,10 @@ import {
 export const Mutation = objectType({
   name: 'Mutation',
   definition(t) {
+    // @ts-ignore
     t.field('passwordlessSignInConfirm', passwordlessSignInConfirm);
 
+    // @ts-ignore
     t.field('passwordlessSignIn', passwordlessSignIn);
 
     // @ts-ignore

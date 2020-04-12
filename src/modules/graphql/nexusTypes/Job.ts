@@ -68,7 +68,7 @@ export const Job = objectType({
 
     t.string('rate', { nullable: true });
 
-    t.string('ir35', { nullable: true });
+    t.boolean('ir35', { nullable: true });
 
     // Extra
     t.field('feeling', { type: Feeling });

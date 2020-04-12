@@ -2,7 +2,41 @@ import { stringArg } from 'nexus';
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { Autho0User } from '../Autho0User';
 
-import { sign } from '../../../../utils/jwt';
+import { sign, decode } from '../../../../utils/jwt';
+import logger from '../../../../utils/logger';
+
+// Return the a memorized token until it expires
+const memo = (() => {
+  let authData: { jwt: string } | undefined;
+  return (state: string | undefined, newAuthData = undefined) => {
+    if (newAuthData) {
+      authData = newAuthData;
+      return newAuthData;
+    }
+
+    if (!authData) {
+      return;
+    }
+
+    if (!authData.jwt) {
+      return;
+    }
+
+    // Decode and check the token
+    const decodeJwt = decode(authData.jwt);
+
+    if (decodeJwt.state !== state) {
+      return;
+    }
+
+    const now = new Date().getTime();
+    if (decodeJwt.exp * 1000 < now) {
+      return;
+    }
+
+    return authData;
+  };
+})();
 
 export const passwordlessSignInConfirm = {
   type: Autho0User,
@@ -18,22 +52,27 @@ export const passwordlessSignInConfirm = {
 
   resolve: async (_parent, { accessToken, state }) => {
     try {
-      const { data } = await axios({
-        method: 'post',
-        url: `https://${process.env.AUTH0_DOMAIN}/userinfo`,
-        headers: {
-          'content-type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-      const jwt = sign(data);
-      return { ...data, uuid: data.sub, jwt };
+      const authData = memo(state);
+      if (authData) {
+        logger.debug(`return memo auth0 token`);
+        return authData;
+      } else {
+        logger.debug(`return fresh auth0 token`);
+        const { data } = await axios({
+          method: 'post',
+          url: `https://${process.env.AUTH0_DOMAIN}/userinfo`,
+          headers: {
+            'content-type': 'application/json',
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+        const jwt = sign({ ...data, state });
+        return memo(state, { ...data, uuid: data.sub, jwt });
+      }
     } catch (error) {
       console.log('error', error);
       return {};
     }
-
-    return true;
   },
 };
 

@@ -74,7 +74,7 @@ export interface NexusGenInputs {
     duration?: string | null; // String
     employmentType?: NexusGenEnums['EmploymentType'] | null; // EmploymentType
     feeling?: NexusGenEnums['Feeling'] | null; // Feeling
-    ir35?: string | null; // String
+    ir35?: boolean | null; // Boolean
     isDeleted?: boolean | null; // Boolean
     jobDescription?: string | null; // String
     jobTitle?: string | null; // String
@@ -151,7 +151,7 @@ export interface NexusGenRootTypes {
     duration?: string | null; // String
     employmentType?: NexusGenEnums['EmploymentType'] | null; // EmploymentType
     feeling: NexusGenEnums['Feeling']; // Feeling!
-    ir35?: string | null; // String
+    ir35?: boolean | null; // Boolean
     isDeleted: boolean; // Boolean!
     jobDescription?: string | null; // String
     jobTitle?: string | null; // String
@@ -249,7 +249,7 @@ export interface NexusGenFieldTypes {
     duration: string | null; // String
     employmentType: NexusGenEnums['EmploymentType'] | null; // EmploymentType
     feeling: NexusGenEnums['Feeling']; // Feeling!
-    ir35: string | null; // String
+    ir35: boolean | null; // Boolean
     isDeleted: boolean; // Boolean!
     jobDescription: string | null; // String
     jobTitle: string | null; // String
