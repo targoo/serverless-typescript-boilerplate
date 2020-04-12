@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import { APIGatewayEvent, Context, Handler, Callback } from 'aws-lambda';
+import { APIGatewayEvent, Context, Handler, Callback, APIGatewayProxyHandler } from 'aws-lambda';
 import { ApolloServer } from 'apollo-server-lambda';
 import { makeSchema } from 'nexus';
 import { join } from 'path';
@@ -30,20 +30,20 @@ const server: ApolloServer = new ApolloServer({
     return error;
   },
   context: ({ event, context }) => {
-    // console.log('event.headers', event.headers);
+    console.log('event.headers', event.headers);
     const {
-      headers: { authorization },
+      headers: { Authorization },
     } = event;
-    // console.log('authorization', authorization);
 
-    const isTokenValid = verify(authorization);
-    // console.log('isTokenValid', isTokenValid);
+    const isTokenValid = verify(Authorization);
+    console.log('isTokenValid', isTokenValid);
 
     const { sub, email, email_verified, nickname, name } = isTokenValid
-      ? decode(authorization)
+      ? decode(Authorization)
       : { sub: undefined, email: undefined, email_verified: undefined, nickname: undefined, name: undefined };
-    console.log('sub', sub);
-    console.log('email', email);
+    console.log('userId', sub);
+    console.log('userEmail', email);
+    console.log('userName', nickname);
 
     return {
       headers: event.headers,
@@ -58,18 +58,22 @@ const server: ApolloServer = new ApolloServer({
   },
 });
 
-export const handler: Handler = server.createHandler({
-  cors: {
-    origin: '*',
-    credentials: true,
-  },
-  onHealthCheck: () => {
-    return new Promise((resolve, reject) => {
-      if (healthcheck()) {
-        resolve();
-      } else {
-        reject();
-      }
-    });
-  },
-});
+// export const handler: Handler = server.createHandler({
+//   cors: {
+//     origin: '*',
+//     credentials: true,
+//   },
+// });
+
+export const handler: APIGatewayProxyHandler = (event, context, callback) => {
+  if (Object.keys(event.headers).includes('Content-Type')) {
+    event.headers['content-type'] = event.headers['Content-Type'];
+  }
+  const handler = server.createHandler({
+    cors: {
+      origin: true,
+      credentials: true,
+    },
+  });
+  return handler(event, context, callback);
+};

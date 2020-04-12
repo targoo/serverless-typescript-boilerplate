@@ -1,4 +1,7 @@
 import { arg } from 'nexus';
+
+import { File } from '../File';
+
 // https://Unexpected number in JSON at position 1 at JSON.parsesirmuel.design/working-with-file-uploads-using-altair-graphql-d2f86dc8261f
 // https://github.com/apollographql/apollo-server/pull/3676/files
 
@@ -14,7 +17,7 @@ import { arg } from 'nexus';
 // @todo create renameFile?
 // @todo create deleteFile?
 export const uploadFile = {
-  type: 'File' as 'File',
+  type: File,
   args: {
     file: arg({ type: 'Upload', required: true }),
   },
@@ -23,6 +26,12 @@ export const uploadFile = {
     console.log('_args', _args);
     console.log('_context', _context);
     console.log('_info', _info);
+    return {
+      id: 'id',
+      filename: 'filename',
+      mimetype: 'mimetype',
+      encoding: 'encoding',
+    };
     // const { filename, mimetype, encoding, size, createReadStream } = await file;
     // console.log('filename', filename);
     // console.log('mimetype', mimetype);

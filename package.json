@@ -43,7 +43,7 @@
   "author": "David Calcus",
   "license": "MIT",
   "dependencies": {
-    "apollo-server-lambda": "2.12.0",
+    "apollo-server-lambda": "2.13.0-alpha.0",
     "auth0-js": "9.13.2",
     "axios": "0.19.2",
     "dynamodb-geo": "0.4.0",
