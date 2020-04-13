@@ -9,9 +9,12 @@ export const passwordlessSignIn = {
     email: stringArg({
       required: true,
     }),
+    redirectUri: stringArg({
+      required: true,
+    }),
   },
 
-  resolve: async (_parent, { email }) => {
+  resolve: async (_parent, { email, redirectUri }) => {
     try {
       const result = await axios({
         method: 'post',
@@ -27,7 +30,7 @@ export const passwordlessSignIn = {
           authParams: {
             scope: 'openid profile email',
             state: generateID(),
-            redirect_uri: `${process.env.APP_URL}`,
+            redirect_uri: redirectUri,
           },
         },
       });

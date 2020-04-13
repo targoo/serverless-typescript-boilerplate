@@ -319,6 +319,7 @@ export interface NexusGenArgTypes {
     passwordlessSignIn: {
       // args
       email: string; // String!
+      redirectUri: string; // String!
     };
     passwordlessSignInConfirm: {
       // args

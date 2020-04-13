@@ -165,7 +165,7 @@ type Mutation {
   archiveJob(boardUuid: ID!, uuid: ID!): Job!
   createBoard(data: BoardInputData!): Board!
   createJob(boardUuid: ID!, data: JobInputData!): Job!
-  passwordlessSignIn(email: String!): Boolean!
+  passwordlessSignIn(email: String!, redirectUri: String!): Boolean!
   passwordlessSignInConfirm(accessToken: String!, state: String!): Autho0User!
   singleUpload(file: Upload!): File!
   updateBoard(data: BoardInputData!, uuid: ID!): Board!
