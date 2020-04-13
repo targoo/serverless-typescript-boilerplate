@@ -6,6 +6,10 @@
 import { core } from 'nexus';
 declare global {
   interface NexusGenCustomInputMethods<TypeName extends string> {
+    upload<FieldName extends string>(
+      fieldName: FieldName,
+      opts?: core.ScalarInputFieldConfig<core.GetGen3<'inputTypes', TypeName, FieldName>>,
+    ): void; // "Upload";
     datetime<FieldName extends string>(
       fieldName: FieldName,
       opts?: core.ScalarInputFieldConfig<core.GetGen3<'inputTypes', TypeName, FieldName>>,
@@ -26,6 +30,7 @@ declare global {
 }
 declare global {
   interface NexusGenCustomOutputMethods<TypeName extends string> {
+    upload<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void; // "Upload";
     datetime<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void; // "DateTime";
     date<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void; // "Date";
     time<FieldName extends string>(fieldName: FieldName, ...opts: core.ScalarOutSpread<TypeName, FieldName>): void; // "Time";
@@ -135,8 +140,8 @@ export interface NexusGenRootTypes {
     // root type
     encoding: string; // String!
     filename: string; // String!
-    id: string; // ID!
     mimetype: string; // String!
+    resource: string; // String!
   };
   Job: {
     // root type
@@ -233,8 +238,8 @@ export interface NexusGenFieldTypes {
     // field return type
     encoding: string; // String!
     filename: string; // String!
-    id: string; // ID!
     mimetype: string; // String!
+    resource: string; // String!
   };
   Job: {
     // field return type
@@ -266,10 +271,10 @@ export interface NexusGenFieldTypes {
     createJob: NexusGenRootTypes['Job']; // Job!
     passwordlessSignIn: boolean; // Boolean!
     passwordlessSignInConfirm: NexusGenRootTypes['Autho0User']; // Autho0User!
+    singleUpload: NexusGenRootTypes['File']; // File!
     updateBoard: NexusGenRootTypes['Board']; // Board!
     updateJob: NexusGenRootTypes['Job']; // Job!
     updateUser: NexusGenRootTypes['User']; // User!
-    uploadFile: NexusGenRootTypes['File']; // File!
   };
   Query: {
     // field return type
@@ -320,6 +325,10 @@ export interface NexusGenArgTypes {
       accessToken: string; // String!
       state: string; // String!
     };
+    singleUpload: {
+      // args
+      file: any; // Upload!
+    };
     updateBoard: {
       // args
       data: NexusGenInputs['BoardInputData']; // BoardInputData!
@@ -334,10 +343,6 @@ export interface NexusGenArgTypes {
     updateUser: {
       // args
       data: NexusGenInputs['UserInputData']; // UserInputData!
-    };
-    uploadFile: {
-      // args
-      file: any; // Upload!
     };
   };
   Query: {

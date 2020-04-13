@@ -1,0 +1,35 @@
+# Upload
+
+
+```typescript
+const typeDefs = gql`
+  scalar Upload
+  type File {
+    filename: String!
+    mimetype: String!
+    encoding: String!
+  }
+  type Query {
+    helloWorld: String
+  }
+  type Mutation {
+    singleUpload(file: Upload!): File!
+  }
+`;
+
+const resolvers = {
+  Mutation: {
+    async singleUpload(_parent: any, { file }: { file: any }) {
+      console.log(file);
+      return file;
+    },
+  },
+};
+
+schema = makeExecutableSchema({
+  typeDefs,
+  resolvers,
+});
+console.log('schema2', JSON.stringify(schema));
+
+```

@@ -97,8 +97,8 @@ enum Feeling {
 type File {
   encoding: String!
   filename: String!
-  id: ID!
   mimetype: String!
+  resource: String!
 }
 
 """Job"""
@@ -167,10 +167,10 @@ type Mutation {
   createJob(boardUuid: ID!, data: JobInputData!): Job!
   passwordlessSignIn(email: String!): Boolean!
   passwordlessSignInConfirm(accessToken: String!, state: String!): Autho0User!
+  singleUpload(file: Upload!): File!
   updateBoard(data: BoardInputData!, uuid: ID!): Board!
   updateJob(boardUuid: ID!, data: JobInputData!, uuid: ID!): Job!
   updateUser(data: UserInputData!): User!
-  uploadFile(file: Upload!): File!
 }
 
 type Query {
@@ -196,7 +196,7 @@ A time string at UTC, such as 10:15:30Z, compliant with the `full-time` format o
 """
 scalar Time
 
-"""The `Upload` scalar type represents a file upload."""
+"""Upload custom scalar type - fixed"""
 scalar Upload
 
 type User {

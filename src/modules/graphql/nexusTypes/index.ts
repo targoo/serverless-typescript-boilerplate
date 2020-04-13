@@ -1,7 +1,6 @@
-import { asNexusMethod } from 'nexus';
+import { asNexusMethod, scalarType } from 'nexus';
 import { GraphQLDate, GraphQLTime, GraphQLDateTime } from 'graphql-iso-date';
 import GraphQLJSON from 'graphql-type-json';
-import { GraphQLUpload } from 'graphql-upload';
 
 import { Query } from './Query';
 import { Mutation } from './Mutation';
@@ -33,7 +32,24 @@ export const GQLDate = asNexusMethod(GraphQLDate, 'date');
 export const GQLTime = asNexusMethod(GraphQLTime, 'time');
 export const GQLJSON = asNexusMethod(GraphQLJSON, 'json');
 
+// The default UPLOAD scalar does not work.
+const Upload = scalarType({
+  name: 'Upload',
+  asNexusMethod: 'upload',
+  description: 'Upload custom scalar type - fixed',
+  parseValue(value) {
+    return value;
+  },
+  serialize(value) {
+    return value;
+  },
+  parseLiteral(ast) {
+    return null;
+  },
+});
+
 export const types = [
+  Upload,
   Query,
   Mutation,
   Board,
@@ -53,7 +69,6 @@ export const types = [
   Feeling,
   EmploymentType,
   EventType,
-  GraphQLUpload,
   GraphQLDateTime,
   GraphQLDate,
   GraphQLTime,
