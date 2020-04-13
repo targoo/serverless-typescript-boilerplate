@@ -7,7 +7,7 @@ module.exports = () => {
   const files = fs.readdirSync(currentPath);
 
   const merged = files
-    .filter((f) => f.endsWith('graphql.yml'))
+    .filter((f) => f.endsWith('.yml'))
     .map((f) => {
       return fs.readFileSync(`${currentPath}/${f}`, 'utf8');
     })

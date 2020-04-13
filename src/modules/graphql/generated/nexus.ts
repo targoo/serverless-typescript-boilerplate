@@ -47,6 +47,7 @@ export interface NexusGenInputs {
     // input type
     availableDate?: any | null; // Date
     description?: string | null; // String
+    file?: string | null; // String
     isDeleted?: boolean | null; // Boolean
     location?: string | null; // String
     title: string; // String!
@@ -120,6 +121,7 @@ export interface NexusGenRootTypes {
     availableDate?: any | null; // Date
     createdAt: any; // DateTime!
     description?: string | null; // String
+    file?: string | null; // String
     isDeleted: boolean; // Boolean!
     location?: string | null; // String
     title: string; // String!
@@ -218,6 +220,7 @@ export interface NexusGenFieldTypes {
     availableDate: any | null; // Date
     createdAt: any; // DateTime!
     description: string | null; // String
+    file: string | null; // String
     isDeleted: boolean; // Boolean!
     location: string | null; // String
     title: string; // String!

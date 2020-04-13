@@ -15,6 +15,11 @@ graphql:
         - dynamodb:BatchGetItem
         - dynamodb:BatchWriteItem
       Resource: 'arn:aws:dynamodb:${self:provider.region}:*:table/${self:custom.stackname}-main'
+    - Effect: 'Allow'
+      Action:
+        - s3:PutObject
+        - s3:GetObject
+      Resource: 'arn:aws:s3:::ab-job/*'
   timeout: 10
   memorySize: 512
   reservedConcurrency: 5

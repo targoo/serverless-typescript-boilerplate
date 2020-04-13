@@ -7,6 +7,7 @@ export const BoardInputData = inputObjectType({
     t.string('description');
     t.date('availableDate');
     t.string('location');
+    t.string('file');
     t.boolean('isDeleted');
   },
 });

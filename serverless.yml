@@ -27,10 +27,6 @@ provider:
   logs:
     restApi: true
 
-  # apiGateway:
-  #   binaryMediaTypes:
-  #     - '*/*'
-
   # usagePlan:
   #   - free:
   #       quota:
@@ -72,8 +68,6 @@ custom:
 
   apigwBinary:
     types:
-      - 'image/jpeg'
-      - 'text/html'
       - 'multipart/form-data'
 
   prune:
@@ -81,8 +75,6 @@ custom:
     number: 5 # Number of versions of your lambda to keep.
 
   stackname: ${self:service}-${self:custom.stage}
-
-  bucket: targoo-serverless-boilerplate
 
   webpack:
     webpackConfig: ./webpack.config.js

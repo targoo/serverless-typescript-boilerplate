@@ -9,6 +9,7 @@ export const boardFormProperties = {
   description: 'string',
   availableDate: 'date',
   location: 'string',
+  file: 'string',
   isDeleted: 'boolean',
   // 'locationName',
   // 'locationAddress',
@@ -41,6 +42,8 @@ export const Board = objectType({
     t.date('availableDate', { nullable: true });
 
     t.string('location', { nullable: true });
+
+    t.string('file', { nullable: true });
 
     t.boolean('isDeleted');
 

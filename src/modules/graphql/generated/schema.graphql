@@ -19,6 +19,7 @@ type Board {
   availableDate: Date
   createdAt: DateTime!
   description: String
+  file: String
   isDeleted: Boolean!
   location: String
   title: String!
@@ -31,6 +32,7 @@ type Board {
 input BoardInputData {
   availableDate: Date
   description: String
+  file: String
   isDeleted: Boolean
   location: String
   title: String!
