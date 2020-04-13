@@ -16,16 +16,28 @@ import { File } from '../File';
 // @todo create uploadFiles
 // @todo create renameFile?
 // @todo create deleteFile?
+
+interface FileUpload {
+  filename: string;
+  mimetype: string;
+  encoding: string;
+  size: number;
+  createReadStream: () => any;
+}
+
 export const uploadFile = {
   type: File,
   args: {
     file: arg({ type: 'Upload', required: true }),
   },
-  resolve: async (_parent, _args, _context, _info) => {
-    console.log('_parent', _parent);
-    console.log('_args', _args);
-    console.log('_context', _context);
-    console.log('_info', _info);
+  resolve: async (_parent, { file }, _context, _info) => {
+    // Validation
+    const { filename, mimetype, encoding, createReadStream } = (await file) as FileUpload;
+
+    console.log('filename', filename);
+    console.log('mimetype', mimetype);
+    console.log('encoding', encoding);
+
     return {
       id: 'id',
       filename: 'filename',

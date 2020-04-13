@@ -1,69 +1,54 @@
-// eslint-disable-next-line no-unused-vars
-import { APIGatewayEvent, Context, Handler, Callback, APIGatewayProxyHandler } from 'aws-lambda';
-import { ApolloServer } from 'apollo-server-lambda';
-import { makeSchema } from 'nexus';
-import { join } from 'path';
-import { types } from './nexusTypes';
-import dynamo from '../../utils/dynamo';
-import logger from '../../utils/logger';
-import healthcheck from '../../utils/healthcheck';
-import { verify, decode } from '../../utils/jwt';
+import gql from 'graphql-tag';
+import { APIGatewayProxyCallback, APIGatewayProxyHandler } from 'aws-lambda';
+import { ApolloServer, defaultPlaygroundOptions } from 'apollo-server-lambda';
 
-const schema = makeSchema({
-  types,
-  shouldGenerateArtifacts: process.env.NODE_ENV === 'development',
-  outputs: {
-    schema: join(__dirname, '../../../../../src/modules/graphql/generated/schema.graphql'),
-    typegen: join(__dirname, '../../../../../src/modules/graphql/generated/nexus.ts'),
+const typeDefs = gql`
+  type File {
+    filename: String!
+    mimetype: String!
+    encoding: String!
+  }
+  type Query {
+    uploads: [File]
+    helloWorld: String
+  }
+  type Mutation {
+    singleUpload(file: Upload!): File!
+    multiUpload(files: [Upload!]!): [File]!
+  }
+`;
+
+const resolvers = {
+  Query: {
+    uploads() {},
+    helloWorld() {
+      return 'hi';
+    },
   },
-});
+  Mutation: {
+    async singleUpload(_parent: any, { file }: { file: any }) {
+      console.log(file);
+      return file;
+    },
+    async multiUpload(_parent: any, { files }: { files: any }) {
+      const fileArray = await files;
+      fileArray.forEach(async (file: any) => {
+        console.log(file);
+      });
+      return fileArray;
+    },
+  },
+};
 
 const graphqlRoutePrefix = process.env.IS_OFFLINE ? '' : `/${process.env.ENV}`;
 
-const server: ApolloServer = new ApolloServer({
-  schema,
-  tracing: true,
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
   playground: {
     endpoint: graphqlRoutePrefix + '/graphql',
   },
-  formatError: (error) => {
-    return error;
-  },
-  context: ({ event, context }) => {
-    console.log('event.headers', event.headers);
-    const {
-      headers: { Authorization },
-    } = event;
-
-    const isTokenValid = verify(Authorization);
-    console.log('isTokenValid', isTokenValid);
-
-    const { sub, email, email_verified, nickname, name } = isTokenValid
-      ? decode(Authorization)
-      : { sub: undefined, email: undefined, email_verified: undefined, nickname: undefined, name: undefined };
-    console.log('userId', sub);
-    console.log('userEmail', email);
-    console.log('userName', nickname);
-
-    return {
-      headers: event.headers,
-      functionName: context.functionName,
-      dynamo,
-      event,
-      userId: sub,
-      userEmail: email,
-      userName: nickname,
-      context,
-    };
-  },
 });
-
-// export const handler: Handler = server.createHandler({
-//   cors: {
-//     origin: '*',
-//     credentials: true,
-//   },
-// });
 
 export const handler: APIGatewayProxyHandler = (event, context, callback) => {
   if (Object.keys(event.headers).includes('Content-Type')) {

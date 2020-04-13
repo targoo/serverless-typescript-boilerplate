@@ -5,6 +5,7 @@ plugins:
   - serverless-iam-roles-per-function
   - serverless-dynamodb-local
   - serverless-prune-plugin
+  - serverless-apigw-binary
   - serverless-offline # serverless-offline needs to be last in the list.
 
 frameworkVersion: '>=1.44.0 <2.0.0'
@@ -22,8 +23,23 @@ provider:
   stackTags:
     project: ${self:service}
     env: ${self:custom.stage}
+
   logs:
     restApi: true
+
+  # apiGateway:
+  #   binaryMediaTypes:
+  #     - '*/*'
+
+  # usagePlan:
+  #   - free:
+  #       quota:
+  #         limit: 1
+  #         offset: 2
+  #         period: MONTH
+  #       throttle:
+  #         burstLimit: 100
+  #         rateLimit: 200
 
   tracing:
     apiGateway: true
@@ -56,6 +72,8 @@ custom:
 
   apigwBinary:
     types:
+      - 'image/jpeg'
+      - 'text/html'
       - 'multipart/form-data'
 
   prune:
