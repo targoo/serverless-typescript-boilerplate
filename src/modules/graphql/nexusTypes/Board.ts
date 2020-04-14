@@ -1,5 +1,10 @@
 import { objectType } from 'nexus';
 
+import logger from '../../../utils/logger';
+import { File, fileProperties } from './File';
+import { IFile } from '../../../types/types';
+import { prepareResponseDate } from './utils/form';
+
 // import { Job } from './Job';
 // import logger from '../../../utils/logger';
 // import { IJob } from '../../../types/types';
@@ -50,6 +55,36 @@ export const Board = objectType({
     t.datetime('createdAt');
 
     t.datetime('updatedAt', { nullable: true });
+
+    t.list.field('files', {
+      type: File,
+      resolve: async ({ uuid }, _args, { userId, dynamo }) => {
+        const properties = Object.keys(fileProperties);
+
+        const params = {
+          KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
+          ExpressionAttributeNames: properties.reduce((acc, cur) => {
+            acc[`#${cur}`] = cur;
+            return acc;
+          }, {}),
+          ExpressionAttributeValues: {
+            ':userUUID': `USER#${userId}`,
+            ':relation': `FILE#BOARD#${uuid}`,
+          },
+          ProjectionExpression: properties.map((property) => `#${property}`),
+        };
+        logger.debug(JSON.stringify(params));
+
+        let { Items: items }: { Items: IFile[] } = await dynamo.query(params);
+        logger.debug(`items: ${JSON.stringify(items)}`);
+
+        items = items.map((item) => prepareResponseDate(item)) as IFile[];
+        logger.debug(`items: ${JSON.stringify(items)}`);
+
+        return items;
+      },
+      nullable: true,
+    });
 
     // t.string('locationName', { nullable: true });
 

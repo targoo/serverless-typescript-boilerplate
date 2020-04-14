@@ -140,10 +140,13 @@ export interface NexusGenRootTypes {
   };
   File: {
     // root type
+    createdAt: any; // DateTime!
     encoding: string; // String!
     filename: string; // String!
+    isDeleted: boolean; // Boolean!
     mimetype: string; // String!
     resource: string; // String!
+    uuid: string; // ID!
   };
   Job: {
     // root type
@@ -221,6 +224,7 @@ export interface NexusGenFieldTypes {
     createdAt: any; // DateTime!
     description: string | null; // String
     file: string | null; // String
+    files: NexusGenRootTypes['File'][] | null; // [File!]
     isDeleted: boolean; // Boolean!
     location: string | null; // String
     title: string; // String!
@@ -239,10 +243,13 @@ export interface NexusGenFieldTypes {
   };
   File: {
     // field return type
+    createdAt: any; // DateTime!
     encoding: string; // String!
     filename: string; // String!
+    isDeleted: boolean; // Boolean!
     mimetype: string; // String!
     resource: string; // String!
+    uuid: string; // ID!
   };
   Job: {
     // field return type

@@ -20,6 +20,7 @@ type Board {
   createdAt: DateTime!
   description: String
   file: String
+  files: [File!]
   isDeleted: Boolean!
   location: String
   title: String!
@@ -97,10 +98,15 @@ enum Feeling {
 }
 
 type File {
+  createdAt: DateTime!
   encoding: String!
   filename: String!
+  isDeleted: Boolean!
   mimetype: String!
   resource: String!
+
+  """UUID of the job"""
+  uuid: ID!
 }
 
 """Job"""
