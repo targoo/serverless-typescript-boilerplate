@@ -7,6 +7,7 @@ export { archiveJob } from './archiveJob';
 export { createEvent } from './createEvent';
 export { singleUpload } from './singleUpload';
 export { multipleUpload } from './multipleUpload';
+export { archiveBoardFile } from './archiveBoardFile';
 export { updateUser } from './updateUser';
 export { passwordlessSignIn } from './passwordlessSignIn';
 export { passwordlessSignInConfirm } from './passwordlessSignInConfirm';

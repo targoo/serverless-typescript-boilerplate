@@ -104,6 +104,7 @@ type File {
   isDeleted: Boolean!
   mimetype: String!
   resource: String!
+  updatedAt: DateTime
 
   """UUID of the job"""
   uuid: ID!

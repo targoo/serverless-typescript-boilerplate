@@ -13,6 +13,7 @@ export const fileProperties = {
   relation: 'key',
   uuid: 'string',
   createdAt: 'datetime',
+  updatedAt: 'datetime',
 };
 
 export const File = objectType({
@@ -28,8 +29,10 @@ export const File = objectType({
 
     t.string('resource');
 
+    t.boolean('isDeleted');
+
     t.datetime('createdAt');
 
-    t.boolean('isDeleted');
+    t.datetime('updatedAt', { nullable: true });
   },
 });

@@ -146,6 +146,7 @@ export interface NexusGenRootTypes {
     isDeleted: boolean; // Boolean!
     mimetype: string; // String!
     resource: string; // String!
+    updatedAt?: any | null; // DateTime
     uuid: string; // ID!
   };
   Job: {
@@ -249,6 +250,7 @@ export interface NexusGenFieldTypes {
     isDeleted: boolean; // Boolean!
     mimetype: string; // String!
     resource: string; // String!
+    updatedAt: any | null; // DateTime
     uuid: string; // ID!
   };
   Job: {
