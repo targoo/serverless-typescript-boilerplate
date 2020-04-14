@@ -166,7 +166,9 @@ type Mutation {
   archiveBoard(uuid: ID!): Board!
   archiveJob(boardUuid: ID!, uuid: ID!): Job!
   createBoard(data: BoardInputData!): Board!
+  createEvent(boardUuid: ID!, data: EventInputData!, jobUuid: ID!): Event!
   createJob(boardUuid: ID!, data: JobInputData!): Job!
+  multipleUpload(boardUuid: ID, files: [Upload!]!): [File!]!
   passwordlessSignIn(email: String!, redirectUri: String!): Boolean!
   passwordlessSignInConfirm(accessToken: String!, state: String!): Autho0User!
   singleUpload(file: Upload!): File!

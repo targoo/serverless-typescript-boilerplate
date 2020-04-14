@@ -7,7 +7,9 @@ import {
   createJob,
   archiveJob,
   updateJob,
+  createEvent,
   singleUpload,
+  multipleUpload,
   updateUser,
   passwordlessSignIn,
   passwordlessSignInConfirm,
@@ -44,6 +46,12 @@ export const Mutation = objectType({
     t.field('updateUser', updateUser);
 
     // @ts-ignore
+    t.field('createEvent', createEvent);
+
+    // @ts-ignore
     t.field('singleUpload', singleUpload);
+
+    // @ts-ignore
+    t.list.field('multipleUpload', multipleUpload);
   },
 });

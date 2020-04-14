@@ -61,6 +61,13 @@ export interface IUser extends IEntityBase {
   email: string;
 }
 
+export interface IFile extends IEntityBase {
+  resource: string;
+  filename: string;
+  mimetype: string;
+  encoding: string;
+}
+
 export interface IJob extends IEntityBase {
   // Agency
   agencyName: string;

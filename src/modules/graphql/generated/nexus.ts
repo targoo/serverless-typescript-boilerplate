@@ -271,7 +271,9 @@ export interface NexusGenFieldTypes {
     archiveBoard: NexusGenRootTypes['Board']; // Board!
     archiveJob: NexusGenRootTypes['Job']; // Job!
     createBoard: NexusGenRootTypes['Board']; // Board!
+    createEvent: NexusGenRootTypes['Event']; // Event!
     createJob: NexusGenRootTypes['Job']; // Job!
+    multipleUpload: NexusGenRootTypes['File'][]; // [File!]!
     passwordlessSignIn: boolean; // Boolean!
     passwordlessSignInConfirm: NexusGenRootTypes['Autho0User']; // Autho0User!
     singleUpload: NexusGenRootTypes['File']; // File!
@@ -314,10 +316,21 @@ export interface NexusGenArgTypes {
       // args
       data: NexusGenInputs['BoardInputData']; // BoardInputData!
     };
+    createEvent: {
+      // args
+      boardUuid: string; // ID!
+      data: NexusGenInputs['EventInputData']; // EventInputData!
+      jobUuid: string; // ID!
+    };
     createJob: {
       // args
       boardUuid: string; // ID!
       data: NexusGenInputs['JobInputData']; // JobInputData!
+    };
+    multipleUpload: {
+      // args
+      boardUuid?: string | null; // ID
+      files: any[]; // [Upload!]!
     };
     passwordlessSignIn: {
       // args
