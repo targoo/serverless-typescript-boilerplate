@@ -1,6 +1,13 @@
 import { objectType } from 'nexus';
 
+import logger from '../../../utils/logger';
+import { prepareResponseDate } from './utils/form';
+
+import { Event, eventProperties } from './Event';
 import { Board } from './Board';
+
+import { IEvent } from '../../../types/types';
+
 import { JobStatus } from './enums/JobStatus';
 import { EmploymentType } from './enums/EmploymentType';
 import { Feeling } from './enums/Feeling';
@@ -81,21 +88,64 @@ export const Job = objectType({
 
     t.boolean('isDeleted');
 
-    // t.field('board', {
-    //   type: Board,
-    //   resolve: async (parent, _args, { userId, dynamo }) => {
-    //     // @ts-ignore
-    //     const { uuid, relation } = parent;
+    t.list.field('events', {
+      type: Event,
 
-    //     const key = {
-    //       id: `USER#${userId}`,
-    //       relation: `BOARD#${relation.split('#')[2]}`,
-    //     };
+      // @ts-ignore
+      resolve: async (parent, _args, { userId, dynamo }) => {
+        // @ts-ignore
+        const { relation } = parent;
 
-    //     const { Item = {} } = await dynamo.getItem(key);
+        // job relation: JOB#BOARD#bja06ihpRpZwrisa#XH0jkiTHTwrdOKS7
+        const boardUuid = relation.split('#')[2];
+        const jobUuid = relation.split('#')[3];
 
-    //     return Item;
-    //   },
-    // });
+        const properties = Object.keys(eventProperties);
+
+        const params = {
+          KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
+          ExpressionAttributeNames: properties.reduce((acc, cur) => {
+            acc[`#${cur}`] = cur;
+            return acc;
+          }, {}),
+          ExpressionAttributeValues: {
+            ':userUUID': `USER#${userId}`,
+            ':relation': `EVENT#BOARD#${boardUuid}#JOB#${jobUuid}`,
+          },
+          ProjectionExpression: properties.map((property) => `#${property}`),
+        };
+        logger.debug(JSON.stringify(params));
+
+        let { Items: items }: { Items: IEvent[] } = await dynamo.query(params);
+        logger.debug(`items: ${JSON.stringify(items)}`);
+
+        items = items.map((item) => prepareResponseDate(item)) as IEvent[];
+        logger.debug(`items: ${JSON.stringify(items)}`);
+
+        return items;
+      },
+      nullable: true,
+    });
+
+    t.field('board', {
+      type: Board,
+
+      resolve: async (parent, _args, { userId, dynamo }) => {
+        // @ts-ignore
+        const { relation } = parent;
+
+        // job relation: JOB#BOARD#bja06ihpRpZwrisa#XH0jkiTHTwrdOKS7
+        const boardUuid = relation.split('#')[2];
+
+        const key = {
+          id: `USER#${userId}`,
+          relation: `BOARD#${boardUuid}`,
+        };
+
+        const { Item = {} } = await dynamo.getItem(key);
+
+        return Item;
+      },
+    });
   },
 });

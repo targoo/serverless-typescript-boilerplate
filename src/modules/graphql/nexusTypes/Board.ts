@@ -5,10 +5,6 @@ import { File, fileProperties } from './File';
 import { IFile } from '../../../types/types';
 import { prepareResponseDate } from './utils/form';
 
-// import { Job } from './Job';
-// import logger from '../../../utils/logger';
-// import { IJob } from '../../../types/types';
-
 export const boardFormProperties = {
   title: 'string',
   description: 'string',
@@ -50,11 +46,11 @@ export const Board = objectType({
 
     t.string('file', { nullable: true });
 
-    t.boolean('isDeleted');
-
     t.datetime('createdAt');
 
     t.datetime('updatedAt', { nullable: true });
+
+    t.boolean('isDeleted');
 
     t.list.field('files', {
       type: File,

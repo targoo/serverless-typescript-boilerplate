@@ -259,12 +259,14 @@ export interface NexusGenFieldTypes {
     agentEmail: string | null; // String
     agentName: string | null; // String
     agentPhone: string | null; // String
+    board: NexusGenRootTypes['Board']; // Board!
     company: string | null; // String
     companyLocation: string | null; // String
     companyWebsite: string | null; // String
     createdAt: any; // DateTime!
     duration: string | null; // String
     employmentType: NexusGenEnums['EmploymentType'] | null; // EmploymentType
+    events: NexusGenRootTypes['Event'][] | null; // [Event!]
     feeling: NexusGenEnums['Feeling']; // Feeling!
     ir35: boolean | null; // Boolean
     isDeleted: boolean; // Boolean!

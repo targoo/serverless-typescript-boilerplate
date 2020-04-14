@@ -116,12 +116,14 @@ type Job {
   agentEmail: String
   agentName: String
   agentPhone: String
+  board: Board!
   company: String
   companyLocation: String
   companyWebsite: String
   createdAt: DateTime!
   duration: String
   employmentType: EmploymentType
+  events: [Event!]
   feeling: Feeling!
   ir35: Boolean
   isDeleted: Boolean!

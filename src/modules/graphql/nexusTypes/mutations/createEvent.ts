@@ -33,7 +33,7 @@ export const createEvent = {
     const event = ({
       ...prepareFormInput(data, eventFormProperties),
       id: `USER#${userId}`,
-      relation: `EVENT#JOB#BOARD#${boardUuid}#${jobUuid}#${uuid}`,
+      relation: `EVENT#BOARD#${boardUuid}#JOB#${jobUuid}#${uuid}`,
       uuid: JSON.stringify({ format: 'string', value: uuid }),
       isDeleted: JSON.stringify({ format: 'boolean', value: false }),
       createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),

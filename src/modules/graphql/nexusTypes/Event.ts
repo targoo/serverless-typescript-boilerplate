@@ -32,10 +32,10 @@ export const Event = objectType({
 
     t.string('description');
 
+    t.boolean('isDeleted');
+
     t.datetime('createdAt');
 
     t.datetime('updatedAt', { nullable: true });
-
-    t.boolean('isDeleted');
   },
 });
