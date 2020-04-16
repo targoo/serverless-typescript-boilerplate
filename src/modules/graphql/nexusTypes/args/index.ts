@@ -9,6 +9,10 @@ export const BoardInputData = inputObjectType({
     t.string('location');
     t.string('file');
     t.boolean('isDeleted');
+
+    t.field('educationLevel', { type: 'EducationLevel' });
+    t.boolean('workRightEU');
+    t.boolean('workRightUK');
   },
 });
 

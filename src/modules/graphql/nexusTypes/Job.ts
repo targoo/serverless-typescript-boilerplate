@@ -5,12 +5,9 @@ import { prepareResponseDate } from './utils/form';
 
 import { Event, eventProperties } from './Event';
 import { Board } from './Board';
+import { EmploymentType, Feeling, JobStatus } from './enums';
 
 import { IEvent } from '../../../types/types';
-
-import { JobStatus } from './enums/JobStatus';
-import { EmploymentType } from './enums/EmploymentType';
-import { Feeling } from './enums/Feeling';
 
 export const jobFormProperties = {
   agencyName: 'string',

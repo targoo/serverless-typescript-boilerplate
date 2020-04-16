@@ -19,7 +19,7 @@ type Board {
   availableDate: Date
   createdAt: DateTime!
   description: String
-  file: String
+  educationLevel: EducationLevel
   files: [File!]
   isDeleted: Boolean!
   location: String
@@ -28,15 +28,20 @@ type Board {
 
   """UUID of the board"""
   uuid: ID!
+  workRightEU: Boolean
+  workRightUK: Boolean
 }
 
 input BoardInputData {
   availableDate: Date
   description: String
+  educationLevel: EducationLevel
   file: String
   isDeleted: Boolean
   location: String
   title: String!
+  workRightEU: Boolean
+  workRightUK: Boolean
 }
 
 input BoardInputSort {
@@ -57,6 +62,19 @@ scalar Date
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
 scalar DateTime
+
+enum EducationLevel {
+  A_LEVELS_GNVQ
+  BTEC
+  CITY_GUILDS
+  DIPLOMA
+  GCSE_GNVQ_O_LEVELS
+  HND_HNC
+  MASTER_DEGREE_OR_HIGHER
+  PHD
+  SENIOR_BUSINESS_TECH_QUALIFICATION
+  UNIVERSITY_DEGREE
+}
 
 enum EmploymentType {
   CONTRACT

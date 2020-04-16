@@ -47,10 +47,13 @@ export interface NexusGenInputs {
     // input type
     availableDate?: any | null; // Date
     description?: string | null; // String
+    educationLevel?: NexusGenEnums['EducationLevel'] | null; // EducationLevel
     file?: string | null; // String
     isDeleted?: boolean | null; // Boolean
     location?: string | null; // String
     title: string; // String!
+    workRightEU?: boolean | null; // Boolean
+    workRightUK?: boolean | null; // Boolean
   };
   BoardInputSort: {
     // input type
@@ -105,6 +108,17 @@ export interface NexusGenInputs {
 }
 
 export interface NexusGenEnums {
+  EducationLevel:
+    | 'A_LEVELS_GNVQ'
+    | 'BTEC'
+    | 'CITY_GUILDS'
+    | 'DIPLOMA'
+    | 'GCSE_GNVQ_O_LEVELS'
+    | 'HND_HNC'
+    | 'MASTER_DEGREE_OR_HIGHER'
+    | 'PHD'
+    | 'SENIOR_BUSINESS_TECH_QUALIFICATION'
+    | 'UNIVERSITY_DEGREE';
   EmploymentType: 'CONTRACT' | 'PERMANENT';
   EventType: 'CALL' | 'FACE2FACE' | 'ONLINETEST' | 'VIDEOCALL';
   Feeling: 'ECSTATIC' | 'HAPPY' | 'NORMAL' | 'SAD';
@@ -128,12 +142,14 @@ export interface NexusGenRootTypes {
     availableDate?: any | null; // Date
     createdAt: any; // DateTime!
     description?: string | null; // String
-    file?: string | null; // String
+    educationLevel?: NexusGenEnums['EducationLevel'] | null; // EducationLevel
     isDeleted: boolean; // Boolean!
     location?: string | null; // String
     title: string; // String!
     updatedAt?: any | null; // DateTime
     uuid: string; // ID!
+    workRightEU?: boolean | null; // Boolean
+    workRightUK?: boolean | null; // Boolean
   };
   Event: {
     // root type
@@ -211,6 +227,7 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
   JobInputData: NexusGenInputs['JobInputData'];
   JobInputWhere: NexusGenInputs['JobInputWhere'];
   UserInputData: NexusGenInputs['UserInputData'];
+  EducationLevel: NexusGenEnums['EducationLevel'];
   EmploymentType: NexusGenEnums['EmploymentType'];
   EventType: NexusGenEnums['EventType'];
   Feeling: NexusGenEnums['Feeling'];
@@ -234,13 +251,15 @@ export interface NexusGenFieldTypes {
     availableDate: any | null; // Date
     createdAt: any; // DateTime!
     description: string | null; // String
-    file: string | null; // String
+    educationLevel: NexusGenEnums['EducationLevel'] | null; // EducationLevel
     files: NexusGenRootTypes['File'][] | null; // [File!]
     isDeleted: boolean; // Boolean!
     location: string | null; // String
     title: string; // String!
     updatedAt: any | null; // DateTime
     uuid: string; // ID!
+    workRightEU: boolean | null; // Boolean
+    workRightUK: boolean | null; // Boolean
   };
   Event: {
     // field return type
@@ -427,7 +446,13 @@ export type NexusGenInputNames =
   | 'JobInputWhere'
   | 'UserInputData';
 
-export type NexusGenEnumNames = 'EmploymentType' | 'EventType' | 'Feeling' | 'JobStatus' | 'SortDirection';
+export type NexusGenEnumNames =
+  | 'EducationLevel'
+  | 'EmploymentType'
+  | 'EventType'
+  | 'Feeling'
+  | 'JobStatus'
+  | 'SortDirection';
 
 export type NexusGenInterfaceNames = never;
 

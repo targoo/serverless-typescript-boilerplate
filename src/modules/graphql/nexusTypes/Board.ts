@@ -4,18 +4,23 @@ import logger from '../../../utils/logger';
 import { File, fileProperties } from './File';
 import { IFile } from '../../../types/types';
 import { prepareResponseDate } from './utils/form';
+import { EducationLevel } from './enums';
 
 export const boardFormProperties = {
   title: 'string',
   description: 'string',
   availableDate: 'date',
   location: 'string',
+  locationGeoJson: 'json',
   isDeleted: 'boolean',
+  educationLevel: 'string',
+  workRightEU: 'boolean',
+  workRightUK: 'boolean',
+
   // 'locationName',
   // 'locationAddress',
   // 'locationRangeKey',
   // 'locationHash',
-  // 'locationGeoJson',
 };
 
 export const boardProperties = {
@@ -43,7 +48,11 @@ export const Board = objectType({
 
     t.string('location', { nullable: true });
 
-    t.string('file', { nullable: true });
+    t.field('educationLevel', { type: EducationLevel, nullable: true });
+
+    t.boolean('workRightEU', { nullable: true });
+
+    t.boolean('workRightUK', { nullable: true });
 
     t.datetime('createdAt');
 

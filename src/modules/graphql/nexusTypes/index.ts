@@ -23,7 +23,7 @@ import {
   EventInputWhere,
 } from './args/';
 
-import { JobStatus, Feeling, EmploymentType, EventType, SortDirection } from './enums';
+import { JobStatus, Feeling, EmploymentType, EventType, SortDirection, EducationLevel } from './enums';
 
 export const GQLDateTime = asNexusMethod(GraphQLDateTime, 'datetime');
 export const GQLDate = asNexusMethod(GraphQLDate, 'date');
@@ -69,6 +69,7 @@ export const types = [
   EmploymentType,
   EventType,
   SortDirection,
+  EducationLevel,
   GraphQLDateTime,
   GraphQLDate,
   GraphQLTime,
