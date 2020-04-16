@@ -52,14 +52,20 @@ export interface NexusGenInputs {
     location?: string | null; // String
     title: string; // String!
   };
+  BoardInputSort: {
+    // input type
+    direction?: NexusGenEnums['SortDirection'] | null; // SortDirection
+    field?: string | null; // String
+  };
   BoardInputWhere: {
     // input type
     isDeleted?: boolean | null; // Boolean
   };
   EventInputData: {
     // input type
-    date?: any | null; // DateTime
     description?: string | null; // String
+    endAt?: any | null; // DateTime
+    startAt?: any | null; // DateTime
     type?: NexusGenEnums['EventType'] | null; // EventType
   };
   EventInputWhere: {
@@ -103,6 +109,7 @@ export interface NexusGenEnums {
   EventType: 'CALL' | 'FACE2FACE' | 'ONLINETEST' | 'VIDEOCALL';
   Feeling: 'ECSTATIC' | 'HAPPY' | 'NORMAL' | 'SAD';
   JobStatus: 'ACTIVE' | 'ARCHIVED';
+  SortDirection: 'ASC' | 'DESC';
 }
 
 export interface NexusGenRootTypes {
@@ -131,9 +138,10 @@ export interface NexusGenRootTypes {
   Event: {
     // root type
     createdAt: any; // DateTime!
-    date: any; // DateTime!
     description: string; // String!
+    endAt: any; // DateTime!
     isDeleted: boolean; // Boolean!
+    startAt: any; // DateTime!
     type: NexusGenEnums['EventType']; // EventType!
     updatedAt?: any | null; // DateTime
     uuid: string; // ID!
@@ -196,6 +204,7 @@ export interface NexusGenRootTypes {
 
 export interface NexusGenAllTypes extends NexusGenRootTypes {
   BoardInputData: NexusGenInputs['BoardInputData'];
+  BoardInputSort: NexusGenInputs['BoardInputSort'];
   BoardInputWhere: NexusGenInputs['BoardInputWhere'];
   EventInputData: NexusGenInputs['EventInputData'];
   EventInputWhere: NexusGenInputs['EventInputWhere'];
@@ -206,6 +215,7 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
   EventType: NexusGenEnums['EventType'];
   Feeling: NexusGenEnums['Feeling'];
   JobStatus: NexusGenEnums['JobStatus'];
+  SortDirection: NexusGenEnums['SortDirection'];
 }
 
 export interface NexusGenFieldTypes {
@@ -235,9 +245,10 @@ export interface NexusGenFieldTypes {
   Event: {
     // field return type
     createdAt: any; // DateTime!
-    date: any; // DateTime!
     description: string; // String!
+    endAt: any; // DateTime!
     isDeleted: boolean; // Boolean!
+    startAt: any; // DateTime!
     type: NexusGenEnums['EventType']; // EventType!
     updatedAt: any | null; // DateTime
     uuid: string; // ID!
@@ -316,6 +327,7 @@ export interface NexusGenArgTypes {
   Mutation: {
     archiveBoard: {
       // args
+      isDeleted?: boolean | null; // Boolean
       uuid: string; // ID!
     };
     archiveJob: {
@@ -380,6 +392,7 @@ export interface NexusGenArgTypes {
     };
     boards: {
       // args
+      sort?: NexusGenInputs['BoardInputSort'] | null; // BoardInputSort
       where?: NexusGenInputs['BoardInputWhere'] | null; // BoardInputWhere
     };
     hello: {
@@ -406,6 +419,7 @@ export type NexusGenObjectNames = 'Autho0User' | 'Board' | 'Event' | 'File' | 'J
 
 export type NexusGenInputNames =
   | 'BoardInputData'
+  | 'BoardInputSort'
   | 'BoardInputWhere'
   | 'EventInputData'
   | 'EventInputWhere'
@@ -413,7 +427,7 @@ export type NexusGenInputNames =
   | 'JobInputWhere'
   | 'UserInputData';
 
-export type NexusGenEnumNames = 'EmploymentType' | 'EventType' | 'Feeling' | 'JobStatus';
+export type NexusGenEnumNames = 'EmploymentType' | 'EventType' | 'Feeling' | 'JobStatus' | 'SortDirection';
 
 export type NexusGenInterfaceNames = never;
 

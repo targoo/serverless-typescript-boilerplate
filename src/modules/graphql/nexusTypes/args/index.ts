@@ -19,6 +19,14 @@ export const BoardInputWhere = inputObjectType({
   },
 });
 
+export const BoardInputSort = inputObjectType({
+  name: 'BoardInputSort',
+  definition(t) {
+    t.string('field');
+    t.field('direction', { type: 'SortDirection' });
+  },
+});
+
 export const JobInputData = inputObjectType({
   name: 'JobInputData',
   definition(t) {
@@ -63,7 +71,8 @@ export const UserInputData = inputObjectType({
 export const EventInputData = inputObjectType({
   name: 'EventInputData',
   definition(t) {
-    t.datetime('date', { required: false });
+    t.datetime('startAt', { required: false });
+    t.datetime('endAt', { required: false });
     t.field('type', { type: 'EventType', required: false });
     t.string('description', { required: false });
   },

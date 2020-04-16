@@ -39,6 +39,11 @@ input BoardInputData {
   title: String!
 }
 
+input BoardInputSort {
+  direction: SortDirection
+  field: String
+}
+
 input BoardInputWhere {
   isDeleted: Boolean
 }
@@ -61,9 +66,10 @@ enum EmploymentType {
 """Event"""
 type Event {
   createdAt: DateTime!
-  date: DateTime!
   description: String!
+  endAt: DateTime!
   isDeleted: Boolean!
+  startAt: DateTime!
   type: EventType!
   updatedAt: DateTime
 
@@ -72,8 +78,9 @@ type Event {
 }
 
 input EventInputData {
-  date: DateTime
   description: String
+  endAt: DateTime
+  startAt: DateTime
   type: EventType
 }
 
@@ -172,7 +179,7 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 scalar JSON
 
 type Mutation {
-  archiveBoard(uuid: ID!): Board!
+  archiveBoard(isDeleted: Boolean, uuid: ID!): Board!
   archiveJob(boardUuid: ID!, uuid: ID!): Job!
   createBoard(data: BoardInputData!): Board!
   createEvent(boardUuid: ID!, data: EventInputData!, jobUuid: ID!): Event!
@@ -191,7 +198,7 @@ type Query {
     """The unique id of the board"""
     uuid: ID!
   ): Board!
-  boards(where: BoardInputWhere): [Board!]!
+  boards(sort: BoardInputSort, where: BoardInputWhere): [Board!]!
   hello(name: String): String!
   job(
     """The id of the board"""
@@ -202,6 +209,11 @@ type Query {
   ): Job!
   jobs(where: JobInputWhere!): [Job!]!
   me: User!
+}
+
+enum SortDirection {
+  ASC
+  DESC
 }
 
 """

@@ -5,7 +5,8 @@ import { EventType } from './enums/EventType';
 export const eventFormProperties = {
   description: 'string',
   type: 'string',
-  date: 'datetime',
+  startAt: 'datetime',
+  endAt: 'datetime',
   isDeleted: 'boolean',
 };
 
@@ -26,7 +27,9 @@ export const Event = objectType({
   definition(t) {
     t.id('uuid', { description: 'UUID of the board' });
 
-    t.datetime('date');
+    t.datetime('startAt');
+
+    t.datetime('endAt');
 
     t.field('type', { type: EventType });
 

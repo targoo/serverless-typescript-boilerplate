@@ -1,4 +1,4 @@
-import { idArg } from 'nexus';
+import { idArg, booleanArg } from 'nexus';
 
 import { Board } from '../Board';
 import { IBoard, IKeyBase } from '../../../../types/types';
@@ -12,9 +12,10 @@ export const archiveBoard = {
     uuid: idArg({
       required: true,
     }),
+    isDeleted: booleanArg(),
   },
 
-  resolve: async (_parent, { uuid }, { userId, dynamo }) => {
+  resolve: async (_parent, { uuid, isDeleted = true }, { userId, dynamo }) => {
     if (!userId) {
       throw new Error('Not authorized to archive the board');
     }
@@ -28,7 +29,7 @@ export const archiveBoard = {
       UpdateExpression: 'set #isDeleted = :isDeleted, #updatedAt = :updatedAt',
       ExpressionAttributeNames: { '#isDeleted': 'isDeleted', '#updatedAt': 'updatedAt' },
       ExpressionAttributeValues: {
-        ':isDeleted': JSON.stringify({ format: 'boolean', value: true }),
+        ':isDeleted': JSON.stringify({ format: 'boolean', value: isDeleted }),
         ':updatedAt': JSON.stringify({ format: 'date', value: new Date().toISOString() }),
       },
     };

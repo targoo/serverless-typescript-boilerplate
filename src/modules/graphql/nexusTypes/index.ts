@@ -15,6 +15,7 @@ import { Event } from './Event';
 import {
   BoardInputData,
   BoardInputWhere,
+  BoardInputSort,
   JobInputData,
   JobInputWhere,
   UserInputData,
@@ -22,10 +23,7 @@ import {
   EventInputWhere,
 } from './args/';
 
-import { JobStatus } from './enums/JobStatus';
-import { Feeling } from './enums/Feeling';
-import { EmploymentType } from './enums/EmploymentType';
-import { EventType } from './enums/EventType';
+import { JobStatus, Feeling, EmploymentType, EventType, SortDirection } from './enums';
 
 export const GQLDateTime = asNexusMethod(GraphQLDateTime, 'datetime');
 export const GQLDate = asNexusMethod(GraphQLDate, 'date');
@@ -60,6 +58,7 @@ export const types = [
   File,
   BoardInputData,
   BoardInputWhere,
+  BoardInputSort,
   JobInputData,
   JobInputWhere,
   UserInputData,
@@ -69,6 +68,7 @@ export const types = [
   Feeling,
   EmploymentType,
   EventType,
+  SortDirection,
   GraphQLDateTime,
   GraphQLDate,
   GraphQLTime,

@@ -1,6 +1,6 @@
 import { arg } from 'nexus';
 
-import { BoardInputWhere } from '../args';
+import { BoardInputWhere, BoardInputSort } from '../args';
 import { Board, boardProperties } from '../Board';
 import { IBoard } from '../../../../types/types';
 import logger from '../../../../utils/logger';
@@ -13,17 +13,12 @@ export const boards = {
     where: arg({
       type: BoardInputWhere,
     }),
+    sort: arg({
+      type: BoardInputSort,
+    }),
   },
 
-  resolve: async (
-    _parent,
-    args: {
-      where: {
-        isDeleted?: boolean;
-      };
-    },
-    { userId, dynamo },
-  ) => {
+  resolve: async (_parent, args, { userId, dynamo }) => {
     if (!userId) {
       throw new Error('Not authorized to list the boards');
     }
@@ -52,6 +47,20 @@ export const boards = {
 
     if (args.where && args.where.isDeleted !== undefined) {
       items = items.filter((item) => item.isDeleted === args.where.isDeleted);
+    }
+
+    if (args.sort) {
+      items.sort((a, b) => {
+        const aProp = a[args.sort.field];
+        const bProp = b[args.sort.field];
+        let comparison = 0;
+        if (aProp > bProp) {
+          comparison = 1;
+        } else if (aProp < bProp) {
+          comparison = -1;
+        }
+        return args.sort.direction === 'ASC' ? comparison : -1 * comparison;
+      });
     }
 
     return items;

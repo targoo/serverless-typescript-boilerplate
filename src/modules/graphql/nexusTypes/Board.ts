@@ -10,7 +10,6 @@ export const boardFormProperties = {
   description: 'string',
   availableDate: 'date',
   location: 'string',
-  file: 'string',
   isDeleted: 'boolean',
   // 'locationName',
   // 'locationAddress',
