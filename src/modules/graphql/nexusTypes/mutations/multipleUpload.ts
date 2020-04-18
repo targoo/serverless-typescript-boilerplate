@@ -48,11 +48,24 @@ export const multipleUpload = {
 
 const uploadFile = async (file, userId, boardUuid, dynamo) => {
   const { filename, mimetype, encoding, createReadStream } = await file;
+  console.log('filename', filename);
+  console.log('mimetype', mimetype);
+  console.log('encoding', encoding);
+  console.log('createReadStream', createReadStream);
   const sanitizedFilename = sanitizeFileName(filename);
 
   const uuid = id();
   const stream = createReadStream();
   const resource = `${uuid}/${sanitizedFilename}`;
+  let sanitizedMimetype;
+  switch (mimetype) {
+    case 'application/pdf':
+      sanitizedMimetype = 'PDF';
+      break;
+    default:
+      sanitizedMimetype = 'FILE';
+      break;
+  }
 
   const params = {
     Bucket: UPLOAD_BUCKET_NAME,
@@ -70,7 +83,7 @@ const uploadFile = async (file, userId, boardUuid, dynamo) => {
       relation: `FILE#BOARD#${boardUuid}#${uuid}`,
       resource: JSON.stringify({ format: 'string', value: resource }),
       filename: JSON.stringify({ format: 'string', value: sanitizedFilename }),
-      mimetype: JSON.stringify({ format: 'string', value: mimetype }),
+      mimetype: JSON.stringify({ format: 'string', value: sanitizedMimetype }),
       encoding: JSON.stringify({ format: 'string', value: encoding }),
       uuid: JSON.stringify({ format: 'string', value: uuid }),
       isDeleted: JSON.stringify({ format: 'boolean', value: false }),

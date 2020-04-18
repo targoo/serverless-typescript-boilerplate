@@ -62,6 +62,8 @@ export const Board = objectType({
 
     t.list.field('files', {
       type: File,
+
+      // @ts-ignore
       resolve: async ({ uuid }, _args, { userId, dynamo }) => {
         const properties = Object.keys(fileProperties);
 
@@ -84,6 +86,8 @@ export const Board = objectType({
 
         items = items.map((item) => prepareResponseDate(item)) as IFile[];
         logger.debug(`items: ${JSON.stringify(items)}`);
+
+        items = items.filter((item) => item.isDeleted === false);
 
         return items;
       },

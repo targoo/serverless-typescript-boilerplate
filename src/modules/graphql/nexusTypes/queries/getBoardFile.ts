@@ -1,51 +1,42 @@
-import { idArg } from 'nexus';
+import { idArg, booleanArg } from 'nexus';
 
-import { File } from '../File';
-import { IFile, IKeyBase } from '../../../../types/types';
+import { Board } from '../Board';
+import { IBoard, IKeyBase } from '../../../../types/types';
 import { prepareResponseDate } from '../utils/form';
 import logger from '../../../../utils/logger';
 
-export const archiveBoardFile = {
-  type: File,
+export const archiveBoard = {
+  type: Board,
 
   args: {
-    boardUuid: idArg({
-      required: true,
-    }),
     uuid: idArg({
       required: true,
     }),
+    isDeleted: booleanArg(),
   },
 
-  resolve: async (_parent, { boardUuid, uuid }, { userId, dynamo }) => {
+  resolve: async (_parent, { uuid, isDeleted = true }, { userId, dynamo }) => {
     if (!userId) {
-      throw new Error('Not authorized to archive the job');
+      throw new Error('Not authorized to archive the board');
     }
-
-    console.log('------delete file');
 
     const key: IKeyBase = {
       id: `USER#${userId}`,
-      relation: `FILE#BOARD#${boardUuid}#${uuid}`,
+      relation: `BOARD#${uuid}`,
     };
-    // FILE#BOARD#mRftlB6r3tcRQnrR#8iOryF0zdWsWfFIO
-
-    // FILE#BOARD#mRftlB6r3tcRQnrR#mRftlB6r3tcRQnrR'
-
-    console.log('------delete file', key);
 
     const params = {
       UpdateExpression: 'set #isDeleted = :isDeleted, #updatedAt = :updatedAt',
       ExpressionAttributeNames: { '#isDeleted': 'isDeleted', '#updatedAt': 'updatedAt' },
       ExpressionAttributeValues: {
-        ':isDeleted': JSON.stringify({ format: 'boolean', value: true }),
+        ':isDeleted': JSON.stringify({ format: 'boolean', value: isDeleted }),
         ':updatedAt': JSON.stringify({ format: 'date', value: new Date().toISOString() }),
       },
     };
 
     await dynamo.updateItem(params, key);
 
-    const { Item }: { Item: IFile } = await dynamo.getItem(key);
+    const { Item }: { Item: IBoard } = await dynamo.getItem(key);
     logger.debug(`item: ${JSON.stringify(Item)}`);
 
     const item = prepareResponseDate(Item);

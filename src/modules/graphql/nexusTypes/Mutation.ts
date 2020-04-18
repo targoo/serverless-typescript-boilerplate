@@ -10,6 +10,7 @@ import {
   createEvent,
   singleUpload,
   multipleUpload,
+  archiveBoardFile,
   updateUser,
   passwordlessSignIn,
   passwordlessSignInConfirm,
@@ -53,5 +54,8 @@ export const Mutation = objectType({
 
     // @ts-ignore
     t.list.field('multipleUpload', multipleUpload);
+
+    // @ts-ignore
+    t.field('archiveBoardFile', archiveBoardFile);
   },
 });

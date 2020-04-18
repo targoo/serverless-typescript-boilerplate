@@ -127,8 +127,9 @@ type File {
   encoding: String!
   filename: String!
   isDeleted: Boolean!
-  mimetype: String!
+  mimetype: MimeType!
   resource: String!
+  temporaryUrl: String!
   updatedAt: DateTime
 
   """UUID of the job"""
@@ -196,8 +197,15 @@ The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://
 """
 scalar JSON
 
+enum MimeType {
+  DOC
+  FILE
+  PDF
+}
+
 type Mutation {
   archiveBoard(isDeleted: Boolean, uuid: ID!): Board!
+  archiveBoardFile(boardUuid: ID!, uuid: ID!): File!
   archiveJob(boardUuid: ID!, uuid: ID!): Job!
   createBoard(data: BoardInputData!): Board!
   createEvent(boardUuid: ID!, data: EventInputData!, jobUuid: ID!): Event!

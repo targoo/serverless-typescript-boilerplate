@@ -123,6 +123,7 @@ export interface NexusGenEnums {
   EventType: 'CALL' | 'FACE2FACE' | 'ONLINETEST' | 'VIDEOCALL';
   Feeling: 'ECSTATIC' | 'HAPPY' | 'NORMAL' | 'SAD';
   JobStatus: 'ACTIVE' | 'ARCHIVED';
+  MimeType: 'DOC' | 'FILE' | 'PDF';
   SortDirection: 'ASC' | 'DESC';
 }
 
@@ -168,7 +169,7 @@ export interface NexusGenRootTypes {
     encoding: string; // String!
     filename: string; // String!
     isDeleted: boolean; // Boolean!
-    mimetype: string; // String!
+    mimetype: NexusGenEnums['MimeType']; // MimeType!
     resource: string; // String!
     updatedAt?: any | null; // DateTime
     uuid: string; // ID!
@@ -232,6 +233,7 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
   EventType: NexusGenEnums['EventType'];
   Feeling: NexusGenEnums['Feeling'];
   JobStatus: NexusGenEnums['JobStatus'];
+  MimeType: NexusGenEnums['MimeType'];
   SortDirection: NexusGenEnums['SortDirection'];
 }
 
@@ -278,8 +280,9 @@ export interface NexusGenFieldTypes {
     encoding: string; // String!
     filename: string; // String!
     isDeleted: boolean; // Boolean!
-    mimetype: string; // String!
+    mimetype: NexusGenEnums['MimeType']; // MimeType!
     resource: string; // String!
+    temporaryUrl: string; // String!
     updatedAt: any | null; // DateTime
     uuid: string; // ID!
   };
@@ -310,6 +313,7 @@ export interface NexusGenFieldTypes {
   Mutation: {
     // field return type
     archiveBoard: NexusGenRootTypes['Board']; // Board!
+    archiveBoardFile: NexusGenRootTypes['File']; // File!
     archiveJob: NexusGenRootTypes['Job']; // Job!
     createBoard: NexusGenRootTypes['Board']; // Board!
     createEvent: NexusGenRootTypes['Event']; // Event!
@@ -347,6 +351,11 @@ export interface NexusGenArgTypes {
     archiveBoard: {
       // args
       isDeleted?: boolean | null; // Boolean
+      uuid: string; // ID!
+    };
+    archiveBoardFile: {
+      // args
+      boardUuid: string; // ID!
       uuid: string; // ID!
     };
     archiveJob: {
@@ -452,6 +461,7 @@ export type NexusGenEnumNames =
   | 'EventType'
   | 'Feeling'
   | 'JobStatus'
+  | 'MimeType'
   | 'SortDirection';
 
 export type NexusGenInterfaceNames = never;
