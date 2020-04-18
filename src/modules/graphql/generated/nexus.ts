@@ -130,12 +130,13 @@ export interface NexusGenEnums {
 export interface NexusGenRootTypes {
   Autho0User: {
     // root type
-    email?: string | null; // String
-    email_verified?: boolean | null; // Boolean
+    email: string; // String!
+    email_verified: boolean; // Boolean!
     jwt: string; // String!
     name?: string | null; // String
     nickname?: string | null; // String
     picture?: string | null; // String
+    sub: string; // String!
     uuid: string; // ID!
   };
   Board: {
@@ -240,12 +241,13 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
 export interface NexusGenFieldTypes {
   Autho0User: {
     // field return type
-    email: string | null; // String
-    email_verified: boolean | null; // Boolean
+    email: string; // String!
+    email_verified: boolean; // Boolean!
     jwt: string; // String!
     name: string | null; // String
     nickname: string | null; // String
     picture: string | null; // String
+    sub: string; // String!
     uuid: string; // ID!
   };
   Board: {
@@ -320,7 +322,7 @@ export interface NexusGenFieldTypes {
     createJob: NexusGenRootTypes['Job']; // Job!
     multipleUpload: NexusGenRootTypes['File'][]; // [File!]!
     passwordlessSignIn: boolean; // Boolean!
-    passwordlessSignInConfirm: NexusGenRootTypes['Autho0User']; // Autho0User!
+    signInConfirm: NexusGenRootTypes['Autho0User']; // Autho0User!
     singleUpload: NexusGenRootTypes['File']; // File!
     updateBoard: NexusGenRootTypes['Board']; // Board!
     updateJob: NexusGenRootTypes['Job']; // Job!
@@ -388,10 +390,9 @@ export interface NexusGenArgTypes {
       email: string; // String!
       redirectUri: string; // String!
     };
-    passwordlessSignInConfirm: {
+    signInConfirm: {
       // args
       accessToken: string; // String!
-      state: string; // String!
     };
     singleUpload: {
       // args

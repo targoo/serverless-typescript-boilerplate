@@ -13,14 +13,14 @@ import {
   archiveBoardFile,
   updateUser,
   passwordlessSignIn,
-  passwordlessSignInConfirm,
+  signInConfirm,
 } from './mutations';
 
 export const Mutation = objectType({
   name: 'Mutation',
   definition(t) {
     // @ts-ignore
-    t.field('passwordlessSignInConfirm', passwordlessSignInConfirm);
+    t.field('signInConfirm', signInConfirm);
 
     // @ts-ignore
     t.field('passwordlessSignIn', passwordlessSignIn);

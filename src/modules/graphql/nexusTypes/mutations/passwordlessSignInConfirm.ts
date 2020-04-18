@@ -38,39 +38,71 @@ const memo = (() => {
   };
 })();
 
+function hashCode(str) {
+  return str.split('').reduce((prevHash, currVal) => ((prevHash << 5) - prevHash + currVal.charCodeAt(0)) | 0, 0);
+}
+
 export const passwordlessSignInConfirm = {
   type: Autho0User,
 
   args: {
-    accessToken: stringArg({
-      required: true,
-    }),
+    code: stringArg(),
+    accessToken: stringArg(),
     state: stringArg({
       required: true,
     }),
   },
 
-  resolve: async (_parent, { accessToken, state }) => {
+  resolve: async (_parent, { code, accessToken, state }) => {
+    console.log('-------------------------------------');
+    console.log('---------------------code----------------', code);
+    console.log('---------------------accessToken----------------', accessToken);
+    console.log('---------------------state----------------', state);
+    let newAccessToken = accessToken;
     try {
-      const authData = memo(state);
-      if (authData) {
-        logger.debug(`return memo auth0 token`);
-        return authData;
-      } else {
-        logger.debug(`return fresh auth0 token`);
-        const { data } = await axios({
-          method: 'post',
-          url: `https://${process.env.AUTH0_DOMAIN}/userinfo`,
-          headers: {
-            'content-type': 'application/json',
-            Authorization: `Bearer ${accessToken}`,
-          },
-        });
-        const jwt = sign({ ...data, state });
-        return memo(state, { ...data, uuid: data.sub, jwt });
-      }
+      //const authData = memo(state);
+      //const authData = null;
+      //if (authData) {
+      //  logger.debug(`return memo auth0 token`);
+      //  return authData;
+      //} else {
+      // If code is passed, we will get the access token.
+      // if (code) {
+      //   const { data: dataToken } = await axios({
+      //     method: 'post',
+      //     url: `https://${process.env.AUTH0_DOMAIN}/oauth/token`,
+      //     data: {
+      //       client_id: process.env.AUTH0_CLIENT_ID,
+      //       client_secret: process.env.AUTH0_CLIENT_SECRET,
+      //       grant_type: 'authorization_code',
+      //       code,
+      //       redirect_uri: 'http://localhost:3001',
+      //       scope: 'openid profile email',
+      //     },
+      //     headers: {
+      //       'content-type': 'application/json',
+      //     },
+      //   });
+      //   newAccessToken = dataToken.access_token;
+      // }
+
+      const { data } = await axios({
+        method: 'post',
+        url: `https://${process.env.AUTH0_DOMAIN}/userinfo`,
+        headers: {
+          'content-type': 'application/json',
+          Authorization: `Bearer ${newAccessToken}`,
+        },
+      });
+      console.log('data', data);
+      const uuid = hashCode(data.email);
+      console.log('hash - uuid', uuid);
+      const jwt = sign({ ...data, state, uuid });
+      console.log('data2', { ...data, uuid, jwt });
+      return { ...data, uuid, jwt };
+      //}
     } catch (error) {
-      console.log('error', error);
+      console.log('error', error.response.data);
       return {};
     }
   },

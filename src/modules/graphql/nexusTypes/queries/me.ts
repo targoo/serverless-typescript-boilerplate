@@ -8,7 +8,7 @@ export const me = {
 
   resolve: async (_parent, _arg, { userId, userEmail, userName, dynamo }) => {
     if (!userId || !userEmail) {
-      throw new Error('cannot create a new user');
+      throw new Error('Not authorized to get or create a user');
     }
 
     const key = {

@@ -3,12 +3,13 @@
 
 
 type Autho0User {
-  email: String
-  email_verified: Boolean
+  email: String!
+  email_verified: Boolean!
   jwt: String!
   name: String
   nickname: String
   picture: String
+  sub: String!
 
   """UUID of the user (Auth0 Sub)"""
   uuid: ID!
@@ -212,7 +213,7 @@ type Mutation {
   createJob(boardUuid: ID!, data: JobInputData!): Job!
   multipleUpload(boardUuid: ID, files: [Upload!]!): [File!]!
   passwordlessSignIn(email: String!, redirectUri: String!): Boolean!
-  passwordlessSignInConfirm(accessToken: String!, state: String!): Autho0User!
+  signInConfirm(accessToken: String!): Autho0User!
   singleUpload(file: Upload!): File!
   updateBoard(data: BoardInputData!, uuid: ID!): Board!
   updateJob(boardUuid: ID!, data: JobInputData!, uuid: ID!): Job!

@@ -10,4 +10,4 @@ export { multipleUpload } from './multipleUpload';
 export { archiveBoardFile } from './archiveBoardFile';
 export { updateUser } from './updateUser';
 export { passwordlessSignIn } from './passwordlessSignIn';
-export { passwordlessSignInConfirm } from './passwordlessSignInConfirm';
+export { signInConfirm } from './signInConfirm';

@@ -35,19 +35,21 @@ const server: ApolloServer = new ApolloServer({
 
     const isTokenValid = verify(Authorization);
 
-    const { sub, email, email_verified, nickname, name } = isTokenValid
+    const { uuid, email, email_verified, nickname, sub } = isTokenValid
       ? decode(Authorization)
-      : { sub: undefined, email: undefined, email_verified: undefined, nickname: undefined, name: undefined };
-    console.log('userId', sub);
+      : { uuid: undefined, email: undefined, email_verified: undefined, nickname: undefined, sub: undefined };
+    console.log('userId', uuid);
+    console.log('userSub', sub);
     console.log('userEmail', email);
     console.log('userName', nickname);
+    console.log('userEmailVerified', email_verified);
 
     return {
       headers: event.headers,
       functionName: context.functionName,
       dynamo,
       event,
-      userId: sub,
+      userId: uuid,
       userEmail: email,
       userName: nickname,
       context,

@@ -5,16 +5,18 @@ export const Autho0User = objectType({
   definition(t) {
     t.id('uuid', { description: 'UUID of the user (Auth0 Sub)' });
 
+    t.string('sub');
+
     t.string('jwt');
 
     t.string('nickname', { nullable: true });
 
     t.string('name', { nullable: true });
 
-    t.string('email', { nullable: true });
+    t.string('email');
 
     t.string('picture', { nullable: true });
 
-    t.boolean('email_verified', { nullable: true });
+    t.boolean('email_verified');
   },
 });
