@@ -14,6 +14,7 @@ import {
   updateUser,
   passwordlessSignIn,
   signInConfirm,
+  sendEmail,
 } from './mutations';
 
 export const Mutation = objectType({
@@ -57,5 +58,8 @@ export const Mutation = objectType({
 
     // @ts-ignore
     t.field('archiveBoardFile', archiveBoardFile);
+
+    // @ts-ignore
+    t.field('sendEmail', sendEmail);
   },
 });

@@ -5,7 +5,7 @@ import { prepareResponseDate } from './utils/form';
 
 import { Event, eventProperties } from './Event';
 import { Board } from './Board';
-import { EmploymentType, Feeling, JobStatus } from './enums';
+import { EmploymentType, Feeling, JobStatus, RemoteOptions } from './enums';
 
 import { IEvent } from '../../../types/types';
 
@@ -14,12 +14,14 @@ export const jobFormProperties = {
   agentName: 'string',
   agentEmail: 'string',
   agentPhone: 'string',
+  referralFee: 'string', // referal fee upon placement
   jobTitle: 'string',
   company: 'string',
   companyWebsite: 'string',
   companyLocation: 'string',
   jobDescription: 'string',
   employmentType: 'string',
+  remoteOptions: 'string',
   duration: 'string',
   rate: 'string',
   ir35: 'boolean',
@@ -54,6 +56,8 @@ export const Job = objectType({
 
     t.string('agentPhone', { nullable: true });
 
+    t.string('referralFee', { nullable: true });
+
     // Job
     t.string('jobTitle', { nullable: true });
 
@@ -67,6 +71,8 @@ export const Job = objectType({
 
     // Money
     t.field('employmentType', { type: EmploymentType, nullable: true });
+
+    t.field('remoteOptions', { type: RemoteOptions, nullable: true });
 
     t.string('duration', { nullable: true });
 

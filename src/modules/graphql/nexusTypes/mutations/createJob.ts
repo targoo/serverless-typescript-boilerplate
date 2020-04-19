@@ -32,7 +32,7 @@ export const createJob = {
       id: `USER#${userId}`,
       relation: `JOB#BOARD#${boardUuid}#${uuid}`,
       uuid: JSON.stringify({ format: 'string', value: uuid }),
-      status: JSON.stringify({ format: 'string', value: JobStatus.ACTIVE }),
+      status: JSON.stringify({ format: 'string', value: JobStatus.STARTED }),
       feeling: JSON.stringify({ format: 'string', value: Feeling.NORMAL }),
       isDeleted: JSON.stringify({ format: 'boolean', value: false }),
       createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),

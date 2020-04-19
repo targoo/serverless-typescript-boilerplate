@@ -110,10 +110,9 @@ input EventInputWhere {
 }
 
 enum EventType {
-  CALL
   FACE2FACE
-  ONLINETEST
-  VIDEOCALL
+  PHONE_CALL
+  VIDEO_CALL
 }
 
 enum Feeling {
@@ -157,6 +156,8 @@ type Job {
   jobDescription: String
   jobTitle: String
   rate: String
+  referralFee: String
+  remoteOptions: RemoteOptions
   status: JobStatus!
   updatedAt: DateTime
 
@@ -189,8 +190,15 @@ input JobInputWhere {
 }
 
 enum JobStatus {
-  ACTIVE
   ARCHIVED
+  FACE2FACE
+  FIRST_STAGE_INTERVIEW
+  LAST_STAGE_INTERVIEW
+  OFFER
+  PHONE_CALL
+  SECOND_STAGE_INTERVIEW
+  STARTED
+  TECH_TEST
 }
 
 """
@@ -213,6 +221,7 @@ type Mutation {
   createJob(boardUuid: ID!, data: JobInputData!): Job!
   multipleUpload(boardUuid: ID, files: [Upload!]!): [File!]!
   passwordlessSignIn(email: String!, redirectUri: String!): Boolean!
+  sendEmail(content: String!, email: String!, subject: String!): Boolean!
   signInConfirm(accessToken: String!): Autho0User!
   singleUpload(file: Upload!): File!
   updateBoard(data: BoardInputData!, uuid: ID!): Board!
@@ -236,6 +245,16 @@ type Query {
   ): Job!
   jobs(where: JobInputWhere!): [Job!]!
   me: User!
+}
+
+enum RemoteOptions {
+  FLEXIBLE
+  FOURDAYS
+  FULLY_REMOTE
+  NO_REMOTE
+  ONEDAY
+  THREEDAYS
+  TWODAYS
 }
 
 enum SortDirection {

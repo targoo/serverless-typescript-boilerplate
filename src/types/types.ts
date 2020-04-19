@@ -6,7 +6,14 @@ export enum BoardStatus {
 }
 
 export enum JobStatus {
-  ACTIVE = 'ACTIVE',
+  STARTED = 'STARTED',
+  PHONE_CALL = 'PHONE_CALL',
+  FIRST_STAGE_INTERVIEW = 'FIRST_STAGE_INTERVIEW',
+  SECOND_STAGE_INTERVIEW = 'SECOND_STAGE_INTERVIEW',
+  LAST_STAGE_INTERVIEW = 'LAST_STAGE_INTERVIEW',
+  FACE2FACE = 'FACE2FACE',
+  TECH_TEST = 'TECH_TEST',
+  OFFER = 'OFFER',
   ARCHIVED = 'ARCHIVED',
 }
 
@@ -15,11 +22,20 @@ export enum EmploymentType {
   PERMANENT = 'PERMANENT',
 }
 
+export enum RemoteOptions {
+  NO_REMOTE = 'NO_REMOTE',
+  FLEXIBLE = 'FLEXIBLE',
+  ONEDAY = 'ONEDAY',
+  TWODAYS = 'TWODAYS',
+  FOURDAYS = 'FOURDAYS',
+  FULLY_REMOTE = 'FULLY_REMOTE',
+}
+
 export enum EventType {
   FACE2FACE = 'FACE2FACE',
-  ONLINETEST = 'ONLINETEST',
-  VIDEOCALL = 'VIDEOCALL',
-  CALL = 'CALL',
+  TECH_TEST = 'TECH_TEST',
+  VIDEO_CALL = 'VIDEO_CALL',
+  PHONE_CALL = 'PHONE_CALL',
 }
 
 export enum Feeling {
@@ -74,6 +90,7 @@ export interface IJob extends IEntityBase {
   agentName: string;
   agentEmail: string;
   agentPhone: string;
+  referralFee: string;
   // Job
   jobTitle: string;
   company: string;
@@ -82,6 +99,7 @@ export interface IJob extends IEntityBase {
   jobDescription: string;
   // Money
   employmentType: EmploymentType;
+  remoteOptions: RemoteOptions;
   duration: string;
   rate: string;
   ir35: string;

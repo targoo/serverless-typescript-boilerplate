@@ -120,10 +120,20 @@ export interface NexusGenEnums {
     | 'SENIOR_BUSINESS_TECH_QUALIFICATION'
     | 'UNIVERSITY_DEGREE';
   EmploymentType: 'CONTRACT' | 'PERMANENT';
-  EventType: 'CALL' | 'FACE2FACE' | 'ONLINETEST' | 'VIDEOCALL';
+  EventType: 'FACE2FACE' | 'PHONE_CALL' | 'VIDEO_CALL';
   Feeling: 'ECSTATIC' | 'HAPPY' | 'NORMAL' | 'SAD';
-  JobStatus: 'ACTIVE' | 'ARCHIVED';
+  JobStatus:
+    | 'ARCHIVED'
+    | 'FACE2FACE'
+    | 'FIRST_STAGE_INTERVIEW'
+    | 'LAST_STAGE_INTERVIEW'
+    | 'OFFER'
+    | 'PHONE_CALL'
+    | 'SECOND_STAGE_INTERVIEW'
+    | 'STARTED'
+    | 'TECH_TEST';
   MimeType: 'DOC' | 'FILE' | 'PDF';
+  RemoteOptions: 'FLEXIBLE' | 'FOURDAYS' | 'FULLY_REMOTE' | 'NO_REMOTE' | 'ONEDAY' | 'THREEDAYS' | 'TWODAYS';
   SortDirection: 'ASC' | 'DESC';
 }
 
@@ -193,6 +203,8 @@ export interface NexusGenRootTypes {
     jobDescription?: string | null; // String
     jobTitle?: string | null; // String
     rate?: string | null; // String
+    referralFee?: string | null; // String
+    remoteOptions?: NexusGenEnums['RemoteOptions'] | null; // RemoteOptions
     status: NexusGenEnums['JobStatus']; // JobStatus!
     updatedAt?: any | null; // DateTime
     uuid: string; // ID!
@@ -235,6 +247,7 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
   Feeling: NexusGenEnums['Feeling'];
   JobStatus: NexusGenEnums['JobStatus'];
   MimeType: NexusGenEnums['MimeType'];
+  RemoteOptions: NexusGenEnums['RemoteOptions'];
   SortDirection: NexusGenEnums['SortDirection'];
 }
 
@@ -308,6 +321,8 @@ export interface NexusGenFieldTypes {
     jobDescription: string | null; // String
     jobTitle: string | null; // String
     rate: string | null; // String
+    referralFee: string | null; // String
+    remoteOptions: NexusGenEnums['RemoteOptions'] | null; // RemoteOptions
     status: NexusGenEnums['JobStatus']; // JobStatus!
     updatedAt: any | null; // DateTime
     uuid: string; // ID!
@@ -322,6 +337,7 @@ export interface NexusGenFieldTypes {
     createJob: NexusGenRootTypes['Job']; // Job!
     multipleUpload: NexusGenRootTypes['File'][]; // [File!]!
     passwordlessSignIn: boolean; // Boolean!
+    sendEmail: boolean; // Boolean!
     signInConfirm: NexusGenRootTypes['Autho0User']; // Autho0User!
     singleUpload: NexusGenRootTypes['File']; // File!
     updateBoard: NexusGenRootTypes['Board']; // Board!
@@ -389,6 +405,12 @@ export interface NexusGenArgTypes {
       // args
       email: string; // String!
       redirectUri: string; // String!
+    };
+    sendEmail: {
+      // args
+      content: string; // String!
+      email: string; // String!
+      subject: string; // String!
     };
     signInConfirm: {
       // args
@@ -463,6 +485,7 @@ export type NexusGenEnumNames =
   | 'Feeling'
   | 'JobStatus'
   | 'MimeType'
+  | 'RemoteOptions'
   | 'SortDirection';
 
 export type NexusGenInterfaceNames = never;

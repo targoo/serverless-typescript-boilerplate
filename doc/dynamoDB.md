@@ -1,13 +1,18 @@
 # Dynamo DB
 
-|       | Hash           | Sort                                                 | Attributes |
-| ----- | -------------- | ---------------------------------------------------- | ---------- |
-|       | ID             | RELATION                                             |            |
-| BOARD | USER#<USER_ID> | BOARD#<BOARD_UUID>                                   |            |
-| JOB   | USER#<USER_ID> | JOB#BOARD#<BOARD_UUID>#<JOB_UUID>                    |            |
-| EVENT | USER#<USER_ID> | EVENT#BOARD#<BOARD_UUID>#JOB#<JOB_UUID>#<EVENT_UUID> |            |
-| FILE  | USER#<USER_ID> | FILE#BOARD#<BOARD_UUID>#<FILE_UUID>                  |            |
-| FILE  | USER#<USER_ID> | FILE#JOB#<JOB_UUID>#<FILE_UUID>                      |            |
+|       | Hash           | Sort                                                 | Attributes |     |
+| ----- | -------------- | ---------------------------------------------------- | ---------- | --- |
+|       |                |                                                      |            |     |
+| ----- | -------------- | ---------------------------------------------------- | ---------- | --- |
+|       | ID             | RELATION                                             |            |     |
+| USER  | USER#<USER_ID> | USER                                                 |            |     |
+| BOARD | USER#<USER_ID> | BOARD#<BOARD_UUID>                                   |            |     |
+| JOB   | USER#<USER_ID> | JOB#BOARD#<BOARD_UUID>#<JOB_UUID>                    |            |     |
+| EVENT | USER#<USER_ID> | EVENT#BOARD#<BOARD_UUID>#JOB#<JOB_UUID>#<EVENT_UUID> |            |     |
+| FILE  | USER#<USER_ID> | FILE#BOARD#<BOARD_UUID>#<FILE_UUID>                  |            |     |
+| FILE  | USER#<USER_ID> | FILE#JOB#<JOB_UUID>#<FILE_UUID>                      |            |     |
+| BOARD | USER#<USER_ID> | FOLLOWING_BOARD#USER<USER_ID>#<BOARD_UUID>           |            |     |
+| JOB   | USER#<USER_ID> | FOLLOWING_JOB#USER<USER_ID>#<BOARD_UUID>             |            |     |
 
 ## Entity Relationship Diagram (ERD)
 

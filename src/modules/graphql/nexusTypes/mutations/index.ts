@@ -11,3 +11,4 @@ export { archiveBoardFile } from './archiveBoardFile';
 export { updateUser } from './updateUser';
 export { passwordlessSignIn } from './passwordlessSignIn';
 export { signInConfirm } from './signInConfirm';
+export { sendEmail } from './sendEmail';

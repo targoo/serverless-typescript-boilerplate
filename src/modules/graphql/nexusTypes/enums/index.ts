@@ -5,3 +5,4 @@ export { JobStatus } from './JobStatus';
 export { SortDirection } from './SortDirection';
 export { EducationLevel } from './EducationLevel';
 export { MimeType } from './MimeType';
+export { RemoteOptions } from './RemoteOptions';
