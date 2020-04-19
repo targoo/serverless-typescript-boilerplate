@@ -19,13 +19,13 @@ export const updateBoard = {
     }),
   },
 
-  resolve: async (_parent, { uuid, data }, { userId, dynamo }) => {
-    if (!userId) {
+  resolve: async (_parent, { uuid, data }, { user, dynamo }) => {
+    if (!user) {
       throw new Error('Not authorized to update the board');
     }
 
     const key: IKeyBase = {
-      id: `USER#${userId}`,
+      id: `USER#${user.userId}`,
       relation: `BOARD#${uuid}`,
     };
 

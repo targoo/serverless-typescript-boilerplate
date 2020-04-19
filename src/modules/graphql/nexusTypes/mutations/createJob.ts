@@ -20,8 +20,8 @@ export const createJob = {
     }),
   },
 
-  resolve: async (_parent, { boardUuid, data }, { userId, dynamo }) => {
-    if (!userId) {
+  resolve: async (_parent, { boardUuid, data }, { user, dynamo }) => {
+    if (!user) {
       throw new Error('Not authorized to create a new job');
     }
 
@@ -29,7 +29,7 @@ export const createJob = {
 
     const job = ({
       ...prepareFormInput(data, jobFormProperties),
-      id: `USER#${userId}`,
+      id: `USER#${user.userId}`,
       relation: `JOB#BOARD#${boardUuid}#${uuid}`,
       uuid: JSON.stringify({ format: 'string', value: uuid }),
       status: JSON.stringify({ format: 'string', value: JobStatus.STARTED }),

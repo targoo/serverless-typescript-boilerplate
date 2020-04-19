@@ -17,15 +17,15 @@ export const archiveBoardFile = {
     }),
   },
 
-  resolve: async (_parent, { boardUuid, uuid }, { userId, dynamo }) => {
-    if (!userId) {
+  resolve: async (_parent, { boardUuid, uuid }, { user, dynamo }) => {
+    if (!user) {
       throw new Error('Not authorized to archive the job');
     }
 
     console.log('------delete file');
 
     const key: IKeyBase = {
-      id: `USER#${userId}`,
+      id: `USER#${user.userId}`,
       relation: `FILE#BOARD#${boardUuid}#${uuid}`,
     };
     // FILE#BOARD#mRftlB6r3tcRQnrR#8iOryF0zdWsWfFIO

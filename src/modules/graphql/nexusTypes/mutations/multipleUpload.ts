@@ -37,10 +37,14 @@ export const multipleUpload = {
     files: arg({ type: 'Upload', required: true, list: true }),
   },
 
-  resolve: async (_parent, { files, boardUuid }, { userId = 'unknown', dynamo }) => {
+  resolve: async (_parent, { files, boardUuid }, { user, dynamo }) => {
+    if (!user) {
+      throw new Error('Not authorized to upload files');
+    }
+
     const filesData = files as Promise<FileUpload>[];
     console.log('filesData', filesData);
-    const result = await Promise.all(files.map((file) => uploadFile(file, userId, boardUuid, dynamo)));
+    const result = await Promise.all(files.map((file) => uploadFile(file, user.userId, boardUuid, dynamo)));
     console.log('result', result);
     return result;
   },

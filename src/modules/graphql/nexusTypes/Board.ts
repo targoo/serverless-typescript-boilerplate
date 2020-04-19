@@ -64,7 +64,7 @@ export const Board = objectType({
       type: File,
 
       // @ts-ignore
-      resolve: async ({ uuid }, _args, { userId, dynamo }) => {
+      resolve: async ({ uuid }, _args, { user, dynamo }) => {
         const properties = Object.keys(fileProperties);
 
         const params = {
@@ -74,7 +74,7 @@ export const Board = objectType({
             return acc;
           }, {}),
           ExpressionAttributeValues: {
-            ':userUUID': `USER#${userId}`,
+            ':userUUID': `USER#${user.userId}`,
             ':relation': `FILE#BOARD#${uuid}`,
           },
           ProjectionExpression: properties.map((property) => `#${property}`),

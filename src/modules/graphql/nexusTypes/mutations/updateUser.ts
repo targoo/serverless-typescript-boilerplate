@@ -16,13 +16,13 @@ export const updateUser = {
     }),
   },
 
-  resolve: async (_parent, { data }, { userId, dynamo }) => {
-    if (!userId) {
+  resolve: async (_parent, { data }, { user, dynamo }) => {
+    if (!user) {
       throw new Error('Not authorized to update the user');
     }
 
     const key: IKeyBase = {
-      id: `USER#${userId}`,
+      id: `USER#${user.userId}`,
       relation: `USER`,
     };
 

@@ -16,9 +16,12 @@ export const signInConfirm = {
     accessToken: stringArg({
       required: true,
     }),
+    state: stringArg({
+      required: true,
+    }),
   },
 
-  resolve: async (_parent, { accessToken }) => {
+  resolve: async (_parent, { accessToken, state }) => {
     try {
       const { data } = await axios({
         method: 'post',
@@ -28,9 +31,9 @@ export const signInConfirm = {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-      const uuid = hashCode(`${data.email}`.toLowerCase());
-      const jwt = sign({ ...data, uuid });
-      return { ...data, uuid, jwt };
+      const userId = hashCode(`${data.email}`.toLowerCase());
+      const jwt = sign({ ...data, userId, state });
+      return { ...data, userId, state, jwt };
     } catch (error) {
       logger.error(error.response.data);
       return {};

@@ -95,7 +95,7 @@ export const Job = objectType({
       type: Event,
 
       // @ts-ignore
-      resolve: async (parent, _args, { userId, dynamo }) => {
+      resolve: async (parent, _args, { user, dynamo }) => {
         // @ts-ignore
         const { relation } = parent;
 
@@ -112,7 +112,7 @@ export const Job = objectType({
             return acc;
           }, {}),
           ExpressionAttributeValues: {
-            ':userUUID': `USER#${userId}`,
+            ':userUUID': `USER#${user.userId}`,
             ':relation': `EVENT#BOARD#${boardUuid}#JOB#${jobUuid}`,
           },
           ProjectionExpression: properties.map((property) => `#${property}`),
@@ -133,7 +133,7 @@ export const Job = objectType({
     t.field('board', {
       type: Board,
 
-      resolve: async (parent, _args, { userId, dynamo }) => {
+      resolve: async (parent, _args, { user, dynamo }) => {
         // @ts-ignore
         const { relation } = parent;
 
@@ -141,7 +141,7 @@ export const Job = objectType({
         const boardUuid = relation.split('#')[2];
 
         const key = {
-          id: `USER#${userId}`,
+          id: `USER#${user.userId}`,
           relation: `BOARD#${boardUuid}`,
         };
 

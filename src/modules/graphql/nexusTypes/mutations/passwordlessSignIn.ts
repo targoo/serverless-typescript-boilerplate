@@ -42,8 +42,3 @@ export const passwordlessSignIn = {
     return true;
   },
 };
-
-// curl --request POST \
-//   --url 'https://YOUR_DOMAIN/passwordless/start' \
-//   --header 'content-type: application/json' \
-//   --data '{"client_id":"YOUR_CLIENT_ID", "connection":"email|sms", "email":"EMAIL", "phone_number":"PHONE_NUMBER", "send":"link|code", "authParams":{"scope": "openid","state": "YOUR_STATE"}}'

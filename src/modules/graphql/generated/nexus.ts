@@ -3,6 +3,7 @@
  * Do not make changes to this file directly
  */
 
+import * as index from '../index';
 import { core } from 'nexus';
 declare global {
   interface NexusGenCustomInputMethods<TypeName extends string> {
@@ -146,8 +147,9 @@ export interface NexusGenRootTypes {
     name?: string | null; // String
     nickname?: string | null; // String
     picture?: string | null; // String
+    state: string; // String!
     sub: string; // String!
-    uuid: string; // ID!
+    userId: string; // ID!
   };
   Board: {
     // root type
@@ -218,7 +220,7 @@ export interface NexusGenRootTypes {
     isDeleted: boolean; // Boolean!
     nickname: string; // String!
     updatedAt?: any | null; // DateTime
-    uuid: string; // ID!
+    userId: string; // ID!
   };
   String: string;
   Int: number;
@@ -260,8 +262,9 @@ export interface NexusGenFieldTypes {
     name: string | null; // String
     nickname: string | null; // String
     picture: string | null; // String
+    state: string; // String!
     sub: string; // String!
-    uuid: string; // ID!
+    userId: string; // ID!
   };
   Board: {
     // field return type
@@ -360,7 +363,7 @@ export interface NexusGenFieldTypes {
     isDeleted: boolean; // Boolean!
     nickname: string; // String!
     updatedAt: any | null; // DateTime
-    uuid: string; // ID!
+    userId: string; // ID!
   };
 }
 
@@ -415,6 +418,7 @@ export interface NexusGenArgTypes {
     signInConfirm: {
       // args
       accessToken: string; // String!
+      state: string; // String!
     };
     singleUpload: {
       // args
@@ -439,6 +443,7 @@ export interface NexusGenArgTypes {
   Query: {
     board: {
       // args
+      userId?: string | null; // ID
       uuid: string; // ID!
     };
     boards: {
@@ -505,7 +510,7 @@ export type NexusGenScalarNames =
 export type NexusGenUnionNames = never;
 
 export interface NexusGenTypes {
-  context: any;
+  context: index.ContextType;
   inputTypes: NexusGenInputs;
   rootTypes: NexusGenRootTypes;
   argTypes: NexusGenArgTypes;

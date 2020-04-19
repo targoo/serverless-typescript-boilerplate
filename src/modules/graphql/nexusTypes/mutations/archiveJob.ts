@@ -17,13 +17,13 @@ export const archiveJob = {
     }),
   },
 
-  resolve: async (_parent, { boardUuid, uuid }, { userId, dynamo }) => {
-    if (!userId) {
+  resolve: async (_parent, { boardUuid, uuid }, { user, dynamo }) => {
+    if (!user) {
       throw new Error('Not authorized to archive the job');
     }
 
     const key: IKeyBase = {
-      id: `USER#${userId}`,
+      id: `USER#${user.userId}`,
       relation: `JOB#BOARD#${boardUuid}#${uuid}`,
     };
 

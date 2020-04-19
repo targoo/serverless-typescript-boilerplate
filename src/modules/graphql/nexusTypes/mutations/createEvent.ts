@@ -23,8 +23,8 @@ export const createEvent = {
     }),
   },
 
-  resolve: async (_parent, { boardUuid, jobUuid, data }, { userId, dynamo }) => {
-    if (!userId) {
+  resolve: async (_parent, { boardUuid, jobUuid, data }, { user, dynamo }) => {
+    if (!user) {
       throw new Error('Not authorized to create a new event');
     }
 
@@ -32,7 +32,7 @@ export const createEvent = {
 
     const event = ({
       ...prepareFormInput(data, eventFormProperties),
-      id: `USER#${userId}`,
+      id: `USER#${user.userId}`,
       relation: `EVENT#BOARD#${boardUuid}#JOB#${jobUuid}#${uuid}`,
       uuid: JSON.stringify({ format: 'string', value: uuid }),
       isDeleted: JSON.stringify({ format: 'boolean', value: false }),

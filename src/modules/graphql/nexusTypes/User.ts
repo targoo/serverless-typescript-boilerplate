@@ -10,7 +10,7 @@ export const userProperties = {
   ...userFormProperties,
   id: 'key',
   relation: 'key',
-  uuid: 'string',
+  userId: 'string',
   createdAt: 'datetime',
   updatedAt: 'datetime',
 };
@@ -18,11 +18,11 @@ export const userProperties = {
 export const User = objectType({
   name: 'User',
   definition(t) {
+    t.id('userId', { description: 'Unique Id of the user based on the email' });
+
     t.string('nickname');
 
     t.string('email');
-
-    t.id('uuid', { description: 'UUID of the user (Cognito Sub)' });
 
     t.datetime('createdAt');
 

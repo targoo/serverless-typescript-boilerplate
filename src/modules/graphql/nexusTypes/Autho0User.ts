@@ -3,9 +3,11 @@ import { objectType } from 'nexus';
 export const Autho0User = objectType({
   name: 'Autho0User',
   definition(t) {
-    t.id('uuid', { description: 'UUID of the user (Auth0 Sub)' });
+    t.id('userId', { description: 'the unique user ID' });
 
     t.string('sub');
+
+    t.string('state');
 
     t.string('jwt');
 

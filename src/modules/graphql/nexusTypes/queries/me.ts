@@ -6,10 +6,11 @@ import logger from '../../../../utils/logger';
 export const me = {
   type: User,
 
-  resolve: async (_parent, _arg, { userId, userEmail, userName, dynamo }) => {
-    if (!userId || !userEmail) {
+  resolve: async (_parent, _arg, { user, dynamo }) => {
+    if (!user) {
       throw new Error('Not authorized to get or create a user');
     }
+    const { userId, nickname, email, state } = user;
 
     const key = {
       id: `USER#${userId}`,
@@ -24,12 +25,12 @@ export const me = {
 
       return response;
     } else {
-      const nickname = userName ? userName : userEmail;
       const user = ({
-        ...prepareFormInput({ nickname, email: userEmail }, userFormProperties),
+        ...prepareFormInput({ nickname: nickname || email, email }, userFormProperties),
         id: `USER#${userId}`,
         relation: `USER`,
-        uuid: JSON.stringify({ format: 'string', value: userId }),
+        userId: JSON.stringify({ format: 'string', value: userId }),
+        state: JSON.stringify({ format: 'string', value: state }),
         isDeleted: JSON.stringify({ format: 'boolean', value: false }),
         createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
       } as unknown) as IUser;

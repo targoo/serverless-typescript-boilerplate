@@ -17,8 +17,8 @@ export const createBoard = {
     }),
   },
 
-  resolve: async (_parent, { data }, { userId, dynamo }) => {
-    if (!userId) {
+  resolve: async (_parent, { data }, { user, dynamo }) => {
+    if (!user) {
       throw new Error('Not authorized to create a new board');
     }
 
@@ -26,7 +26,7 @@ export const createBoard = {
 
     const board = ({
       ...prepareFormInput(data, boardFormProperties),
-      id: `USER#${userId}`,
+      id: `USER#${user.userId}`,
       relation: `BOARD#${uuid}`,
       uuid: JSON.stringify({ format: 'string', value: uuid }),
       isDeleted: JSON.stringify({ format: 'boolean', value: false }),

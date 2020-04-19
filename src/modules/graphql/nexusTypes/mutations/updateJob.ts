@@ -22,13 +22,13 @@ export const updateJob = {
     }),
   },
 
-  resolve: async (_parent, { boardUuid, uuid, data }, { userId, dynamo }) => {
-    if (!userId) {
+  resolve: async (_parent, { boardUuid, uuid, data }, { user, dynamo }) => {
+    if (!user) {
       throw new Error('Not authorized to update the job');
     }
 
     const key: IKeyBase = {
-      id: `USER#${userId}`,
+      id: `USER#${user.userId}`,
       relation: `JOB#BOARD#${boardUuid}#${uuid}`,
     };
 
