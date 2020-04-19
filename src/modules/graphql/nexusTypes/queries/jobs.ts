@@ -24,9 +24,9 @@ export const jobs = {
         boardUuid: string;
       };
     },
-    { userId, dynamo },
+    { user, dynamo },
   ) => {
-    if (!userId) {
+    if (!user) {
       throw new Error('Not authorized to list the jobs');
     }
 
@@ -39,7 +39,7 @@ export const jobs = {
         return acc;
       }, {}),
       ExpressionAttributeValues: {
-        ':userUUID': `USER#${userId}`,
+        ':userUUID': `USER#${user.userId}`,
         ':relation': args.where.boardUuid ? `JOB#BOARD#${args.where.boardUuid}` : 'JOB#BOARD#',
       },
       ProjectionExpression: properties.map((property) => `#${property}`),

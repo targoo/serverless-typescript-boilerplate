@@ -18,8 +18,8 @@ export const boards = {
     }),
   },
 
-  resolve: async (_parent, args, { userId, dynamo }) => {
-    if (!userId) {
+  resolve: async (_parent, args, { user, dynamo }) => {
+    if (!user) {
       throw new Error('Not authorized to list the boards');
     }
 
@@ -32,7 +32,7 @@ export const boards = {
         return acc;
       }, {}),
       ExpressionAttributeValues: {
-        ':userUUID': `USER#${userId}`,
+        ':userUUID': `USER#${user.userId}`,
         ':relation': 'BOARD#',
       },
       ProjectionExpression: properties.map((property) => `#${property}`),

@@ -15,13 +15,13 @@ export const archiveBoard = {
     isDeleted: booleanArg(),
   },
 
-  resolve: async (_parent, { uuid, isDeleted = true }, { userId, dynamo }) => {
-    if (!userId) {
-      throw new Error('Not authorized to archive the board');
+  resolve: async (_parent, { uuid, isDeleted = true }, { user, dynamo }) => {
+    if (!user) {
+      throw new Error("Not authorized to get the board's files");
     }
 
     const key: IKeyBase = {
-      id: `USER#${userId}`,
+      id: `USER#${user.userId}`,
       relation: `BOARD#${uuid}`,
     };
 

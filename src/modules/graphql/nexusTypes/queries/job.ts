@@ -21,13 +21,13 @@ export const job = {
 
   args: jobArgs,
 
-  resolve: async (_parent, { boardUuid, uuid }, { userId, dynamo }) => {
-    if (!userId) {
+  resolve: async (_parent, { boardUuid, uuid }, { user, dynamo }) => {
+    if (!user) {
       throw new Error('Not authorized to get the board');
     }
 
     const key = {
-      id: `USER#${userId}`,
+      id: `USER#${user.userId}`,
       relation: `JOB#BOARD#${boardUuid}#${uuid}`,
     };
 

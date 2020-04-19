@@ -26,7 +26,7 @@ export const board = {
     }
 
     const key = {
-      id: `USER#${userId || user.uuid}`,
+      id: `USER#${userId || user.userId}`,
       relation: `BOARD#${uuid}`,
     };
 
