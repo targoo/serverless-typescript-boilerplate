@@ -9,20 +9,20 @@ export const archiveBoard = {
   type: Board,
 
   args: {
-    uuid: idArg({
+    boardUuid: idArg({
       required: true,
     }),
     isDeleted: booleanArg(),
   },
 
-  resolve: async (_parent, { uuid, isDeleted = true }, { user, dynamo }) => {
+  resolve: async (_parent, { boardUuid, isDeleted = true }, { user, dynamo }) => {
     if (!user) {
       throw new Error('Not authorized to archive the board');
     }
 
     const key: IKeyBase = {
       id: `USER#${user.userId}`,
-      relation: `BOARD#${uuid}`,
+      relation: `BOARD#${boardUuid}`,
     };
 
     const params = {

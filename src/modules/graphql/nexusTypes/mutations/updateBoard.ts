@@ -10,7 +10,7 @@ export const updateBoard = {
   type: Board,
 
   args: {
-    uuid: idArg({
+    boardUuid: idArg({
       required: true,
     }),
     data: arg({
@@ -19,14 +19,14 @@ export const updateBoard = {
     }),
   },
 
-  resolve: async (_parent, { uuid, data }, { user, dynamo }) => {
+  resolve: async (_parent, { boardUuid, data }, { user, dynamo }) => {
     if (!user) {
       throw new Error('Not authorized to update the board');
     }
 
     const key: IKeyBase = {
       id: `USER#${user.userId}`,
-      relation: `BOARD#${uuid}`,
+      relation: `BOARD#${boardUuid}`,
     };
 
     const prepData = prepareFormInput(data, boardFormProperties);

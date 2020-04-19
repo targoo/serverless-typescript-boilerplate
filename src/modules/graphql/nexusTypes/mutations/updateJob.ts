@@ -13,7 +13,7 @@ export const updateJob = {
     boardUuid: idArg({
       required: true,
     }),
-    uuid: idArg({
+    jobUuid: idArg({
       required: true,
     }),
     data: arg({
@@ -22,14 +22,14 @@ export const updateJob = {
     }),
   },
 
-  resolve: async (_parent, { boardUuid, uuid, data }, { user, dynamo }) => {
+  resolve: async (_parent, { boardUuid, jobUuid, data }, { user, dynamo }) => {
     if (!user) {
       throw new Error('Not authorized to update the job');
     }
 
     const key: IKeyBase = {
       id: `USER#${user.userId}`,
-      relation: `JOB#BOARD#${boardUuid}#${uuid}`,
+      relation: `JOB#BOARD#${boardUuid}#${jobUuid}`,
     };
 
     const prepData = prepareFormInput(data, jobFormProperties);

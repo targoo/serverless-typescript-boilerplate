@@ -6,7 +6,7 @@ import logger from '../../../../utils/logger';
 import { prepareResponseDate } from '../utils/form';
 
 const boardArgs = {
-  uuid: idArg({
+  boardUuid: idArg({
     required: true,
     description: 'The unique id of the board',
   }),
@@ -20,14 +20,14 @@ export const board = {
 
   args: boardArgs,
 
-  resolve: async (_parent, { uuid, userId }, { user, dynamo }) => {
+  resolve: async (_parent, { boardUuid, userId }, { user, dynamo }) => {
     if (!user) {
       throw new Error('Not authorized to get the board');
     }
 
     const key = {
       id: `USER#${userId || user.userId}`,
-      relation: `BOARD#${uuid}`,
+      relation: `BOARD#${boardUuid}`,
     };
 
     const { Item }: { Item: IBoard } = await dynamo.getItem(key);

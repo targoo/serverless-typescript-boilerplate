@@ -12,19 +12,19 @@ export const archiveJob = {
     boardUuid: idArg({
       required: true,
     }),
-    uuid: idArg({
+    jobUuid: idArg({
       required: true,
     }),
   },
 
-  resolve: async (_parent, { boardUuid, uuid }, { user, dynamo }) => {
+  resolve: async (_parent, { boardUuid, jobUuid }, { user, dynamo }) => {
     if (!user) {
       throw new Error('Not authorized to archive the job');
     }
 
     const key: IKeyBase = {
       id: `USER#${user.userId}`,
-      relation: `JOB#BOARD#${boardUuid}#${uuid}`,
+      relation: `JOB#BOARD#${boardUuid}#${jobUuid}`,
     };
 
     const params = {

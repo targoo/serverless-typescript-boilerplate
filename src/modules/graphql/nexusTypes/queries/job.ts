@@ -10,7 +10,7 @@ const jobArgs = {
     required: true,
     description: 'The id of the board',
   }),
-  uuid: idArg({
+  jobUuid: idArg({
     required: true,
     description: 'The id of the job',
   }),
@@ -21,14 +21,14 @@ export const job = {
 
   args: jobArgs,
 
-  resolve: async (_parent, { boardUuid, uuid }, { user, dynamo }) => {
+  resolve: async (_parent, { boardUuid, jobUuid }, { user, dynamo }) => {
     if (!user) {
       throw new Error('Not authorized to get the board');
     }
 
     const key = {
       id: `USER#${user.userId}`,
-      relation: `JOB#BOARD#${boardUuid}#${uuid}`,
+      relation: `JOB#BOARD#${boardUuid}#${jobUuid}`,
     };
 
     const { Item }: { Item: IJob } = await dynamo.getItem(key);

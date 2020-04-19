@@ -12,27 +12,20 @@ export const archiveBoardFile = {
     boardUuid: idArg({
       required: true,
     }),
-    uuid: idArg({
+    fileUuid: idArg({
       required: true,
     }),
   },
 
-  resolve: async (_parent, { boardUuid, uuid }, { user, dynamo }) => {
+  resolve: async (_parent, { boardUuid, fileUuid }, { user, dynamo }) => {
     if (!user) {
-      throw new Error('Not authorized to archive the job');
+      throw new Error('Not authorized to archive the board file');
     }
-
-    console.log('------delete file');
 
     const key: IKeyBase = {
       id: `USER#${user.userId}`,
-      relation: `FILE#BOARD#${boardUuid}#${uuid}`,
+      relation: `FILE#BOARD#${boardUuid}#${fileUuid}`,
     };
-    // FILE#BOARD#mRftlB6r3tcRQnrR#8iOryF0zdWsWfFIO
-
-    // FILE#BOARD#mRftlB6r3tcRQnrR#mRftlB6r3tcRQnrR'
-
-    console.log('------delete file', key);
 
     const params = {
       UpdateExpression: 'set #isDeleted = :isDeleted, #updatedAt = :updatedAt',

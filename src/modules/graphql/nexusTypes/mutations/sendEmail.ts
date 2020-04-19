@@ -19,7 +19,7 @@ export const sendEmail = {
   },
 
   resolve: async (_parent, { email, subject, content }, { user }) => {
-    // if (!userId) {
+    // if (!user) {
     //   throw new Error('Not authorized to send an email');
     // }
     // Send email

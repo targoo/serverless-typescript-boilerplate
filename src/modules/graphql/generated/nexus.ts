@@ -371,18 +371,18 @@ export interface NexusGenArgTypes {
   Mutation: {
     archiveBoard: {
       // args
+      boardUuid: string; // ID!
       isDeleted?: boolean | null; // Boolean
-      uuid: string; // ID!
     };
     archiveBoardFile: {
       // args
       boardUuid: string; // ID!
-      uuid: string; // ID!
+      fileUuid: string; // ID!
     };
     archiveJob: {
       // args
       boardUuid: string; // ID!
-      uuid: string; // ID!
+      jobUuid: string; // ID!
     };
     createBoard: {
       // args
@@ -426,14 +426,14 @@ export interface NexusGenArgTypes {
     };
     updateBoard: {
       // args
+      boardUuid: string; // ID!
       data: NexusGenInputs['BoardInputData']; // BoardInputData!
-      uuid: string; // ID!
     };
     updateJob: {
       // args
       boardUuid: string; // ID!
       data: NexusGenInputs['JobInputData']; // JobInputData!
-      uuid: string; // ID!
+      jobUuid: string; // ID!
     };
     updateUser: {
       // args
@@ -443,8 +443,8 @@ export interface NexusGenArgTypes {
   Query: {
     board: {
       // args
+      boardUuid: string; // ID!
       userId?: string | null; // ID
-      uuid: string; // ID!
     };
     boards: {
       // args
@@ -458,7 +458,7 @@ export interface NexusGenArgTypes {
     job: {
       // args
       boardUuid: string; // ID!
-      uuid: string; // ID!
+      jobUuid: string; // ID!
     };
     jobs: {
       // args
