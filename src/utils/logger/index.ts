@@ -18,7 +18,7 @@ const logFormat =
 
 const options: LoggerOptions = {
   format: combine(errors({ stack: true }), splat(), timestamp(), logFormat),
-  level: 'debug',
+  level: 'info',
   transports: [consoleTransport],
   exitOnError: false,
 };

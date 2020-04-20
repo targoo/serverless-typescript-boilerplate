@@ -3,6 +3,8 @@ import { APIGatewayProxyEvent, Context } from 'aws-lambda';
 
 import { verify, decode } from '../../utils/jwt';
 import dynamo from '../../utils/dynamo';
+import s3 from '../../utils/s3';
+import { emailService } from '../../utils/emailService';
 
 // Infers the resolve type of a promise
 type ThenArg<T> = T extends Promise<infer U> ? U : T;
@@ -14,6 +16,8 @@ export interface ContextParameters {
 
 interface GraphQLContext extends ContextParameters {
   dynamo: any;
+  s3: any;
+  emailService: any;
   user: {
     sub: string;
     userId: string;
@@ -52,6 +56,8 @@ export const getContext = async ({ event, context }: ContextParameters): Promise
     event,
     context,
     dynamo,
+    s3,
     user,
+    emailService,
   };
 };

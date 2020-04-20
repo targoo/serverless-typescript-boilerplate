@@ -1,9 +1,9 @@
-import AWS from 'aws-sdk';
-// import { captureAWS } from 'aws-xray-sdk-core';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 
 import logger from './logger';
-
 import { IEntityBase, IEntityBaseDynamo, IKeyBase, Modify } from '../types/types';
+
+const DYNAMO_TABLE = process.env.DYNAMO_TABLE;
 
 const localConfig = {
   region: 'localhost',
@@ -19,11 +19,7 @@ const AWSConfig = {
 };
 
 const dynamoConfig = process.env.ENV === 'local' ? localConfig : AWSConfig;
-const DYNAMO_TABLE = process.env.DYNAMO_TABLE;
-
-AWS.config.update(dynamoConfig);
-
-const dynamoClient = new AWS.DynamoDB.DocumentClient();
+const dynamoClient = new DocumentClient(dynamoConfig);
 
 /**
  * DynamoDB Client Abstraction

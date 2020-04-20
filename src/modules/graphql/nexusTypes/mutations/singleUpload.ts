@@ -7,15 +7,15 @@ import { sanitizeFileName } from '../../../../utils/files/files';
 const UPLOAD_BUCKET_NAME = process.env.AWS_BUCKET_UPLOAD || '';
 
 if (process.env.ENV === 'local') {
-  AWS.config.update({
-    signatureVersion: 'v4',
-    region: process.env.AWS_REGION,
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    s3BucketEndpoint: false,
-    //@ts-ignore
-    endpoint: 'https://s3.amazonaws.com',
-  });
+  // AWS.config.update({
+  //   signatureVersion: 'v4',
+  //   region: process.env.AWS_REGION,
+  //   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  //   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  //   s3BucketEndpoint: false,
+  //   //@ts-ignore
+  //   endpoint: 'https://s3.amazonaws.com',
+  // });
 } else {
   AWS.config.update({
     signatureVersion: 'v4',

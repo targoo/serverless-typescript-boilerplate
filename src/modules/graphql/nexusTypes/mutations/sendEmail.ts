@@ -1,7 +1,6 @@
 import { stringArg } from 'nexus';
 
 import logger from '../../../../utils/logger';
-import { sendRawEmail } from '../utils/emailService/emailService';
 
 export const sendEmail = {
   type: 'Boolean',
@@ -18,13 +17,13 @@ export const sendEmail = {
     }),
   },
 
-  resolve: async (_parent, { email, subject, content }, { user }) => {
+  resolve: async (_parent, { email, subject, content }, { user, emailService }) => {
     // if (!user) {
     //   throw new Error('Not authorized to send an email');
     // }
     // Send email
     try {
-      const result = await sendRawEmail(email, subject, content);
+      const result = await emailService.sendRawEmail(email, subject, content);
       console.log('result', result);
     } catch (error) {
       console.error('error-------', error);

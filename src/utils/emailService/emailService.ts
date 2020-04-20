@@ -1,17 +1,24 @@
 import { SES, AWSError } from 'aws-sdk';
 import { SendEmailRequest, SendEmailResponse } from 'aws-sdk/clients/ses';
+
 import { TAddresses, ISendTemplatedEmailOptions } from './emailService.types';
+import logger from '../logger';
+
+const localConfig = {
+  region: process.env.AWS_REGION,
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+};
+
+const AWSConfig = {
+  region: process.env.AWS_REGION,
+};
+
+const sesConfig = process.env.ENV === 'local' ? localConfig : AWSConfig;
 
 const SOURCE_EMAIL: string = process.env.SES_SOURCE_EMAIL;
-const REGION: string = process.env.AWS_REGION;
-const ses = new SES({ region: REGION });
+const sesClient = new SES(sesConfig);
 
-export function sendRawEmail(to: TAddresses, subject: string, content: string, options?: ISendTemplatedEmailOptions) {
-  console.log(`send-raw-email ${to}`);
-  return sendEmail(to, subject, content, options);
-}
-
-// Composes an email message using an email template and immediately queues it for sending.
 function sendEmail(
   to: TAddresses,
   subject: string,
@@ -47,5 +54,13 @@ function sendEmail(
       CcAddresses: cc,
     },
   };
-  return ses.sendEmail(sesParams).promise();
+
+  return sesClient.sendEmail(sesParams).promise();
 }
+
+export const emailService = {
+  sendRawEmail: (to: TAddresses, subject: string, content: string, options?: ISendTemplatedEmailOptions) => {
+    logger.info(`send-raw-email ${to}`);
+    return sendEmail(to, subject, content, options);
+  },
+};

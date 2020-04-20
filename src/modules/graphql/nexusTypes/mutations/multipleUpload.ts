@@ -1,4 +1,3 @@
-import * as AWS from 'aws-sdk';
 import { arg, idArg } from 'nexus';
 
 import { File } from '../File';
@@ -10,25 +9,6 @@ import logger from '../../../../utils/logger';
 
 const UPLOAD_BUCKET_NAME = process.env.AWS_BUCKET_UPLOAD || '';
 
-if (process.env.ENV === 'local') {
-  AWS.config.update({
-    signatureVersion: 'v4',
-    region: process.env.AWS_REGION,
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    s3BucketEndpoint: false,
-    //@ts-ignore
-    endpoint: 'https://s3.amazonaws.com',
-  });
-} else {
-  AWS.config.update({
-    signatureVersion: 'v4',
-    region: process.env.AWS_REGION,
-  });
-}
-
-const s3 = new AWS.S3();
-
 export const multipleUpload = {
   type: File,
 
@@ -37,20 +17,20 @@ export const multipleUpload = {
     files: arg({ type: 'Upload', required: true, list: true }),
   },
 
-  resolve: async (_parent, { files, boardUuid }, { user, dynamo }) => {
+  resolve: async (_parent, { files, boardUuid }, { user, dynamo, s3 }) => {
     if (!user) {
       throw new Error('Not authorized to upload files');
     }
 
     const filesData = files as Promise<FileUpload>[];
     console.log('filesData', filesData);
-    const result = await Promise.all(files.map((file) => uploadFile(file, user.userId, boardUuid, dynamo)));
+    const result = await Promise.all(files.map((file) => uploadFile(file, user.userId, boardUuid, dynamo, s3)));
     console.log('result', result);
     return result;
   },
 };
 
-const uploadFile = async (file, userId, boardUuid, dynamo) => {
+const uploadFile = async (file, userId, boardUuid, dynamo, s3) => {
   const { filename, mimetype, encoding, createReadStream } = await file;
   console.log('filename', filename);
   console.log('mimetype', mimetype);
@@ -79,7 +59,7 @@ const uploadFile = async (file, userId, boardUuid, dynamo) => {
   };
 
   try {
-    await s3.upload(params).promise();
+    await s3.upload(params);
     logger.debug(`File uploaded under ${resource}`);
 
     const file = ({

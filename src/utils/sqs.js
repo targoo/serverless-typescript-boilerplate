@@ -1,7 +1,7 @@
 'use strict';
 
 const AWS = require('aws-sdk');
-AWS.config.setPromisesDependency(require('bluebird'));
+// AWS.config.setPromisesDependency(require('bluebird'));
 
 const endpoint = process.env.SQS_QUEUE_URL;
 
