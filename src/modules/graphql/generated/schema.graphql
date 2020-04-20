@@ -26,8 +26,10 @@ type Board {
   description: String
   educationLevel: EducationLevel
   files: [File!]
+  interestLevel: InterestLevel
   isDeleted: Boolean!
   location: String
+  locationCoordinates: JSON
   title: String!
   updatedAt: DateTime
 
@@ -43,9 +45,10 @@ input BoardInputData {
   availableDate: Date
   description: String
   educationLevel: EducationLevel
-  file: String
+  interestLevel: InterestLevel
   isDeleted: Boolean
   location: String
+  locationCoordinates: JSON
   title: String!
   workRightEU: Boolean
   workRightUK: Boolean
@@ -146,6 +149,12 @@ type File {
   UUID of the job
   """
   uuid: ID!
+}
+
+enum InterestLevel {
+  ACTIVELY_LOOKING
+  JUST_BROWSING
+  OPEN_TO_OPPORTUNITY
 }
 
 """

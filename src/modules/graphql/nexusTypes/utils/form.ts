@@ -6,6 +6,12 @@ export function prepareFormInput(myObj: any, formProperties: any) {
     .reduce((result, key) => {
       const currentObject = myObj[key];
       switch (formProperties[key]) {
+        case 'json':
+          result[key] = JSON.stringify({
+            format: 'json',
+            value: currentObject ? currentObject : null,
+          });
+          break;
         case 'date':
           result[key] = JSON.stringify({
             format: 'date',
@@ -47,6 +53,7 @@ export function prepareResponseDate(myObj: any) {
         case 'boolean':
           result[key] = Boolean(value);
           break;
+        case 'json':
         case 'string':
           result[key] = value;
           break;

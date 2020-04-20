@@ -7,12 +7,12 @@ export const BoardInputData = inputObjectType({
     t.string('description');
     t.date('availableDate');
     t.string('location');
-    t.string('file');
-    t.boolean('isDeleted');
-
+    t.json('locationCoordinates');
     t.field('educationLevel', { type: 'EducationLevel' });
+    t.field('interestLevel', { type: 'InterestLevel' });
     t.boolean('workRightEU');
     t.boolean('workRightUK');
+    t.boolean('isDeleted');
   },
 });
 

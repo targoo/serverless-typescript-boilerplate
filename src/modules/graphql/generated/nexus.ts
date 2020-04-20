@@ -49,9 +49,10 @@ export interface NexusGenInputs {
     availableDate?: any | null; // Date
     description?: string | null; // String
     educationLevel?: NexusGenEnums['EducationLevel'] | null; // EducationLevel
-    file?: string | null; // String
+    interestLevel?: NexusGenEnums['InterestLevel'] | null; // InterestLevel
     isDeleted?: boolean | null; // Boolean
     location?: string | null; // String
+    locationCoordinates?: any | null; // JSON
     title: string; // String!
     workRightEU?: boolean | null; // Boolean
     workRightUK?: boolean | null; // Boolean
@@ -123,6 +124,7 @@ export interface NexusGenEnums {
   EmploymentType: 'CONTRACT' | 'PERMANENT';
   EventType: 'FACE2FACE' | 'PHONE_CALL' | 'VIDEO_CALL';
   Feeling: 'ECSTATIC' | 'HAPPY' | 'NORMAL' | 'SAD';
+  InterestLevel: 'ACTIVELY_LOOKING' | 'JUST_BROWSING' | 'OPEN_TO_OPPORTUNITY';
   JobStatus:
     | 'ARCHIVED'
     | 'FACE2FACE'
@@ -157,8 +159,10 @@ export interface NexusGenRootTypes {
     createdAt: any; // DateTime!
     description?: string | null; // String
     educationLevel?: NexusGenEnums['EducationLevel'] | null; // EducationLevel
+    interestLevel?: NexusGenEnums['InterestLevel'] | null; // InterestLevel
     isDeleted: boolean; // Boolean!
     location?: string | null; // String
+    locationCoordinates?: any | null; // JSON
     title: string; // String!
     updatedAt?: any | null; // DateTime
     uuid: string; // ID!
@@ -247,6 +251,7 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
   EmploymentType: NexusGenEnums['EmploymentType'];
   EventType: NexusGenEnums['EventType'];
   Feeling: NexusGenEnums['Feeling'];
+  InterestLevel: NexusGenEnums['InterestLevel'];
   JobStatus: NexusGenEnums['JobStatus'];
   MimeType: NexusGenEnums['MimeType'];
   RemoteOptions: NexusGenEnums['RemoteOptions'];
@@ -273,8 +278,10 @@ export interface NexusGenFieldTypes {
     description: string | null; // String
     educationLevel: NexusGenEnums['EducationLevel'] | null; // EducationLevel
     files: NexusGenRootTypes['File'][] | null; // [File!]
+    interestLevel: NexusGenEnums['InterestLevel'] | null; // InterestLevel
     isDeleted: boolean; // Boolean!
     location: string | null; // String
+    locationCoordinates: any | null; // JSON
     title: string; // String!
     updatedAt: any | null; // DateTime
     uuid: string; // ID!
@@ -488,6 +495,7 @@ export type NexusGenEnumNames =
   | 'EmploymentType'
   | 'EventType'
   | 'Feeling'
+  | 'InterestLevel'
   | 'JobStatus'
   | 'MimeType'
   | 'RemoteOptions'
