@@ -2,9 +2,10 @@ import { objectType } from 'nexus';
 
 import logger from '../../../utils/logger';
 import { File, fileProperties } from './File';
-import { IFile } from '../../../types/types';
+import { IFile, IUser } from '../../../types/types';
 import { prepareResponseDate } from './utils/form';
 import { EducationLevel, InterestLevel } from './enums';
+import { User } from './User';
 
 export const boardFormProperties = {
   title: 'string',
@@ -12,6 +13,8 @@ export const boardFormProperties = {
   availableDate: 'date',
   location: 'string',
   locationCoordinates: 'json',
+  locationMain: 'string',
+  locationSecondary: 'string',
   isDeleted: 'boolean',
   educationLevel: 'string',
   interestLevel: 'string',
@@ -50,6 +53,10 @@ export const Board = objectType({
     t.string('location', { nullable: true });
 
     t.json('locationCoordinates', { nullable: true });
+
+    t.string('locationMain', { nullable: true });
+
+    t.string('locationSecondary', { nullable: true });
 
     t.field('educationLevel', { type: EducationLevel, nullable: true });
 
@@ -97,6 +104,26 @@ export const Board = objectType({
         return items;
       },
       nullable: true,
+    });
+
+    t.field('user', {
+      type: User,
+
+      // @ts-ignore
+      resolve: async ({ id }, _args, { dynamo }) => {
+        const key = {
+          id,
+          relation: 'USER',
+        };
+
+        const { Item }: { Item: IUser } = await dynamo.getItem(key);
+        logger.info(`item: ${JSON.stringify(Item)}`);
+
+        const item = prepareResponseDate(Item);
+        logger.info(`item: ${JSON.stringify(item)}`);
+
+        return item;
+      },
     });
 
     // t.string('locationName', { nullable: true });

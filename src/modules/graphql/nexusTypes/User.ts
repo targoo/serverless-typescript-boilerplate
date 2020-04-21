@@ -3,6 +3,7 @@ import { objectType } from 'nexus';
 export const userFormProperties = {
   nickname: 'string',
   email: 'string',
+  state: 'string',
   isDeleted: 'boolean',
 };
 
@@ -23,6 +24,8 @@ export const User = objectType({
     t.string('nickname');
 
     t.string('email');
+
+    t.string('state');
 
     t.datetime('createdAt');
 

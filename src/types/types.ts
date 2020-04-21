@@ -97,6 +97,7 @@ export interface IJob extends IEntityBase {
   companyWebsite: string;
   companyLocation: string;
   jobDescription: string;
+  jobUrl: string;
   // Money
   employmentType: EmploymentType;
   remoteOptions: RemoteOptions;

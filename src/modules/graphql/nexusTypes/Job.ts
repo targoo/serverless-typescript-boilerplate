@@ -2,24 +2,27 @@ import { objectType } from 'nexus';
 
 import logger from '../../../utils/logger';
 import { prepareResponseDate } from './utils/form';
-
+import { IEvent, IUser } from '../../../types/types';
 import { Event, eventProperties } from './Event';
 import { Board } from './Board';
 import { EmploymentType, Feeling, JobStatus, RemoteOptions } from './enums';
-
-import { IEvent } from '../../../types/types';
+import { User } from './User';
 
 export const jobFormProperties = {
   agencyName: 'string',
   agentName: 'string',
   agentEmail: 'string',
   agentPhone: 'string',
-  referralFee: 'string', // referal fee upon placement
+  referralFee: 'string',
   jobTitle: 'string',
   company: 'string',
   companyWebsite: 'string',
   companyLocation: 'string',
+  companyLocationCoordinates: 'json',
+  companyLocationMain: 'string',
+  companyLocationSecondary: 'string',
   jobDescription: 'string',
+  jobUrl: 'string',
   employmentType: 'string',
   remoteOptions: 'string',
   duration: 'string',
@@ -67,7 +70,15 @@ export const Job = objectType({
 
     t.string('companyLocation', { nullable: true });
 
+    t.json('companyLocationCoordinates', { nullable: true });
+
+    t.string('companyLocationMain', { nullable: true });
+
+    t.string('companyLocationSecondary', { nullable: true });
+
     t.string('jobDescription', { nullable: true });
+
+    t.string('jobUrl', { nullable: true });
 
     // Money
     t.field('employmentType', { type: EmploymentType, nullable: true });
@@ -148,6 +159,26 @@ export const Job = objectType({
         const { Item = {} } = await dynamo.getItem(key);
 
         return Item;
+      },
+    });
+
+    t.field('user', {
+      type: User,
+
+      // @ts-ignore
+      resolve: async ({ id }, _args, { dynamo }) => {
+        const key = {
+          id,
+          relation: 'USER',
+        };
+
+        const { Item }: { Item: IUser } = await dynamo.getItem(key);
+        logger.info(`item: ${JSON.stringify(Item)}`);
+
+        const item = prepareResponseDate(Item);
+        logger.info(`item: ${JSON.stringify(item)}`);
+
+        return item;
       },
     });
   },

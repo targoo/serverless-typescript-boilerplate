@@ -8,6 +8,8 @@ export const BoardInputData = inputObjectType({
     t.date('availableDate');
     t.string('location');
     t.json('locationCoordinates');
+    t.string('locationMain');
+    t.string('locationSecondary');
     t.field('educationLevel', { type: 'EducationLevel' });
     t.field('interestLevel', { type: 'InterestLevel' });
     t.boolean('workRightEU');
@@ -39,14 +41,21 @@ export const JobInputData = inputObjectType({
     t.string('agentName');
     t.string('agentEmail');
     t.string('agentPhone');
-    // Job
-    t.string('jobTitle');
+    t.string('referralFee');
+    // Company
     t.string('company');
     t.string('companyWebsite');
     t.string('companyLocation');
+    t.json('companyLocationCoordinates');
+    t.string('companyLocationMain');
+    t.string('companyLocationSecondary');
+    // Job
+    t.string('jobTitle');
     t.string('jobDescription');
+    t.string('jobUrl');
     // Money
     t.field('employmentType', { type: 'EmploymentType' });
+    t.field('remoteOptions', { type: 'RemoteOptions' });
     t.string('duration');
     t.string('rate');
     t.boolean('ir35');
@@ -68,7 +77,7 @@ export const JobInputWhere = inputObjectType({
 export const UserInputData = inputObjectType({
   name: 'UserInputData',
   definition(t) {
-    t.string('name', { required: false });
+    t.string('nickname', { required: false });
   },
 });
 

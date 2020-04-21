@@ -53,6 +53,8 @@ export interface NexusGenInputs {
     isDeleted?: boolean | null; // Boolean
     location?: string | null; // String
     locationCoordinates?: any | null; // JSON
+    locationMain?: string | null; // String
+    locationSecondary?: string | null; // String
     title: string; // String!
     workRightEU?: boolean | null; // Boolean
     workRightUK?: boolean | null; // Boolean
@@ -87,6 +89,9 @@ export interface NexusGenInputs {
     agentPhone?: string | null; // String
     company?: string | null; // String
     companyLocation?: string | null; // String
+    companyLocationCoordinates?: any | null; // JSON
+    companyLocationMain?: string | null; // String
+    companyLocationSecondary?: string | null; // String
     companyWebsite?: string | null; // String
     duration?: string | null; // String
     employmentType?: NexusGenEnums['EmploymentType'] | null; // EmploymentType
@@ -95,7 +100,10 @@ export interface NexusGenInputs {
     isDeleted?: boolean | null; // Boolean
     jobDescription?: string | null; // String
     jobTitle?: string | null; // String
+    jobUrl?: string | null; // String
     rate?: string | null; // String
+    referralFee?: string | null; // String
+    remoteOptions?: NexusGenEnums['RemoteOptions'] | null; // RemoteOptions
     status?: NexusGenEnums['JobStatus'] | null; // JobStatus
   };
   JobInputWhere: {
@@ -105,7 +113,7 @@ export interface NexusGenInputs {
   };
   UserInputData: {
     // input type
-    name?: string | null; // String
+    nickname?: string | null; // String
   };
 }
 
@@ -163,6 +171,8 @@ export interface NexusGenRootTypes {
     isDeleted: boolean; // Boolean!
     location?: string | null; // String
     locationCoordinates?: any | null; // JSON
+    locationMain?: string | null; // String
+    locationSecondary?: string | null; // String
     title: string; // String!
     updatedAt?: any | null; // DateTime
     uuid: string; // ID!
@@ -199,6 +209,9 @@ export interface NexusGenRootTypes {
     agentPhone?: string | null; // String
     company?: string | null; // String
     companyLocation?: string | null; // String
+    companyLocationCoordinates?: any | null; // JSON
+    companyLocationMain?: string | null; // String
+    companyLocationSecondary?: string | null; // String
     companyWebsite?: string | null; // String
     createdAt: any; // DateTime!
     duration?: string | null; // String
@@ -208,6 +221,7 @@ export interface NexusGenRootTypes {
     isDeleted: boolean; // Boolean!
     jobDescription?: string | null; // String
     jobTitle?: string | null; // String
+    jobUrl?: string | null; // String
     rate?: string | null; // String
     referralFee?: string | null; // String
     remoteOptions?: NexusGenEnums['RemoteOptions'] | null; // RemoteOptions
@@ -223,6 +237,7 @@ export interface NexusGenRootTypes {
     email: string; // String!
     isDeleted: boolean; // Boolean!
     nickname: string; // String!
+    state: string; // String!
     updatedAt?: any | null; // DateTime
     userId: string; // ID!
   };
@@ -282,8 +297,11 @@ export interface NexusGenFieldTypes {
     isDeleted: boolean; // Boolean!
     location: string | null; // String
     locationCoordinates: any | null; // JSON
+    locationMain: string | null; // String
+    locationSecondary: string | null; // String
     title: string; // String!
     updatedAt: any | null; // DateTime
+    user: NexusGenRootTypes['User']; // User!
     uuid: string; // ID!
     workRightEU: boolean | null; // Boolean
     workRightUK: boolean | null; // Boolean
@@ -320,6 +338,9 @@ export interface NexusGenFieldTypes {
     board: NexusGenRootTypes['Board']; // Board!
     company: string | null; // String
     companyLocation: string | null; // String
+    companyLocationCoordinates: any | null; // JSON
+    companyLocationMain: string | null; // String
+    companyLocationSecondary: string | null; // String
     companyWebsite: string | null; // String
     createdAt: any; // DateTime!
     duration: string | null; // String
@@ -330,11 +351,13 @@ export interface NexusGenFieldTypes {
     isDeleted: boolean; // Boolean!
     jobDescription: string | null; // String
     jobTitle: string | null; // String
+    jobUrl: string | null; // String
     rate: string | null; // String
     referralFee: string | null; // String
     remoteOptions: NexusGenEnums['RemoteOptions'] | null; // RemoteOptions
     status: NexusGenEnums['JobStatus']; // JobStatus!
     updatedAt: any | null; // DateTime
+    user: NexusGenRootTypes['User']; // User!
     uuid: string; // ID!
   };
   Mutation: {
@@ -369,6 +392,7 @@ export interface NexusGenFieldTypes {
     email: string; // String!
     isDeleted: boolean; // Boolean!
     nickname: string; // String!
+    state: string; // String!
     updatedAt: any | null; // DateTime
     userId: string; // ID!
   };
