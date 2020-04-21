@@ -439,6 +439,7 @@ export interface NexusGenArgTypes {
       // args
       email: string; // String!
       redirectUri: string; // String!
+      state: string; // String!
     };
     sendEmail: {
       // args

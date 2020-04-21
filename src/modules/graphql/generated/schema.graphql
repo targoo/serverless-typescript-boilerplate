@@ -261,7 +261,7 @@ type Mutation {
   createEvent(boardUuid: ID!, data: EventInputData!, jobUuid: ID!): Event!
   createJob(boardUuid: ID!, data: JobInputData!): Job!
   multipleUpload(boardUuid: ID, files: [Upload!]!): [File!]!
-  passwordlessSignIn(email: String!, redirectUri: String!): Boolean!
+  passwordlessSignIn(email: String!, redirectUri: String!, state: String!): Boolean!
   sendEmail(content: String!, email: String!, subject: String!): Boolean!
   signInConfirm(accessToken: String!, state: String!): Autho0User!
   singleUpload(file: Upload!): File!

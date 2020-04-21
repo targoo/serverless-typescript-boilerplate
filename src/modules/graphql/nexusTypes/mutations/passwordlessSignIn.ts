@@ -1,11 +1,14 @@
 import { stringArg } from 'nexus';
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import generateID from '../../../../utils/id';
+import logger from '../../../../utils/logger';
 
 export const passwordlessSignIn = {
   type: 'Boolean' as 'Boolean',
 
   args: {
+    state: stringArg({
+      required: true,
+    }),
     email: stringArg({
       required: true,
     }),
@@ -14,7 +17,7 @@ export const passwordlessSignIn = {
     }),
   },
 
-  resolve: async (_parent, { email, redirectUri }) => {
+  resolve: async (_parent, { state, email, redirectUri }) => {
     try {
       const result = await axios({
         method: 'post',
@@ -29,14 +32,13 @@ export const passwordlessSignIn = {
           send: 'link',
           authParams: {
             scope: 'openid profile email',
-            state: generateID(),
+            state,
             redirect_uri: redirectUri,
           },
         },
       });
-      console.log(result.data);
     } catch (error) {
-      console.log('error', error);
+      logger.error(error);
     }
 
     return true;
