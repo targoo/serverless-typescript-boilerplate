@@ -91,6 +91,18 @@ enum EducationLevel {
   UNIVERSITY_DEGREE
 }
 
+input EmailInputData {
+  email: String!
+  emailTemplate: EmailTemplate!
+  params: JSON
+  replyTo: String
+  subject: String!
+}
+
+enum EmailTemplate {
+  INVITE_AGENT
+}
+
 enum EmploymentType {
   CONTRACT
   PERMANENT
@@ -189,7 +201,7 @@ type Job {
   jobUrl: String
   rate: String
   referralFee: String
-  remoteOptions: RemoteOptions
+  remoteOption: RemoteOption
   status: JobStatus!
   updatedAt: DateTime
   user: User!
@@ -221,7 +233,7 @@ input JobInputData {
   jobUrl: String
   rate: String
   referralFee: String
-  remoteOptions: RemoteOptions
+  remoteOption: RemoteOption
   status: JobStatus
 }
 
@@ -262,7 +274,7 @@ type Mutation {
   createJob(boardUuid: ID!, data: JobInputData!): Job!
   multipleUpload(boardUuid: ID, files: [Upload!]!): [File!]!
   passwordlessSignIn(email: String!, redirectUri: String!, state: String!): Boolean!
-  sendEmail(content: String!, email: String!, subject: String!): Boolean!
+  sendEmail(data: EmailInputData!): Boolean!
   signInConfirm(accessToken: String!, state: String!): Autho0User!
   singleUpload(file: Upload!): File!
   updateBoard(boardUuid: ID!, data: BoardInputData!): Board!
@@ -299,7 +311,7 @@ type Query {
   me: User!
 }
 
-enum RemoteOptions {
+enum RemoteOption {
   FLEXIBLE
   FOURDAYS
   FULLY_REMOTE

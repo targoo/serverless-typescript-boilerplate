@@ -1,5 +1,16 @@
 import { inputObjectType } from 'nexus';
 
+export const EmailInputData = inputObjectType({
+  name: 'EmailInputData',
+  definition(t) {
+    t.string('email', { required: true });
+    t.string('subject', { required: true });
+    t.field('emailTemplate', { type: 'EmailTemplate', required: true });
+    t.json('params');
+    t.string('replyTo');
+  },
+});
+
 export const BoardInputData = inputObjectType({
   name: 'BoardInputData',
   definition(t) {
@@ -55,7 +66,7 @@ export const JobInputData = inputObjectType({
     t.string('jobUrl');
     // Money
     t.field('employmentType', { type: 'EmploymentType' });
-    t.field('remoteOptions', { type: 'RemoteOptions' });
+    t.field('remoteOption', { type: 'RemoteOption' });
     t.string('duration');
     t.string('rate');
     t.boolean('ir35');

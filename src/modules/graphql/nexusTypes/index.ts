@@ -21,6 +21,7 @@ import {
   UserInputData,
   EventInputData,
   EventInputWhere,
+  EmailInputData,
 } from './args/';
 
 import {
@@ -31,7 +32,8 @@ import {
   SortDirection,
   EducationLevel,
   InterestLevel,
-  RemoteOptions,
+  RemoteOption,
+  EmailTemplate,
 } from './enums';
 
 export const GQLDateTime = asNexusMethod(GraphQLDateTime, 'datetime');
@@ -73,6 +75,7 @@ export const types = [
   UserInputData,
   EventInputData,
   EventInputWhere,
+  EmailInputData,
   JobStatus,
   Feeling,
   EmploymentType,
@@ -80,7 +83,8 @@ export const types = [
   SortDirection,
   EducationLevel,
   InterestLevel,
-  RemoteOptions,
+  RemoteOption,
+  EmailTemplate,
   GraphQLDateTime,
   GraphQLDate,
   GraphQLTime,

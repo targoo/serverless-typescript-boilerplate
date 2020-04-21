@@ -68,6 +68,14 @@ export interface NexusGenInputs {
     // input type
     isDeleted?: boolean | null; // Boolean
   };
+  EmailInputData: {
+    // input type
+    email: string; // String!
+    emailTemplate: NexusGenEnums['EmailTemplate']; // EmailTemplate!
+    params?: any | null; // JSON
+    replyTo?: string | null; // String
+    subject: string; // String!
+  };
   EventInputData: {
     // input type
     description?: string | null; // String
@@ -103,7 +111,7 @@ export interface NexusGenInputs {
     jobUrl?: string | null; // String
     rate?: string | null; // String
     referralFee?: string | null; // String
-    remoteOptions?: NexusGenEnums['RemoteOptions'] | null; // RemoteOptions
+    remoteOption?: NexusGenEnums['RemoteOption'] | null; // RemoteOption
     status?: NexusGenEnums['JobStatus'] | null; // JobStatus
   };
   JobInputWhere: {
@@ -129,6 +137,7 @@ export interface NexusGenEnums {
     | 'PHD'
     | 'SENIOR_BUSINESS_TECH_QUALIFICATION'
     | 'UNIVERSITY_DEGREE';
+  EmailTemplate: 'INVITE_AGENT';
   EmploymentType: 'CONTRACT' | 'PERMANENT';
   EventType: 'FACE2FACE' | 'PHONE_CALL' | 'VIDEO_CALL';
   Feeling: 'ECSTATIC' | 'HAPPY' | 'NORMAL' | 'SAD';
@@ -144,7 +153,7 @@ export interface NexusGenEnums {
     | 'STARTED'
     | 'TECH_TEST';
   MimeType: 'DOC' | 'FILE' | 'PDF';
-  RemoteOptions: 'FLEXIBLE' | 'FOURDAYS' | 'FULLY_REMOTE' | 'NO_REMOTE' | 'ONEDAY' | 'THREEDAYS' | 'TWODAYS';
+  RemoteOption: 'FLEXIBLE' | 'FOURDAYS' | 'FULLY_REMOTE' | 'NO_REMOTE' | 'ONEDAY' | 'THREEDAYS' | 'TWODAYS';
   SortDirection: 'ASC' | 'DESC';
 }
 
@@ -224,7 +233,7 @@ export interface NexusGenRootTypes {
     jobUrl?: string | null; // String
     rate?: string | null; // String
     referralFee?: string | null; // String
-    remoteOptions?: NexusGenEnums['RemoteOptions'] | null; // RemoteOptions
+    remoteOption?: NexusGenEnums['RemoteOption'] | null; // RemoteOption
     status: NexusGenEnums['JobStatus']; // JobStatus!
     updatedAt?: any | null; // DateTime
     uuid: string; // ID!
@@ -257,19 +266,21 @@ export interface NexusGenAllTypes extends NexusGenRootTypes {
   BoardInputData: NexusGenInputs['BoardInputData'];
   BoardInputSort: NexusGenInputs['BoardInputSort'];
   BoardInputWhere: NexusGenInputs['BoardInputWhere'];
+  EmailInputData: NexusGenInputs['EmailInputData'];
   EventInputData: NexusGenInputs['EventInputData'];
   EventInputWhere: NexusGenInputs['EventInputWhere'];
   JobInputData: NexusGenInputs['JobInputData'];
   JobInputWhere: NexusGenInputs['JobInputWhere'];
   UserInputData: NexusGenInputs['UserInputData'];
   EducationLevel: NexusGenEnums['EducationLevel'];
+  EmailTemplate: NexusGenEnums['EmailTemplate'];
   EmploymentType: NexusGenEnums['EmploymentType'];
   EventType: NexusGenEnums['EventType'];
   Feeling: NexusGenEnums['Feeling'];
   InterestLevel: NexusGenEnums['InterestLevel'];
   JobStatus: NexusGenEnums['JobStatus'];
   MimeType: NexusGenEnums['MimeType'];
-  RemoteOptions: NexusGenEnums['RemoteOptions'];
+  RemoteOption: NexusGenEnums['RemoteOption'];
   SortDirection: NexusGenEnums['SortDirection'];
 }
 
@@ -354,7 +365,7 @@ export interface NexusGenFieldTypes {
     jobUrl: string | null; // String
     rate: string | null; // String
     referralFee: string | null; // String
-    remoteOptions: NexusGenEnums['RemoteOptions'] | null; // RemoteOptions
+    remoteOption: NexusGenEnums['RemoteOption'] | null; // RemoteOption
     status: NexusGenEnums['JobStatus']; // JobStatus!
     updatedAt: any | null; // DateTime
     user: NexusGenRootTypes['User']; // User!
@@ -443,9 +454,7 @@ export interface NexusGenArgTypes {
     };
     sendEmail: {
       // args
-      content: string; // String!
-      email: string; // String!
-      subject: string; // String!
+      data: NexusGenInputs['EmailInputData']; // EmailInputData!
     };
     signInConfirm: {
       // args
@@ -509,6 +518,7 @@ export type NexusGenInputNames =
   | 'BoardInputData'
   | 'BoardInputSort'
   | 'BoardInputWhere'
+  | 'EmailInputData'
   | 'EventInputData'
   | 'EventInputWhere'
   | 'JobInputData'
@@ -517,13 +527,14 @@ export type NexusGenInputNames =
 
 export type NexusGenEnumNames =
   | 'EducationLevel'
+  | 'EmailTemplate'
   | 'EmploymentType'
   | 'EventType'
   | 'Feeling'
   | 'InterestLevel'
   | 'JobStatus'
   | 'MimeType'
-  | 'RemoteOptions'
+  | 'RemoteOption'
   | 'SortDirection';
 
 export type NexusGenInterfaceNames = never;

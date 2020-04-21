@@ -22,7 +22,7 @@ export enum EmploymentType {
   PERMANENT = 'PERMANENT',
 }
 
-export enum RemoteOptions {
+export enum RemoteOption {
   NO_REMOTE = 'NO_REMOTE',
   FLEXIBLE = 'FLEXIBLE',
   ONEDAY = 'ONEDAY',
@@ -100,7 +100,7 @@ export interface IJob extends IEntityBase {
   jobUrl: string;
   // Money
   employmentType: EmploymentType;
-  remoteOptions: RemoteOptions;
+  remoteOption: RemoteOption;
   duration: string;
   rate: string;
   ir35: string;

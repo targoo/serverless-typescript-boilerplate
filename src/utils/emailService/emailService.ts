@@ -27,13 +27,14 @@ function sendEmail(
 ): Promise<SendEmailResponse | AWSError> {
   const cc = options && options.cc ? (Array.isArray(options.cc) ? options.cc : [options.cc]) : undefined;
   const bcc = options && options.bcc ? (Array.isArray(options.bcc) ? options.bcc : [options.bcc]) : undefined;
+  const replyTo =
+    options && options.replyTo ? (Array.isArray(options.replyTo) ? options.replyTo : [options.replyTo]) : undefined;
 
   const sesParams: SendEmailRequest = {
     Source: (options && options.source) || SOURCE_EMAIL,
+    ReplyToAddresses: replyTo,
     Message: {
-      /* required */
       Body: {
-        /* required */
         Html: {
           Charset: 'UTF-8',
           Data: content,
