@@ -3,3 +3,4 @@ export { board } from './board';
 export { jobs } from './jobs';
 export { job } from './job';
 export { me } from './me';
+export { followingBoards } from './followingBoards';

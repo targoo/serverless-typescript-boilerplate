@@ -25,6 +25,9 @@ export const board = {
       throw new Error('Not authorized to get the board');
     }
 
+    // Check permission
+    // @todo
+
     const key = {
       id: `USER#${userId || user.userId}`,
       relation: `BOARD#${boardUuid}`,

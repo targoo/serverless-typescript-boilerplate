@@ -25,23 +25,26 @@ export const me = {
 
       return response;
     } else {
-      const user = ({
-        ...prepareFormInput({ nickname: nickname || email, email }, userFormProperties),
-        id: `USER#${userId}`,
-        relation: `USER`,
-        userId: JSON.stringify({ format: 'string', value: userId }),
-        state: JSON.stringify({ format: 'string', value: state }),
-        isDeleted: JSON.stringify({ format: 'boolean', value: false }),
-        createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
-      } as unknown) as IUser;
-
-      logger.debug(JSON.stringify(user));
-      await dynamo.saveItem(user);
-
-      const response = prepareResponseDate(user);
-      logger.debug(JSON.stringify(response));
-
-      return response;
+      throw new Error('User not found');
     }
+    // else {
+    //   const user = ({
+    //     ...prepareFormInput({ nickname: nickname || email, email }, userFormProperties),
+    //     id: `USER#${userId}`,
+    //     relation: `USER`,
+    //     userId: JSON.stringify({ format: 'string', value: userId }),
+    //     state: JSON.stringify({ format: 'string', value: state }),
+    //     isDeleted: JSON.stringify({ format: 'boolean', value: false }),
+    //     createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
+    //   } as unknown) as IUser;
+
+    //   logger.debug(JSON.stringify(user));
+    //   await dynamo.saveItem(user);
+
+    //   const response = prepareResponseDate(user);
+    //   logger.debug(JSON.stringify(response));
+
+    //   return response;
+    // }
   },
 };

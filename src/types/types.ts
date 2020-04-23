@@ -45,6 +45,17 @@ export enum Feeling {
   SAD = 'SAD',
 }
 
+export interface IAuth {
+  sub: string;
+  userId: string;
+  nickname: string;
+  state: string;
+  name: string;
+  email: string;
+  picture: string;
+  email_verified: boolean;
+}
+
 export interface IKeyBase {
   id: string;
   relation: string;
@@ -70,6 +81,11 @@ export interface IBoard extends IEntityBase {
   description: string;
   availableDate: string;
   location: string;
+}
+
+export interface IFollowingBoard extends IEntityBase {
+  userId: string;
+  boardUuid: string;
 }
 
 export interface IUser extends IEntityBase {

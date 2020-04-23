@@ -15,6 +15,8 @@ import {
   passwordlessSignIn,
   signInConfirm,
   sendEmail,
+  unfollowBoard,
+  logout,
 } from './mutations';
 
 export const Mutation = objectType({
@@ -61,5 +63,11 @@ export const Mutation = objectType({
 
     // @ts-ignore
     t.field('sendEmail', sendEmail);
+
+    // @ts-ignore
+    t.field('unfollowBoard', unfollowBoard);
+
+    // @ts-ignore
+    t.field('logout', logout);
   },
 });

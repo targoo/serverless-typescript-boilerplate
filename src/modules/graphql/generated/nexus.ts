@@ -304,6 +304,7 @@ export interface NexusGenFieldTypes {
     description: string | null; // String
     educationLevel: NexusGenEnums['EducationLevel'] | null; // EducationLevel
     files: NexusGenRootTypes['File'][] | null; // [File!]
+    followers: NexusGenRootTypes['User'][]; // [User!]!
     interestLevel: NexusGenEnums['InterestLevel'] | null; // InterestLevel
     isDeleted: boolean; // Boolean!
     location: string | null; // String
@@ -379,11 +380,13 @@ export interface NexusGenFieldTypes {
     createBoard: NexusGenRootTypes['Board']; // Board!
     createEvent: NexusGenRootTypes['Event']; // Event!
     createJob: NexusGenRootTypes['Job']; // Job!
+    logout: boolean; // Boolean!
     multipleUpload: NexusGenRootTypes['File'][]; // [File!]!
     passwordlessSignIn: boolean; // Boolean!
     sendEmail: boolean; // Boolean!
     signInConfirm: NexusGenRootTypes['Autho0User']; // Autho0User!
     singleUpload: NexusGenRootTypes['File']; // File!
+    unfollowBoard: boolean; // Boolean!
     updateBoard: NexusGenRootTypes['Board']; // Board!
     updateJob: NexusGenRootTypes['Job']; // Job!
     updateUser: NexusGenRootTypes['User']; // User!
@@ -392,6 +395,7 @@ export interface NexusGenFieldTypes {
     // field return type
     board: NexusGenRootTypes['Board']; // Board!
     boards: NexusGenRootTypes['Board'][]; // [Board!]!
+    followingBoards: NexusGenRootTypes['Board'][]; // [Board!]!
     hello: string; // String!
     job: NexusGenRootTypes['Job']; // Job!
     jobs: NexusGenRootTypes['Job'][]; // [Job!]!
@@ -465,6 +469,11 @@ export interface NexusGenArgTypes {
       // args
       file: any; // Upload!
     };
+    unfollowBoard: {
+      // args
+      boardUuid: string; // ID!
+      isDeleted?: boolean | null; // Boolean
+    };
     updateBoard: {
       // args
       boardUuid: string; // ID!
@@ -491,6 +500,10 @@ export interface NexusGenArgTypes {
       // args
       sort?: NexusGenInputs['BoardInputSort'] | null; // BoardInputSort
       where?: NexusGenInputs['BoardInputWhere'] | null; // BoardInputWhere
+    };
+    followingBoards: {
+      // args
+      sort?: NexusGenInputs['BoardInputSort'] | null; // BoardInputSort
     };
     hello: {
       // args

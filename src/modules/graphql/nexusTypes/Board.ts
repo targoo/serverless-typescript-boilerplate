@@ -20,11 +20,6 @@ export const boardFormProperties = {
   interestLevel: 'string',
   workRightEU: 'boolean',
   workRightUK: 'boolean',
-
-  // 'locationName',
-  // 'locationAddress',
-  // 'locationRangeKey',
-  // 'locationHash',
 };
 
 export const boardProperties = {
@@ -32,6 +27,16 @@ export const boardProperties = {
   id: 'key',
   relation: 'key',
   uuid: 'string',
+  createdAt: 'datetime',
+  updatedAt: 'datetime',
+};
+
+export const followingBoardProperties = {
+  id: 'key',
+  relation: 'key',
+  boardUuid: 'string',
+  userId: 'string',
+  isDeleted: 'boolean',
   createdAt: 'datetime',
   updatedAt: 'datetime',
 };
@@ -123,6 +128,30 @@ export const Board = objectType({
         logger.info(`item: ${JSON.stringify(item)}`);
 
         return item;
+      },
+    });
+
+    t.list.field('followers', {
+      type: User,
+
+      // @ts-ignore
+      resolve: async (parents, _args, { dynamo }) => {
+        console.log(parents.uuid);
+
+        // const params = {
+        //   KeyConditionExpression: '#fid = :fid and begins_with(#relation, :relation)',
+        //   ExpressionAttributeNames: {
+        //     '#fid': 'fid',
+        //     '#id': 'id',
+        //   },
+        //   ExpressionAttributeValues: {
+        //     ':userUUID': `USER#${user.userId}`,
+        //     ':relation': 'BOARD#',
+        //   },
+        //   ProjectionExpression: ['fid'],
+        // };
+
+        return [];
       },
     });
 

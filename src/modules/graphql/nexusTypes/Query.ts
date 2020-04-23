@@ -1,6 +1,6 @@
 import { queryType, stringArg } from 'nexus';
 
-import { board, boards, job, jobs, me } from './queries';
+import { board, boards, followingBoards, job, jobs, me } from './queries';
 
 const Query = queryType({
   definition(t) {
@@ -17,6 +17,9 @@ const Query = queryType({
 
     // @ts-ignore
     t.list.field('boards', boards);
+
+    // @ts-ignore
+    t.list.field('followingBoards', followingBoards);
 
     // @ts-ignore
     t.field('job', job);

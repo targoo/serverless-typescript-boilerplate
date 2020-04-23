@@ -12,3 +12,5 @@ export { updateUser } from './updateUser';
 export { passwordlessSignIn } from './passwordlessSignIn';
 export { signInConfirm } from './signInConfirm';
 export { sendEmail } from './sendEmail';
+export { unfollowBoard } from './unfollowBoard';
+export { logout } from './logout';

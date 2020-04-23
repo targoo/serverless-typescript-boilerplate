@@ -83,6 +83,15 @@ const client = {
     where.TableName = tableName;
     return dynamoClient.query(where).promise();
   },
+
+  /**
+   * Execute a batchGetItem on DynamoTable.
+   * You must inform the KeyConditionExpression and ExpressionAttributeNames
+   */
+  batchGetItem: (where: any, tableName: string = DYNAMO_TABLE) => {
+    where.TableName = tableName;
+    return dynamoClient.batchGet(where).promise();
+  },
 };
 
 export default client;

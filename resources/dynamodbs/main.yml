@@ -9,6 +9,8 @@ Resources:
           AttributeType: 'S'
         - AttributeName: 'relation'
           AttributeType: 'S'
+        - AttributeName: 'fid'
+          AttributeType: 'S'
       KeySchema:
         - AttributeName: 'id'
           KeyType: 'HASH'
@@ -17,6 +19,18 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 1
         WriteCapacityUnits: 1
+      GlobalSecondaryIndexes:
+        - IndexName: followers
+          KeySchema:
+            - AttributeName: fid
+              KeyType: HASH
+            - AttributeName: relation
+              KeyType: RANGE
+          Projection:
+            ProjectionType: ALL
+          ProvisionedThroughput:
+            ReadCapacityUnits: 1
+            WriteCapacityUnits: 1
 
 Outputs:
   TableArn:
