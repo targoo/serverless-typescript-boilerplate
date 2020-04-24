@@ -1,9 +1,10 @@
-import { objectType } from 'nexus';
+import { objectType } from '@nexus/schema';
 
 export const Autho0User = objectType({
   name: 'Autho0User',
+
   definition(t) {
-    t.id('userId', { description: 'the unique user ID' });
+    t.id('uuid', { description: 'the unique user ID' });
 
     t.string('sub');
 

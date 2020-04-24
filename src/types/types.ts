@@ -89,8 +89,11 @@ export interface IFollowingBoard extends IEntityBase {
 }
 
 export interface IUser extends IEntityBase {
+  nickname: string;
   name: string;
   email: string;
+  isEmailVerified: boolean;
+  state: string;
 }
 
 export interface IFile extends IEntityBase {

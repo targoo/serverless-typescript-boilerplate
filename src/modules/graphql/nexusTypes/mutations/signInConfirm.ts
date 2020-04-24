@@ -1,13 +1,14 @@
-import { stringArg } from 'nexus';
+import { stringArg } from '@nexus/schema';
 import axios from 'axios';
+import * as crypto from 'crypto';
 
+import { MutationFieldType } from '../../types';
 import { Autho0User } from '../Autho0User';
 import { sign } from '../../../../utils/jwt';
 import logger from '../../../../utils/logger';
-import { hashCode } from '../utils/secret/secret';
 import { IUser, IAuth } from '../../../../types/types';
 
-export const signInConfirm = {
+export const signInConfirm: MutationFieldType<'signInConfirm'> = {
   type: Autho0User,
 
   args: {
@@ -30,10 +31,13 @@ export const signInConfirm = {
         },
       });
 
-      const userId = hashCode(`${data.email}`.toLowerCase());
+      const uuid = crypto
+        .createHmac('sha1', process.env.SIGNIN_USER_SECRET)
+        .update(`${data.email}`.toLowerCase())
+        .digest('hex');
 
       const key = {
-        id: `USER#${userId}`,
+        id: `USER#${uuid}`,
         relation: `USER`,
       };
 
@@ -65,14 +69,14 @@ export const signInConfirm = {
         await dynamo.updateItem(params, key);
       } else {
         const createUser = ({
-          id: `USER#${userId}`,
+          id: `USER#${uuid}`,
           relation: `USER`,
           email: JSON.stringify({ format: 'string', value: data.email }),
           isEmailVerified: JSON.stringify({ format: 'boolean', value: data.email_verified }),
           nickname: JSON.stringify({ format: 'string', value: data.nickname || data.email }),
           name: JSON.stringify({ format: 'string', value: data.name }),
           sub: JSON.stringify({ format: 'string', value: data.sub }),
-          userId: JSON.stringify({ format: 'string', value: userId }),
+          uuid: JSON.stringify({ format: 'string', value: uuid }),
           state: JSON.stringify({ format: 'string', value: state }),
           isDeleted: JSON.stringify({ format: 'boolean', value: false }),
           createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
@@ -80,11 +84,11 @@ export const signInConfirm = {
         await dynamo.saveItem(createUser);
       }
 
-      const jwt = sign({ ...data, userId, state });
-      return { ...data, userId, state, jwt };
+      const jwt = sign({ ...data, uuid, state });
+      return { ...data, uuid, state, jwt };
     } catch (error) {
       logger.error(error.response.data);
-      return {};
+      throw new Error('Could not sign in the user');
     }
   },
 };

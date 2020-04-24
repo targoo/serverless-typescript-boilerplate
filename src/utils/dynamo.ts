@@ -41,8 +41,8 @@ const client = {
   /**
    * Find one item from DynamoDB
    */
-  getItem: (key: IKeyBase, tableName: string = DYNAMO_TABLE) => {
-    const params = {
+  getItem: (key: IKeyBase, tableName: string = DYNAMO_TABLE): Promise<DocumentClient.GetItemOutput> => {
+    const params: DocumentClient.GetItemInput = {
       TableName: tableName,
       Key: key,
     };
@@ -66,13 +66,18 @@ const client = {
   /**
    * Update an item identified by Key
    */
-  updateItem: (params, key: IKeyBase, tableName: string = DYNAMO_TABLE) => {
-    params.TableName = tableName;
-    params.Key = key;
-    params.ReturnValues = 'ALL_NEW';
-    logger.debug(`params: ${JSON.stringify(params)}`);
-
-    return dynamoClient.update(params).promise();
+  updateItem: (
+    params: Omit<DocumentClient.UpdateItemInput, 'Key' | 'TableName'>,
+    key: IKeyBase,
+    tableName: string = DYNAMO_TABLE,
+  ): Promise<DocumentClient.UpdateItemOutput> => {
+    const newParams: DocumentClient.UpdateItemInput = {
+      ...params,
+      TableName: tableName,
+      Key: key,
+      ReturnValues: 'ALL_NEW',
+    };
+    return dynamoClient.update(newParams).promise();
   },
 
   /**

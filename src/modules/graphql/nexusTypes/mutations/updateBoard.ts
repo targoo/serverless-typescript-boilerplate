@@ -1,12 +1,13 @@
-import { arg, idArg } from 'nexus';
+import { arg, idArg } from '@nexus/schema';
 
 import { BoardInputData } from '../args';
 import { Board, boardFormProperties } from '../Board';
 import { IBoard, IKeyBase } from '../../../../types/types';
 import logger from '../../../../utils/logger';
 import { prepareFormInput, prepareResponseDate } from '../utils/form';
+import { MutationFieldType } from '../../types';
 
-export const updateBoard = {
+export const updateBoard: MutationFieldType<'updateBoard'> = {
   type: Board,
 
   args: {
@@ -19,13 +20,14 @@ export const updateBoard = {
     }),
   },
 
+  // @ts-ignore
   resolve: async (_parent, { boardUuid, data }, { user, dynamo }) => {
     if (!user) {
       throw new Error('Not authorized to update the board');
     }
 
     const key: IKeyBase = {
-      id: `USER#${user.userId}`,
+      id: `USER#${user.uuid}`,
       relation: `BOARD#${boardUuid}`,
     };
 
@@ -56,16 +58,19 @@ export const updateBoard = {
       ExpressionAttributeValues,
     };
 
-    logger.debug(JSON.stringify(params));
+    try {
+      await dynamo.updateItem(params, key);
 
-    await dynamo.updateItem(params, key);
+      const { Item } = await dynamo.getItem(key);
+      logger.debug(`item: ${JSON.stringify(Item)}`);
 
-    const { Item }: { Item: IBoard } = await dynamo.getItem(key);
-    logger.debug(`item: ${JSON.stringify(Item)}`);
+      const item = prepareResponseDate(Item) as IBoard;
+      logger.debug(`item: ${JSON.stringify(item)}`);
 
-    const item = prepareResponseDate(Item);
-    logger.debug(`item: ${JSON.stringify(item)}`);
-
-    return item;
+      return item;
+    } catch (error) {
+      logger.error(error);
+      throw new Error('Could not update the board');
+    }
   },
 };

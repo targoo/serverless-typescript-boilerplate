@@ -1,12 +1,13 @@
-import { arg } from 'nexus';
+import { arg } from '@nexus/schema';
 
 import { UserInputData } from '../args';
 import { User, userFormProperties } from '../User';
 import { IUser, IKeyBase } from '../../../../types/types';
 import logger from '../../../../utils/logger';
 import { prepareFormInput, prepareResponseDate } from '../utils/form';
+import { MutationFieldType } from '../../types';
 
-export const updateUser = {
+export const updateUser: MutationFieldType<'updateUser'> = {
   type: User,
 
   args: {
@@ -22,7 +23,7 @@ export const updateUser = {
     }
 
     const key: IKeyBase = {
-      id: `USER#${user.userId}`,
+      id: `USER#${user.uuid}`,
       relation: `USER`,
     };
 
@@ -53,16 +54,15 @@ export const updateUser = {
       ExpressionAttributeValues,
     };
 
-    logger.debug(JSON.stringify(params));
+    try {
+      await dynamo.updateItem(params, key);
+      const { Item } = await dynamo.getItem(key);
+      const item = prepareResponseDate(Item) as IUser;
 
-    await dynamo.updateItem(params, key);
-
-    const { Item }: { Item: IUser } = await dynamo.getItem(key);
-    logger.debug(`item: ${JSON.stringify(Item)}`);
-
-    const item = prepareResponseDate(Item);
-    logger.debug(`item: ${JSON.stringify(item)}`);
-
-    return item;
+      return item;
+    } catch (error) {
+      logger.error(error);
+      throw new Error('could not update the user');
+    }
   },
 };

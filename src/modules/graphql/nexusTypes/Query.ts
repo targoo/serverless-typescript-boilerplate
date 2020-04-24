@@ -1,4 +1,4 @@
-import { queryType, stringArg } from 'nexus';
+import { queryType, stringArg } from '@nexus/schema';
 
 import { board, boards, followingBoards, job, jobs, me } from './queries';
 

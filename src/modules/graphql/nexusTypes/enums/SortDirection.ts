@@ -1,4 +1,4 @@
-import { enumType } from 'nexus/dist';
+import { enumType } from '@nexus/schema';
 
 export const SortDirection = enumType({
   name: 'SortDirection',

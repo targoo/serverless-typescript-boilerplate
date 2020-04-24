@@ -1,5 +1,6 @@
-import { arg, idArg } from 'nexus';
+import { arg, idArg } from '@nexus/schema';
 
+import { MutationFieldType } from '../../types';
 import { JobInputData } from '../args';
 import { Job, jobFormProperties } from '../Job';
 import { IJob, JobStatus, Feeling } from '../../../../types/types';
@@ -7,7 +8,7 @@ import id from '../../../../utils/id';
 import logger from '../../../../utils/logger';
 import { prepareFormInput, prepareResponseDate } from '../utils/form';
 
-export const createJob = {
+export const createJob: MutationFieldType<'createJob'> = {
   type: Job,
 
   args: {
@@ -20,6 +21,7 @@ export const createJob = {
     }),
   },
 
+  // @ts-ignore
   resolve: async (_parent, { boardUuid, data }, { user, dynamo }) => {
     if (!user) {
       throw new Error('Not authorized to create a new job');
@@ -29,7 +31,7 @@ export const createJob = {
 
     const job = ({
       ...prepareFormInput(data, jobFormProperties),
-      id: `USER#${user.userId}`,
+      id: `USER#${user.uuid}`,
       relation: `JOB#BOARD#${boardUuid}#${uuid}`,
       uuid: JSON.stringify({ format: 'string', value: uuid }),
       status: JSON.stringify({ format: 'string', value: JobStatus.STARTED }),

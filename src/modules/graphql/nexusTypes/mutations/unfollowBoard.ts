@@ -1,9 +1,10 @@
-import { idArg, booleanArg } from 'nexus';
+import { idArg, booleanArg } from '@nexus/schema';
 
-import { IBoard, IKeyBase } from '../../../../types/types';
+import { IKeyBase } from '../../../../types/types';
 import logger from '../../../../utils/logger';
+import { MutationFieldType } from '../../types';
 
-export const unfollowBoard = {
+export const unfollowBoard: MutationFieldType<'unfollowBoard'> = {
   type: 'Boolean',
 
   args: {
@@ -19,7 +20,7 @@ export const unfollowBoard = {
     }
 
     const key: IKeyBase = {
-      id: `USER#${user.userId}`,
+      id: `USER#${user.uuid}`,
       relation: `FOLLOWING_BOARD#${boardUuid}`,
     };
 
@@ -32,10 +33,12 @@ export const unfollowBoard = {
       },
     };
 
-    await dynamo.updateItem(params, key);
-
-    const { Item }: { Item: IBoard } = await dynamo.getItem(key);
-    logger.debug(`item: ${JSON.stringify(Item)}`);
+    try {
+      await dynamo.updateItem(params, key);
+    } catch (error) {
+      logger.error(error);
+      throw new Error('Could not unfollow the board');
+    }
 
     return true;
   },

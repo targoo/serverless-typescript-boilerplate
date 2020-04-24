@@ -1,4 +1,4 @@
-import { enumType } from 'nexus/dist';
+import { enumType } from '@nexus/schema';
 
 export const RemoteOption = enumType({
   name: 'RemoteOption',

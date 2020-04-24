@@ -1,4 +1,4 @@
-import { objectType } from 'nexus';
+import { objectType } from '@nexus/schema';
 
 import logger from '../../../utils/logger';
 import { File, fileProperties } from './File';
@@ -35,7 +35,7 @@ export const followingBoardProperties = {
   id: 'key',
   relation: 'key',
   boardUuid: 'string',
-  userId: 'string',
+  uuid: 'string',
   isDeleted: 'boolean',
   createdAt: 'datetime',
   updatedAt: 'datetime',
@@ -47,6 +47,10 @@ export const Board = objectType({
   description: 'Board',
 
   definition(t) {
+    t.id('id', { description: 'Internal partition key' });
+
+    t.id('relation', { description: 'Internal sort key' });
+
     t.id('uuid', { description: 'UUID of the board' });
 
     t.string('title');
@@ -77,6 +81,8 @@ export const Board = objectType({
 
     t.boolean('isDeleted');
 
+    t.boolean('isOwner');
+
     t.list.field('files', {
       type: File,
 
@@ -91,7 +97,7 @@ export const Board = objectType({
             return acc;
           }, {}),
           ExpressionAttributeValues: {
-            ':userUUID': `USER#${user.userId}`,
+            ':userUUID': `USER#${user.uuid}`,
             ':relation': `FILE#BOARD#${uuid}`,
           },
           ProjectionExpression: properties.map((property) => `#${property}`),
@@ -114,18 +120,15 @@ export const Board = objectType({
     t.field('user', {
       type: User,
 
-      // @ts-ignore
       resolve: async ({ id }, _args, { dynamo }) => {
         const key = {
           id,
           relation: 'USER',
         };
 
-        const { Item }: { Item: IUser } = await dynamo.getItem(key);
-        logger.info(`item: ${JSON.stringify(Item)}`);
+        const { Item } = await dynamo.getItem(key);
 
-        const item = prepareResponseDate(Item);
-        logger.info(`item: ${JSON.stringify(item)}`);
+        const item = prepareResponseDate(Item) as IUser;
 
         return item;
       },
@@ -145,7 +148,7 @@ export const Board = objectType({
         //     '#id': 'id',
         //   },
         //   ExpressionAttributeValues: {
-        //     ':userUUID': `USER#${user.userId}`,
+        //     ':userUUID': `USER#${user.uuid}`,
         //     ':relation': 'BOARD#',
         //   },
         //   ProjectionExpression: ['fid'],
@@ -171,7 +174,7 @@ export const Board = objectType({
 
     // t.list.field('jobs', {
     //   type: Job,
-    //   resolve: async ({ uuid }, _args, { userId, dynamo }) => {
+    //   resolve: async ({ uuid }, _args, { uuid, dynamo }) => {
     //     const params = {
     //       KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
     //       ExpressionAttributeNames: {
@@ -184,7 +187,7 @@ export const Board = objectType({
     //         '#relation': 'relation',
     //       },
     //       ExpressionAttributeValues: {
-    //         ':userUUID': `USER#${userId}`,
+    //         ':userUUID': `USER#${uuid}`,
     //         ':relation': `JOB#BOARD#${uuid}`,
     //       },
     //       ProjectionExpression: ['#relation', '#title', '#uuid', '#status', '#createdAt', '#updatedAt', 'isDeleted'],

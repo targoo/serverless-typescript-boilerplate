@@ -1,10 +1,12 @@
 import logger from '../../utils/logger';
 import { APIGatewayProxyEvent, Context } from 'aws-lambda';
+import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 
 import { verify, decode } from '../../utils/jwt';
 import dynamo from '../../utils/dynamo';
 import s3 from '../../utils/s3';
 import { emailService } from '../../utils/emailService';
+import { IKeyBase } from '../../types/types';
 
 // Infers the resolve type of a promise
 type ThenArg<T> = T extends Promise<infer U> ? U : T;
@@ -15,12 +17,22 @@ export interface ContextParameters {
 }
 
 interface GraphQLContext extends ContextParameters {
-  dynamo: any;
+  dynamo: {
+    getItem: (key: IKeyBase, tableName?: string) => ReturnType<typeof dynamo.getItem>;
+    saveItem: any;
+    removeItem: any;
+    updateItem: (
+      params: Omit<DocumentClient.UpdateItemInput, 'Key' | 'TableName'>,
+      key: IKeyBase,
+      tableName?: string,
+    ) => ReturnType<typeof dynamo.updateItem>;
+    query: any;
+  };
   s3: any;
   emailService: any;
   user: {
     sub: string;
-    userId: string;
+    uuid: string;
     email: string;
     email_verified: boolean;
     nickname: string;

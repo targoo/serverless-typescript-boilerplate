@@ -1,5 +1,6 @@
-import { arg, idArg } from 'nexus';
+import { arg, idArg } from '@nexus/schema';
 
+import { MutationFieldType } from '../../types';
 import { File } from '../File';
 import { id } from '../../../../utils';
 import { sanitizeFileName } from '../../../../utils/files/files';
@@ -9,7 +10,7 @@ import logger from '../../../../utils/logger';
 
 const UPLOAD_BUCKET_NAME = process.env.AWS_BUCKET_UPLOAD || '';
 
-export const multipleUpload = {
+export const multipleUpload: MutationFieldType<'multipleUpload'> = {
   type: File,
 
   args: {
@@ -17,6 +18,7 @@ export const multipleUpload = {
     files: arg({ type: 'Upload', required: true, list: true }),
   },
 
+  // @ts-ignore
   resolve: async (_parent, { files, boardUuid }, { user, dynamo, s3 }) => {
     if (!user) {
       throw new Error('Not authorized to upload files');
@@ -24,13 +26,13 @@ export const multipleUpload = {
 
     const filesData = files as Promise<FileUpload>[];
     console.log('filesData', filesData);
-    const result = await Promise.all(files.map((file) => uploadFile(file, user.userId, boardUuid, dynamo, s3)));
+    const result = await Promise.all(files.map((file) => uploadFile(file, user.uuid, boardUuid, dynamo, s3)));
     console.log('result', result);
     return result;
   },
 };
 
-const uploadFile = async (file, userId, boardUuid, dynamo, s3) => {
+const uploadFile = async (file, userUuid, boardUuid, dynamo, s3) => {
   const { filename, mimetype, encoding, createReadStream } = await file;
   console.log('filename', filename);
   console.log('mimetype', mimetype);
@@ -63,7 +65,7 @@ const uploadFile = async (file, userId, boardUuid, dynamo, s3) => {
     logger.debug(`File uploaded under ${resource}`);
 
     const file = ({
-      id: `USER#${userId}`,
+      id: `USER#${userUuid}`,
       relation: `FILE#BOARD#${boardUuid}#${uuid}`,
       resource: JSON.stringify({ format: 'string', value: resource }),
       filename: JSON.stringify({ format: 'string', value: sanitizedFilename }),

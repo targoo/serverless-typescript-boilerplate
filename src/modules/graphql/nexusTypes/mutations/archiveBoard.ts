@@ -1,11 +1,12 @@
-import { idArg, booleanArg } from 'nexus';
+import { idArg, booleanArg } from '@nexus/schema';
 
+import { MutationFieldType } from '../../types';
 import { Board } from '../Board';
 import { IBoard, IKeyBase } from '../../../../types/types';
 import { prepareResponseDate } from '../utils/form';
 import logger from '../../../../utils/logger';
 
-export const archiveBoard = {
+export const archiveBoard: MutationFieldType<'archiveBoard'> = {
   type: Board,
 
   args: {
@@ -15,13 +16,14 @@ export const archiveBoard = {
     isDeleted: booleanArg(),
   },
 
+  // @ts-ignore
   resolve: async (_parent, { boardUuid, isDeleted = true }, { user, dynamo }) => {
     if (!user) {
       throw new Error('Not authorized to archive the board');
     }
 
     const key: IKeyBase = {
-      id: `USER#${user.userId}`,
+      id: `USER#${user.uuid}`,
       relation: `BOARD#${boardUuid}`,
     };
 
@@ -34,14 +36,15 @@ export const archiveBoard = {
       },
     };
 
-    await dynamo.updateItem(params, key);
+    try {
+      await dynamo.updateItem(params, key);
+      const { Item } = await dynamo.getItem(key);
 
-    const { Item }: { Item: IBoard } = await dynamo.getItem(key);
-    logger.debug(`item: ${JSON.stringify(Item)}`);
-
-    const item = prepareResponseDate(Item);
-    logger.debug(`item: ${JSON.stringify(item)}`);
-
-    return item;
+      const item = prepareResponseDate(Item) as IBoard;
+      return item;
+    } catch (error) {
+      logger.error(error);
+      throw new Error('Could not archive the board');
+    }
   },
 };

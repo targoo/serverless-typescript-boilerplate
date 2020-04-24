@@ -1,8 +1,10 @@
 import * as AWS from 'aws-sdk';
-import { arg } from 'nexus';
+import { arg } from '@nexus/schema';
+
 import { File } from '../File';
 import { id } from '../../../../utils';
 import { sanitizeFileName } from '../../../../utils/files/files';
+import { MutationFieldType } from '../../types';
 
 const UPLOAD_BUCKET_NAME = process.env.AWS_BUCKET_UPLOAD || '';
 
@@ -25,13 +27,14 @@ if (process.env.ENV === 'local') {
 
 const s3 = new AWS.S3();
 
-export const singleUpload = {
+export const singleUpload: MutationFieldType<'singleUpload'> = {
   type: File,
 
   args: {
     file: arg({ type: 'Upload', required: true }),
   },
 
+  // @ts-ignore
   resolve: async (_parent, { file }, _context, _info) => {
     const { filename, mimetype, encoding, createReadStream } = (await file) as FileUpload;
     const sanitizedFilename = sanitizeFileName(filename);

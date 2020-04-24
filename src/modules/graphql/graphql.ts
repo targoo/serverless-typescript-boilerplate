@@ -1,6 +1,6 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import { ApolloServer } from 'apollo-server-lambda';
-import { makeSchema } from 'nexus';
+import { makeSchema } from '@nexus/schema';
 import { types } from './nexusTypes';
 import { join } from 'path';
 import { getContext, ContextParameters } from '.';
@@ -21,11 +21,10 @@ let schema: any = makeSchema({
     singleQuote: true,
     printWidth: 120,
   },
-  // join(__dirname, '../../../../../.prettierrc.js'),
 
   typegenAutoConfig: {
-    sources: [{ source: join(__dirname, '../../../../../src/modules/graphql/index.ts'), alias: 'index' }],
-    contextType: 'index.ContextType',
+    sources: [{ source: join(__dirname, '../../../../../src/modules/graphql/index.ts'), alias: 'ctx' }],
+    contextType: 'ctx.ContextType',
     debug: true,
   },
 });

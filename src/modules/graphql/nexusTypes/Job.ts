@@ -1,4 +1,4 @@
-import { objectType } from 'nexus';
+import { objectType } from '@nexus/schema';
 
 import logger from '../../../utils/logger';
 import { prepareResponseDate } from './utils/form';
@@ -48,6 +48,10 @@ export const Job = objectType({
   description: 'Job',
 
   definition(t) {
+    t.id('id', { description: 'Internal partition key' });
+
+    t.id('relation', { description: 'Internal sort key' });
+
     t.id('uuid', { description: 'UUID of the job' });
 
     // Agency
@@ -123,7 +127,7 @@ export const Job = objectType({
             return acc;
           }, {}),
           ExpressionAttributeValues: {
-            ':userUUID': `USER#${user.userId}`,
+            ':userUUID': `USER#${user.uuid}`,
             ':relation': `EVENT#BOARD#${boardUuid}#JOB#${jobUuid}`,
           },
           ProjectionExpression: properties.map((property) => `#${property}`),
@@ -144,15 +148,15 @@ export const Job = objectType({
     t.field('board', {
       type: Board,
 
+      // @ts-ignore
       resolve: async (parent, _args, { user, dynamo }) => {
         // @ts-ignore
         const { relation } = parent;
 
-        // job relation: JOB#BOARD#bja06ihpRpZwrisa#XH0jkiTHTwrdOKS7
         const boardUuid = relation.split('#')[2];
 
         const key = {
-          id: `USER#${user.userId}`,
+          id: `USER#${user.uuid}`,
           relation: `BOARD#${boardUuid}`,
         };
 
@@ -172,11 +176,9 @@ export const Job = objectType({
           relation: 'USER',
         };
 
-        const { Item }: { Item: IUser } = await dynamo.getItem(key);
-        logger.info(`item: ${JSON.stringify(Item)}`);
+        const { Item } = await dynamo.getItem(key);
 
-        const item = prepareResponseDate(Item);
-        logger.info(`item: ${JSON.stringify(item)}`);
+        const item = prepareResponseDate(Item) as IUser;
 
         return item;
       },

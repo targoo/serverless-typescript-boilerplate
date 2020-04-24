@@ -96,6 +96,9 @@ custom:
     # Uncomment only if you already have a DynamoDB running locally
     # noStart: true
 
+  serverless-offline:
+    useChildProcesses: true
+
 functions: ${file(resources/lambdas/loader.js)}
 
 resources:

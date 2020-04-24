@@ -1,4 +1,4 @@
-import { objectType } from 'nexus';
+import { objectType } from '@nexus/schema';
 
 export const userFormProperties = {
   nickname: 'string',
@@ -11,7 +11,7 @@ export const userProperties = {
   ...userFormProperties,
   id: 'key',
   relation: 'key',
-  userId: 'string',
+  uuid: 'string',
   createdAt: 'datetime',
   updatedAt: 'datetime',
 };
@@ -19,9 +19,13 @@ export const userProperties = {
 export const User = objectType({
   name: 'User',
   definition(t) {
-    t.id('userId', { description: 'Unique Id of the user based on the email' });
+    t.id('uuid', { description: 'Unique Id of the user based on the email' });
 
     t.string('nickname');
+
+    t.string('name');
+
+    t.boolean('isEmailVerified');
 
     t.string('email');
 

@@ -1,8 +1,9 @@
-import { stringArg } from 'nexus';
+import { stringArg } from '@nexus/schema';
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import logger from '../../../../utils/logger';
+import { MutationFieldType } from '../../types';
 
-export const passwordlessSignIn = {
+export const passwordlessSignIn: MutationFieldType<'passwordlessSignIn'> = {
   type: 'Boolean' as 'Boolean',
 
   args: {

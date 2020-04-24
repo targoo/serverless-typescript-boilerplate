@@ -1,5 +1,6 @@
-import { arg } from 'nexus';
+import { arg } from '@nexus/schema';
 
+import { QueryFieldType } from '../../types';
 import { BoardInputWhere, BoardInputSort } from '../args';
 import { Board, followingBoardProperties, boardProperties } from '../Board';
 import { IFollowingBoard, IBoard } from '../../../../types/types';
@@ -15,7 +16,7 @@ const getBoard = async (dynamo, id, relation) => {
   return prepareResponseDate(Item);
 };
 
-export const followingBoards = {
+export const followingBoards: QueryFieldType<'followingBoards'> = {
   type: Board,
 
   args: {
@@ -24,7 +25,8 @@ export const followingBoards = {
     }),
   },
 
-  resolve: async (_parent, args, { user, dynamo }) => {
+  // @ts-ignore
+  resolve: async (_parent, _args, { user, dynamo }) => {
     if (!user) {
       throw new Error('Not authorized to list the boards');
     }
@@ -38,7 +40,7 @@ export const followingBoards = {
         return acc;
       }, {}),
       ExpressionAttributeValues: {
-        ':userUUID': `USER#${user.userId}`,
+        ':userUUID': `USER#${user.uuid}`,
         ':relation': 'FOLLOWING_BOARD#',
       },
       ProjectionExpression: properties.map((property) => `#${property}`),
@@ -51,7 +53,7 @@ export const followingBoards = {
     items = items.filter((item) => item.isDeleted === false);
 
     let results = (await Promise.all(
-      items.map((item) => getBoard(dynamo, `USER#${item.userId}`, `BOARD#${item.boardUuid}`)),
+      items.map((item) => getBoard(dynamo, `USER#${item.uuid}`, `BOARD#${item.boardUuid}`)),
     )) as IBoard[];
     results.filter((result) => result.isDeleted === false);
 

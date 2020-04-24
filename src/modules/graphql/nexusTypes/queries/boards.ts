@@ -1,12 +1,13 @@
-import { arg } from 'nexus';
+import { arg } from '@nexus/schema';
 
+import { QueryFieldType } from '../../types';
 import { BoardInputWhere, BoardInputSort } from '../args';
 import { Board, boardProperties } from '../Board';
 import { IBoard } from '../../../../types/types';
 import logger from '../../../../utils/logger';
 import { prepareResponseDate } from '../utils/form';
 
-export const boards = {
+export const boards: QueryFieldType<'boards'> = {
   type: Board,
 
   args: {
@@ -18,6 +19,7 @@ export const boards = {
     }),
   },
 
+  // @ts-ignore
   resolve: async (_parent, args, { user, dynamo }) => {
     if (!user) {
       throw new Error('Not authorized to list the boards');
@@ -32,7 +34,7 @@ export const boards = {
         return acc;
       }, {}),
       ExpressionAttributeValues: {
-        ':userUUID': `USER#${user.userId}`,
+        ':userUUID': `USER#${user.uuid}`,
         ':relation': 'BOARD#',
       },
       ProjectionExpression: properties.map((property) => `#${property}`),

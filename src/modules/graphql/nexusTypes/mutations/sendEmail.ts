@@ -1,11 +1,12 @@
-import { arg } from 'nexus';
+import { arg } from '@nexus/schema';
 
 import { EmailInputData } from '../args';
 import logger from '../../../../utils/logger';
 import { hashCode } from '../utils/secret/secret';
 import { IUser } from '../../../../types/types';
+import { MutationFieldType } from '../../types';
 
-export const sendEmail = {
+export const sendEmail: MutationFieldType<'sendEmail'> = {
   type: 'Boolean',
 
   args: {
@@ -17,17 +18,17 @@ export const sendEmail = {
 
   resolve: async (_parent, { data }, { dynamo, user, emailService }) => {
     const { email, subject, replyTo, emailTemplate, params } = data;
-    const { userId, boardUuid, content, ctaUrl, userNickname } = params;
+    const { uuid, boardUuid, content, ctaUrl, userNickname } = params;
 
     if (!user) {
       throw new Error('Not authorized to send an email');
     }
 
     // @todo check permissions
-    const newUserId = hashCode(`${email}`.toLowerCase());
+    const newuuid = hashCode(`${email}`.toLowerCase());
 
     const key = {
-      id: `USER#${newUserId}`,
+      id: `USER#${newuuid}`,
       relation: `USER`,
     };
     const { Item } = await dynamo.getItem(key);
@@ -35,9 +36,9 @@ export const sendEmail = {
     // Create user if it does not exist yet.
     if (!Item) {
       const user = ({
-        id: `USER#${newUserId}`,
+        id: `USER#${newuuid}`,
         relation: `USER`,
-        userId: JSON.stringify({ format: 'string', value: newUserId }),
+        uuid: JSON.stringify({ format: 'string', value: newuuid }),
         email: JSON.stringify({ format: 'string', value: email }),
         isEmailVerified: JSON.stringify({ format: 'boolean', value: false }),
         isDeleted: JSON.stringify({ format: 'boolean', value: false }),
@@ -48,16 +49,16 @@ export const sendEmail = {
 
     // Create board following if it does not exist yet.
     const key2 = {
-      id: `USER#${userId}`,
-      relation: `FOLLOWING_BOARD#${newUserId}#${boardUuid}`,
+      id: `USER#${uuid}`,
+      relation: `FOLLOWING_BOARD#${newuuid}#${boardUuid}`,
     };
     const { Item: Item2 } = await dynamo.getItem(key2);
     if (!Item2) {
       const board = ({
-        id: `USER#${newUserId}`,
+        id: `USER#${newuuid}`,
         relation: `FOLLOWING_BOARD#${boardUuid}`,
-        fid: `USER#${userId}`,
-        userId: JSON.stringify({ format: 'string', value: userId }),
+        fid: `USER#${uuid}`,
+        uuid: JSON.stringify({ format: 'string', value: uuid }),
         boardUuid: JSON.stringify({ format: 'string', value: boardUuid }),
         isDeleted: JSON.stringify({ format: 'boolean', value: false }),
         createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),

@@ -1,12 +1,13 @@
-import { arg } from 'nexus';
+import { arg } from '@nexus/schema';
 
+import { QueryFieldType } from '../../types';
 import { JobInputWhere } from '../args';
 import { Job, jobProperties } from '../Job';
 import { IJob } from '../../../../types/types';
 import logger from '../../../../utils/logger';
 import { prepareResponseDate } from '../utils/form';
 
-export const jobs = {
+export const jobs: QueryFieldType<'jobs'> = {
   type: Job,
 
   args: {
@@ -16,16 +17,8 @@ export const jobs = {
     }),
   },
 
-  resolve: async (
-    _parent,
-    args: {
-      where: {
-        isDeleted?: boolean;
-        boardUuid: string;
-      };
-    },
-    { user, dynamo },
-  ) => {
+  // @ts-ignore
+  resolve: async (_parent, args, { user, dynamo }) => {
     if (!user) {
       throw new Error('Not authorized to list the jobs');
     }
@@ -39,7 +32,7 @@ export const jobs = {
         return acc;
       }, {}),
       ExpressionAttributeValues: {
-        ':userUUID': `USER#${user.userId}`,
+        ':userUUID': `USER#${user.uuid}`,
         ':relation': args.where.boardUuid ? `JOB#BOARD#${args.where.boardUuid}` : 'JOB#BOARD#',
       },
       ProjectionExpression: properties.map((property) => `#${property}`),

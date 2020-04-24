@@ -1,11 +1,12 @@
-import { idArg, booleanArg } from 'nexus';
+import { idArg, booleanArg } from '@nexus/schema';
 
+import { QueryFieldType } from '../../types';
 import { Board } from '../Board';
-import { IBoard, IKeyBase } from '../../../../types/types';
+import { IKeyBase } from '../../../../types/types';
 import { prepareResponseDate } from '../utils/form';
 import logger from '../../../../utils/logger';
 
-export const archiveBoard = {
+export const getBoardFile: QueryFieldType<'archiveBoard'> = {
   type: Board,
 
   args: {
@@ -21,7 +22,7 @@ export const archiveBoard = {
     }
 
     const key: IKeyBase = {
-      id: `USER#${user.userId}`,
+      id: `USER#${user.uuid}`,
       relation: `BOARD#${boardUuid}`,
     };
 
@@ -36,7 +37,7 @@ export const archiveBoard = {
 
     await dynamo.updateItem(params, key);
 
-    const { Item }: { Item: IBoard } = await dynamo.getItem(key);
+    const { Item } = await dynamo.getItem(key);
     logger.debug(`item: ${JSON.stringify(Item)}`);
 
     const item = prepareResponseDate(Item);

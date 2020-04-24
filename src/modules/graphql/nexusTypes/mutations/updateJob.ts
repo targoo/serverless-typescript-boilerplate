@@ -1,12 +1,13 @@
-import { arg, idArg } from 'nexus';
+import { arg, idArg } from '@nexus/schema';
 
 import { JobInputData } from '../args';
 import { Job, jobFormProperties } from '../Job';
 import { IJob, IKeyBase } from '../../../../types/types';
 import logger from '../../../../utils/logger';
 import { prepareFormInput, prepareResponseDate } from '../utils/form';
+import { MutationFieldType } from '../../types';
 
-export const updateJob = {
+export const updateJob: MutationFieldType<'updateJob'> = {
   type: Job,
 
   args: {
@@ -22,13 +23,14 @@ export const updateJob = {
     }),
   },
 
+  // @ts-ignore
   resolve: async (_parent, { boardUuid, jobUuid, data }, { user, dynamo }) => {
     if (!user) {
       throw new Error('Not authorized to update the job');
     }
 
     const key: IKeyBase = {
-      id: `USER#${user.userId}`,
+      id: `USER#${user.uuid}`,
       relation: `JOB#BOARD#${boardUuid}#${jobUuid}`,
     };
 
@@ -59,16 +61,18 @@ export const updateJob = {
       ExpressionAttributeValues,
     };
 
-    logger.debug(JSON.stringify(params));
+    try {
+      await dynamo.updateItem(params, key);
 
-    await dynamo.updateItem(params, key);
+      const { Item } = await dynamo.getItem(key);
+      logger.debug(`item: ${JSON.stringify(Item)}`);
 
-    const { Item }: { Item: IJob } = await dynamo.getItem(key);
-    logger.debug(`item: ${JSON.stringify(Item)}`);
-
-    const item = prepareResponseDate(Item);
-    logger.debug(`item: ${JSON.stringify(item)}`);
-
-    return item;
+      const item = prepareResponseDate(Item) as IJob;
+      logger.debug(`item: ${JSON.stringify(item)}`);
+      return item;
+    } catch (error) {
+      logger.error(error);
+      throw new Error('Could not update the job');
+    }
   },
 };
