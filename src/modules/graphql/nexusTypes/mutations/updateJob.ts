@@ -2,7 +2,7 @@ import { arg, idArg } from '@nexus/schema';
 
 import { JobInputData } from '../args';
 import { Job, jobFormProperties } from '../Job';
-import { IJob, IKeyBase } from '../../../../types/types';
+import { IJob, IKeyBase, IFollowingJob } from '../../../../types/types';
 import logger from '../../../../utils/logger';
 import { prepareFormInput, prepareResponseDate } from '../utils/form';
 import { MutationFieldType } from '../../types';
@@ -11,6 +11,9 @@ export const updateJob: MutationFieldType<'updateJob'> = {
   type: Job,
 
   args: {
+    userUuid: idArg({
+      required: true,
+    }),
     boardUuid: idArg({
       required: true,
     }),
@@ -24,13 +27,31 @@ export const updateJob: MutationFieldType<'updateJob'> = {
   },
 
   // @ts-ignore
-  resolve: async (_parent, { boardUuid, jobUuid, data }, { user, dynamo }) => {
+  resolve: async (_parent, { userUuid, boardUuid, jobUuid, data }, { user, dynamo }) => {
     if (!user) {
       throw new Error('Not authorized to update the job');
     }
 
+    // Check permissions
+    if (userUuid !== user.uuid) {
+      const jobKey = {
+        id: `USER#${user.uuid}`,
+        relation: `FOLLOWING_JOB#BOARD#${boardUuid}#${jobUuid}`,
+      };
+      const { Item } = await dynamo.getItem(jobKey);
+
+      if (Item) {
+        const followingBoard = prepareResponseDate(Item) as IFollowingJob;
+        if (followingBoard.isDeleted) {
+          throw new Error('Cannot update anymore this job for this board');
+        }
+      } else {
+        throw new Error('Cannot update a job for this board');
+      }
+    }
+
     const key: IKeyBase = {
-      id: `USER#${user.uuid}`,
+      id: `USER#${userUuid}`,
       relation: `JOB#BOARD#${boardUuid}#${jobUuid}`,
     };
 
@@ -64,12 +85,10 @@ export const updateJob: MutationFieldType<'updateJob'> = {
     try {
       await dynamo.updateItem(params, key);
 
-      const { Item } = await dynamo.getItem(key);
-      logger.debug(`item: ${JSON.stringify(Item)}`);
+      let { Item: job } = await dynamo.getItem(key);
 
-      const item = prepareResponseDate(Item) as IJob;
-      logger.debug(`item: ${JSON.stringify(item)}`);
-      return item;
+      job = prepareResponseDate(job) as IJob;
+      return job;
     } catch (error) {
       logger.error(error);
       throw new Error('Could not update the job');

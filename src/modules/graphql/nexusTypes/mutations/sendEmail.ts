@@ -1,8 +1,8 @@
 import { arg } from '@nexus/schema';
+import * as crypto from 'crypto';
 
 import { EmailInputData } from '../args';
 import logger from '../../../../utils/logger';
-import { hashCode } from '../utils/secret/secret';
 import { IUser } from '../../../../types/types';
 import { MutationFieldType } from '../../types';
 
@@ -18,53 +18,44 @@ export const sendEmail: MutationFieldType<'sendEmail'> = {
 
   resolve: async (_parent, { data }, { dynamo, user, emailService }) => {
     const { email, subject, replyTo, emailTemplate, params } = data;
-    const { uuid, boardUuid, content, ctaUrl, userNickname } = params;
+    const { boardUuid, content, ctaUrl, userNickname } = params;
 
     if (!user) {
       throw new Error('Not authorized to send an email');
     }
 
-    // @todo check permissions
-    const newuuid = hashCode(`${email}`.toLowerCase());
+    const followingUserUuid = crypto
+      .createHmac('sha1', process.env.SIGNIN_USER_SECRET)
+      .update(`${email}`.toLowerCase())
+      .digest('hex');
 
-    const key = {
-      id: `USER#${newuuid}`,
+    const userKey = {
+      id: `USER#${followingUserUuid}`,
       relation: `USER`,
     };
-    const { Item } = await dynamo.getItem(key);
+    const { Item } = await dynamo.getItem(userKey);
 
     // Create user if it does not exist yet.
     if (!Item) {
-      const user = ({
-        id: `USER#${newuuid}`,
+      const userParams = ({
+        id: `USER#${followingUserUuid}`,
         relation: `USER`,
-        uuid: JSON.stringify({ format: 'string', value: newuuid }),
+        uuid: JSON.stringify({ format: 'string', value: followingUserUuid }),
         email: JSON.stringify({ format: 'string', value: email }),
         isEmailVerified: JSON.stringify({ format: 'boolean', value: false }),
         isDeleted: JSON.stringify({ format: 'boolean', value: false }),
         createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
       } as unknown) as IUser;
-      await dynamo.saveItem(user);
+      await dynamo.saveItem(userParams);
     }
 
     // Create board following if it does not exist yet.
-    const key2 = {
-      id: `USER#${uuid}`,
-      relation: `FOLLOWING_BOARD#${newuuid}#${boardUuid}`,
+    const boardKey = {
+      id: `USER#${followingUserUuid}`,
+      relation: `FOLLOWING_BOARD#${boardUuid}`,
     };
-    const { Item: Item2 } = await dynamo.getItem(key2);
-    if (!Item2) {
-      const board = ({
-        id: `USER#${newuuid}`,
-        relation: `FOLLOWING_BOARD#${boardUuid}`,
-        fid: `USER#${uuid}`,
-        uuid: JSON.stringify({ format: 'string', value: uuid }),
-        boardUuid: JSON.stringify({ format: 'string', value: boardUuid }),
-        isDeleted: JSON.stringify({ format: 'boolean', value: false }),
-        createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
-      } as unknown) as IUser;
-      await dynamo.saveItem(board);
-    } else {
+    const { Item: Item2 } = await dynamo.getItem(boardKey);
+    if (Item2) {
       const params = {
         UpdateExpression: 'set #isDeleted = :isDeleted, #updated = :updated',
         ExpressionAttributeNames: {
@@ -76,7 +67,18 @@ export const sendEmail: MutationFieldType<'sendEmail'> = {
           ':updated': JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
         },
       };
-      await dynamo.updateItem(params, key2);
+      await dynamo.updateItem(params, boardKey);
+    } else {
+      const board = ({
+        id: `USER#${followingUserUuid}`,
+        relation: `FOLLOWING_BOARD#${boardUuid}`,
+        fid: `USER#${user.uuid}`,
+        userUuid: JSON.stringify({ format: 'string', value: user.uuid }),
+        boardUuid: JSON.stringify({ format: 'string', value: boardUuid }),
+        isDeleted: JSON.stringify({ format: 'boolean', value: false }),
+        createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
+      } as unknown) as IUser;
+      await dynamo.saveItem(board);
     }
 
     const emailContent = `

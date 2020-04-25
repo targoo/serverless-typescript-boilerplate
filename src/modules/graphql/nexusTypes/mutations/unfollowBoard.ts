@@ -37,7 +37,7 @@ export const unfollowBoard: MutationFieldType<'unfollowBoard'> = {
       await dynamo.updateItem(params, key);
     } catch (error) {
       logger.error(error);
-      throw new Error('Could not unfollow the board');
+      throw new Error('Could not un-follow the board');
     }
 
     return true;

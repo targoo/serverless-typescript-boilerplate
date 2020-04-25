@@ -28,14 +28,15 @@ export const boardProperties = {
   relation: 'key',
   uuid: 'string',
   createdAt: 'datetime',
+  createdBy: 'string',
   updatedAt: 'datetime',
 };
 
 export const followingBoardProperties = {
   id: 'key',
   relation: 'key',
+  userUuid: 'string',
   boardUuid: 'string',
-  uuid: 'string',
   isDeleted: 'boolean',
   createdAt: 'datetime',
   updatedAt: 'datetime',
@@ -81,7 +82,9 @@ export const Board = objectType({
 
     t.boolean('isDeleted');
 
-    t.boolean('isOwner');
+    t.boolean('isOwner', { nullable: true });
+
+    t.list.string('permissions');
 
     t.list.field('files', {
       type: File,

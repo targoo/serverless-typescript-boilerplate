@@ -1,3 +1,5 @@
+import { NexusGenEnums } from '../modules/graphql/generated/nexus';
+
 export type Modify<T, R> = Omit<T, keyof R> & R;
 
 export enum BoardStatus {
@@ -64,6 +66,7 @@ export interface IKeyBase {
 export interface IEntityBase extends IKeyBase {
   createdAt: Date;
   updatedAt?: Date;
+  createdBy: string;
   isDeleted: boolean;
   readonly uuid: string;
 }
@@ -77,15 +80,29 @@ export type IEntityBaseDynamo = Modify<
 >;
 
 export interface IBoard extends IEntityBase {
+  interestLevel?: NexusGenEnums['InterestLevel'] | null;
+  workRightUK?: boolean | null;
+  description?: string;
+  locationSecondary?: string;
+  availableDate?: string;
   title: string;
-  description: string;
-  availableDate: string;
-  location: string;
+  locationMain?: string;
+  educationLevel?: NexusGenEnums['EducationLevel'] | null;
+  location?: string;
+  locationCoordinates?: any;
+  workRightEU?: boolean | null;
+  isOwner?: boolean;
 }
 
 export interface IFollowingBoard extends IEntityBase {
-  userId: string;
+  userUuid: string;
   boardUuid: string;
+}
+
+export interface IFollowingJob extends IEntityBase {
+  userUuid: string;
+  boardUuid: string;
+  jobUuid: string;
 }
 
 export interface IUser extends IEntityBase {
@@ -115,6 +132,9 @@ export interface IJob extends IEntityBase {
   company: string;
   companyWebsite: string;
   companyLocation: string;
+  companyLocationMain: string;
+  companyLocationSecondary: string;
+  companyLocationCoordinates: any;
   jobDescription: string;
   jobUrl: string;
   // Money
@@ -122,7 +142,7 @@ export interface IJob extends IEntityBase {
   remoteOption: RemoteOption;
   duration: string;
   rate: string;
-  ir35: string;
+  ir35: boolean;
   // Extra
   feeling: Feeling;
   status: JobStatus;

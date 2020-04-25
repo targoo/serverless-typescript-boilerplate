@@ -2,7 +2,7 @@ import { idArg } from '@nexus/schema';
 
 import { QueryFieldType } from '../../types';
 import { Board } from '../Board';
-import { IBoard } from '../../../../types/types';
+import { IBoard, IFollowingJob, IFollowingBoard } from '../../../../types/types';
 import logger from '../../../../utils/logger';
 import { prepareResponseDate } from '../utils/form';
 
@@ -23,32 +23,34 @@ export const board: QueryFieldType<'board'> = {
   args: boardArgs,
 
   // @ts-ignore
-  resolve: async (_parent, { uuid, boardUuid }, { user, dynamo }) => {
+  resolve: async (_parent, { userUuid, boardUuid }, { user, dynamo }) => {
     if (!user) {
       throw new Error('Not authorized to get the board');
     }
 
-    let isOwner = true;
+    // Check permissions
+    if (userUuid !== user.uuid) {
+      const followingKey = {
+        id: `USER#${user.uuid}`,
+        relation: `FOLLOWING_BOARD#${boardUuid}`,
+      };
+      const { Item } = await dynamo.getItem(followingKey);
 
-    // Check permissions if the user tried to access someone else board.
-    if (uuid !== user.uuid) {
-      try {
-        const followingKey = {
-          id: `USER#${user.uuid}`,
-          relation: `FOLLOWING_BOARD#${boardUuid}`,
-        };
-
-        await dynamo.getItem(followingKey);
-        isOwner = false;
-      } catch (error) {
-        logger.error(error);
-        throw new Error('Not permitted to get the board');
+      if (Item) {
+        const followingBoard = prepareResponseDate(Item) as IFollowingBoard;
+        if (followingBoard.isDeleted) {
+          throw new Error('Cannot view this board anymore');
+        }
+      } else {
+        throw new Error('Cannot view this board');
       }
     }
 
+    const permissions = userUuid !== user.uuid ? ['VIEW', 'UNFOLLOW', 'ADD_JOB'] : ['VIEW', 'EDIT', 'ADD_JOB'];
+
     try {
       const key = {
-        id: `USER#${uuid}`,
+        id: `USER#${userUuid}`,
         relation: `BOARD#${boardUuid}`,
       };
 
@@ -56,7 +58,9 @@ export const board: QueryFieldType<'board'> = {
 
       item = prepareResponseDate(item) as IBoard;
 
-      return { ...item, isOwner };
+      console.log({ ...item, permissions });
+
+      return { ...item, permissions };
     } catch (error) {
       logger.error(error);
       throw new Error('The board does not exist');

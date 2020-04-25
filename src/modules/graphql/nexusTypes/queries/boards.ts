@@ -26,6 +26,7 @@ export const boards: QueryFieldType<'boards'> = {
     }
 
     const properties = Object.keys(boardProperties);
+    const permissions = ['VIEW', 'EDIT', 'ARCHIVE', 'ADD_JOB', 'INVITE'];
 
     const params = {
       KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
@@ -45,7 +46,8 @@ export const boards: QueryFieldType<'boards'> = {
     logger.debug(`items: ${JSON.stringify(items)}`);
 
     items = items.map((item) => prepareResponseDate(item)) as IBoard[];
-    logger.debug(`items: ${JSON.stringify(items)}`);
+
+    items = items.map((item) => ({ ...item, permissions })) as IBoard[];
 
     if (args.where && args.where.isDeleted !== undefined) {
       items = items.filter((item) => item.isDeleted === args.where.isDeleted);

@@ -7,6 +7,10 @@ import { prepareResponseDate } from '../utils/form';
 import { IJob } from '../../../../types/types';
 
 const jobArgs = {
+  userUuid: idArg({
+    required: true,
+    description: 'The id of the user',
+  }),
   boardUuid: idArg({
     required: true,
     description: 'The id of the board',
@@ -23,13 +27,13 @@ export const job: QueryFieldType<'job'> = {
   args: jobArgs,
 
   // @ts-ignore
-  resolve: async (_parent, { boardUuid, jobUuid }, { user, dynamo }) => {
+  resolve: async (_parent, { userUuid, boardUuid, jobUuid }, { user, dynamo }) => {
     if (!user) {
       throw new Error('Not authorized to get the board');
     }
 
     const key = {
-      id: `USER#${user.uuid}`,
+      id: `USER#${userUuid}`,
       relation: `JOB#BOARD#${boardUuid}#${jobUuid}`,
     };
 

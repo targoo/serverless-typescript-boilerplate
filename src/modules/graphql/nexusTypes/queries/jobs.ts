@@ -7,6 +7,15 @@ import { IJob } from '../../../../types/types';
 import logger from '../../../../utils/logger';
 import { prepareResponseDate } from '../utils/form';
 
+const getJob = async (dynamo, id, relation) => {
+  const key = {
+    id,
+    relation,
+  };
+  const { Item } = await dynamo.getItem(key);
+  return prepareResponseDate(Item);
+};
+
 export const jobs: QueryFieldType<'jobs'> = {
   type: Job,
 
@@ -17,38 +26,66 @@ export const jobs: QueryFieldType<'jobs'> = {
     }),
   },
 
-  // @ts-ignore
-  resolve: async (_parent, args, { user, dynamo }) => {
+  resolve: async (_parent, { where: { userUuid, boardUuid, isDeleted } = {} }, { user, dynamo }) => {
     if (!user) {
       throw new Error('Not authorized to list the jobs');
     }
 
-    const properties = Object.keys(jobProperties);
+    if (userUuid === user.uuid) {
+      const permissions = ['VIEW', 'EDIT', 'ARCHIVE', 'INVITE', 'ADD_EVENT'];
+      const properties = Object.keys(jobProperties);
 
-    const params = {
-      KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
-      ExpressionAttributeNames: properties.reduce((acc, cur) => {
-        acc[`#${cur}`] = cur;
-        return acc;
-      }, {}),
-      ExpressionAttributeValues: {
-        ':userUUID': `USER#${user.uuid}`,
-        ':relation': args.where.boardUuid ? `JOB#BOARD#${args.where.boardUuid}` : 'JOB#BOARD#',
-      },
-      ProjectionExpression: properties.map((property) => `#${property}`),
-    };
-    logger.debug(JSON.stringify(params));
+      const params = {
+        KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
+        ExpressionAttributeNames: properties.reduce((acc, cur) => {
+          acc[`#${cur}`] = cur;
+          return acc;
+        }, {}),
+        ExpressionAttributeValues: {
+          ':userUUID': `USER#${user.uuid}`,
+          ':relation': `JOB#BOARD#${boardUuid}`,
+        },
+        ProjectionExpression: properties.map((property) => `#${property}`),
+      };
 
-    let { Items: items }: { Items: IJob[] } = await dynamo.query(params);
-    logger.debug(`items: ${JSON.stringify(items)}`);
+      let { Items: items } = await dynamo.query(params);
 
-    items = items.map((item) => prepareResponseDate(item)) as IJob[];
-    logger.debug(`items: ${JSON.stringify(items)}`);
+      items = items
+        .map((item) => prepareResponseDate(item))
+        .map((item) => ({ ...item, permissions }))
+        .filter((item) => item.isDeleted === isDeleted || false) as IJob[];
 
-    if (args.where && args.where.isDeleted !== undefined) {
-      items = items.filter((item) => item.isDeleted === args.where.isDeleted);
+      return items;
+    } else {
+      const permissions = ['VIEW', 'EDIT', 'ADD_EVENT'];
+      const params = {
+        KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
+        ExpressionAttributeNames: {
+          '#userUuid': 'userUuid',
+          '#boardUuid': 'boardUuid',
+          '#jobUuid': 'jobUuid',
+          '#isDeleted': 'isDeleted',
+          '#id': 'id',
+          '#relation': 'relation',
+        },
+        ExpressionAttributeValues: {
+          ':userUUID': `USER#${user.uuid}`,
+          ':relation': `FOLLOWING_JOB#BOARD#${boardUuid}#`,
+        },
+        ProjectionExpression: ['#userUuid', '#boardUuid', '#jobUuid', '#isDeleted', '#id', '#relation'],
+      };
+      console.log('params', params);
+      let { Items: items } = await dynamo.query(params);
+
+      items = items.map((item) => prepareResponseDate(item)).filter((item) => item.isDeleted === false) as IJob[];
+
+      items = (await Promise.all(
+        items.map((item) => getJob(dynamo, `USER#${item.userUuid}`, `JOB#BOARD#${item.boardUuid}#${item.jobUuid}`)),
+      )) as IJob[];
+
+      items = items.map((item) => ({ ...item, permissions })).filter((item) => item.isDeleted === false) as IJob[];
+
+      return items;
     }
-
-    return items;
   },
 };

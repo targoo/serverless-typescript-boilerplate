@@ -12,7 +12,7 @@
 | FILE  | USER#<USER_ID> | FILE#BOARD#<BOARD_UUID>#<FILE_UUID>                  |            |                |
 | FILE  | USER#<USER_ID> | FILE#JOB#<JOB_UUID>#<FILE_UUID>                      |            |                |
 | BOARD | USER#<USER_ID> | FOLLOWING_BOARD#<BOARD_UUID>                         |            | USER#<USER_ID> |
-| JOB   | USER#<USER_ID> | FOLLOWING_JOB#USER<USER_ID>#<BOARD_UUID>             |            |                |
+| JOB   | USER#<USER_ID> | FOLLOWING_JOB#BOARD#<BOARD_UUID>#<JOB_UUID>          |            |                |
 
 ## Entity Relationship Diagram (ERD)
 

@@ -80,8 +80,9 @@ export const JobInputData = inputObjectType({
 export const JobInputWhere = inputObjectType({
   name: 'JobInputWhere',
   definition(t) {
-    t.boolean('isDeleted');
+    t.id('userUuid', { required: true });
     t.id('boardUuid', { required: true });
+    t.boolean('isDeleted');
   },
 });
 

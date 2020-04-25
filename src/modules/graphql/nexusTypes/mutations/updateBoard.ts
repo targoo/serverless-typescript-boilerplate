@@ -61,13 +61,11 @@ export const updateBoard: MutationFieldType<'updateBoard'> = {
     try {
       await dynamo.updateItem(params, key);
 
-      const { Item } = await dynamo.getItem(key);
-      logger.debug(`item: ${JSON.stringify(Item)}`);
+      let { Item: board } = await dynamo.getItem(key);
 
-      const item = prepareResponseDate(Item) as IBoard;
-      logger.debug(`item: ${JSON.stringify(item)}`);
+      board = prepareResponseDate(board) as IBoard;
 
-      return item;
+      return board;
     } catch (error) {
       logger.error(error);
       throw new Error('Could not update the board');

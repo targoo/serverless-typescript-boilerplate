@@ -34,11 +34,12 @@ type Board {
   id: ID!
   interestLevel: InterestLevel
   isDeleted: Boolean!
-  isOwner: Boolean!
+  isOwner: Boolean
   location: String
   locationCoordinates: JSON
   locationMain: String
   locationSecondary: String
+  permissions: [String!]!
 
   """
   Internal sort key
@@ -202,6 +203,7 @@ type Job {
   companyLocationSecondary: String
   companyWebsite: String
   createdAt: DateTime!
+  createdBy: User!
   duration: String
   employmentType: EmploymentType
   events: [Event!]
@@ -216,6 +218,7 @@ type Job {
   jobDescription: String
   jobTitle: String
   jobUrl: String
+  permissions: [String!]!
   rate: String
   referralFee: String
 
@@ -262,6 +265,7 @@ input JobInputData {
 input JobInputWhere {
   boardUuid: ID!
   isDeleted: Boolean
+  userUuid: ID!
 }
 
 enum JobStatus {
@@ -293,7 +297,7 @@ type Mutation {
   archiveJob(boardUuid: ID!, isDeleted: Boolean, jobUuid: ID!): Job!
   createBoard(data: BoardInputData!): Board!
   createEvent(boardUuid: ID!, data: EventInputData!, jobUuid: ID!): Event!
-  createJob(boardUuid: ID!, data: JobInputData!): Job!
+  createJob(boardUuid: ID!, data: JobInputData!, userUuid: ID!): Job!
   logout: Boolean!
   multipleUpload(boardUuid: ID, files: [Upload!]!): [File!]!
   passwordlessSignIn(email: String!, redirectUri: String!, state: String!): Boolean!
@@ -302,7 +306,7 @@ type Mutation {
   singleUpload(file: Upload!): File!
   unfollowBoard(boardUuid: ID!, isDeleted: Boolean): Boolean!
   updateBoard(boardUuid: ID!, data: BoardInputData!): Board!
-  updateJob(boardUuid: ID!, data: JobInputData!, jobUuid: ID!): Job!
+  updateJob(boardUuid: ID!, data: JobInputData!, jobUuid: ID!, userUuid: ID!): Job!
   updateUser(data: UserInputData!): User!
 }
 
@@ -331,6 +335,11 @@ type Query {
     The id of the job
     """
     jobUuid: ID!
+
+    """
+    The id of the user
+    """
+    userUuid: ID!
   ): Job!
   jobs(where: JobInputWhere!): [Job!]!
   me: User!

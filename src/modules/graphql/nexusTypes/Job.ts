@@ -106,6 +106,8 @@ export const Job = objectType({
 
     t.boolean('isDeleted');
 
+    t.list.string('permissions');
+
     t.list.field('events', {
       type: Event,
 
@@ -149,10 +151,7 @@ export const Job = objectType({
       type: Board,
 
       // @ts-ignore
-      resolve: async (parent, _args, { user, dynamo }) => {
-        // @ts-ignore
-        const { relation } = parent;
-
+      resolve: async ({ relation }, _args, { user, dynamo }) => {
         const boardUuid = relation.split('#')[2];
 
         const key = {
@@ -178,9 +177,23 @@ export const Job = objectType({
 
         const { Item } = await dynamo.getItem(key);
 
-        const item = prepareResponseDate(Item) as IUser;
+        return prepareResponseDate(Item) as IUser;
+      },
+    });
 
-        return item;
+    t.field('createdBy', {
+      type: User,
+
+      // @ts-ignore
+      resolve: async ({ createdBy }, _args, { dynamo }) => {
+        const key = {
+          id: `USER#${createdBy}`,
+          relation: 'USER',
+        };
+
+        const { Item } = await dynamo.getItem(key);
+
+        return prepareResponseDate(Item) as IUser;
       },
     });
   },

@@ -118,6 +118,7 @@ export interface NexusGenInputs {
     // input type
     boardUuid: string; // ID!
     isDeleted?: boolean | null; // Boolean
+    userUuid: string; // ID!
   };
   UserInputData: {
     // input type
@@ -179,11 +180,12 @@ export interface NexusGenRootTypes {
     id: string; // ID!
     interestLevel?: NexusGenEnums['InterestLevel'] | null; // InterestLevel
     isDeleted: boolean; // Boolean!
-    isOwner: boolean; // Boolean!
+    isOwner?: boolean | null; // Boolean
     location?: string | null; // String
     locationCoordinates?: any | null; // JSON
     locationMain?: string | null; // String
     locationSecondary?: string | null; // String
+    permissions: string[]; // [String!]!
     relation: string; // ID!
     title: string; // String!
     updatedAt?: any | null; // DateTime
@@ -235,6 +237,7 @@ export interface NexusGenRootTypes {
     jobDescription?: string | null; // String
     jobTitle?: string | null; // String
     jobUrl?: string | null; // String
+    permissions: string[]; // [String!]!
     rate?: string | null; // String
     referralFee?: string | null; // String
     relation: string; // ID!
@@ -315,11 +318,12 @@ export interface NexusGenFieldTypes {
     id: string; // ID!
     interestLevel: NexusGenEnums['InterestLevel'] | null; // InterestLevel
     isDeleted: boolean; // Boolean!
-    isOwner: boolean; // Boolean!
+    isOwner: boolean | null; // Boolean
     location: string | null; // String
     locationCoordinates: any | null; // JSON
     locationMain: string | null; // String
     locationSecondary: string | null; // String
+    permissions: string[]; // [String!]!
     relation: string; // ID!
     title: string; // String!
     updatedAt: any | null; // DateTime
@@ -365,6 +369,7 @@ export interface NexusGenFieldTypes {
     companyLocationSecondary: string | null; // String
     companyWebsite: string | null; // String
     createdAt: any; // DateTime!
+    createdBy: NexusGenRootTypes['User']; // User!
     duration: string | null; // String
     employmentType: NexusGenEnums['EmploymentType'] | null; // EmploymentType
     events: NexusGenRootTypes['Event'][] | null; // [Event!]
@@ -375,6 +380,7 @@ export interface NexusGenFieldTypes {
     jobDescription: string | null; // String
     jobTitle: string | null; // String
     jobUrl: string | null; // String
+    permissions: string[]; // [String!]!
     rate: string | null; // String
     referralFee: string | null; // String
     relation: string; // ID!
@@ -460,6 +466,7 @@ export interface NexusGenArgTypes {
       // args
       boardUuid: string; // ID!
       data: NexusGenInputs['JobInputData']; // JobInputData!
+      userUuid: string; // ID!
     };
     multipleUpload: {
       // args
@@ -500,6 +507,7 @@ export interface NexusGenArgTypes {
       boardUuid: string; // ID!
       data: NexusGenInputs['JobInputData']; // JobInputData!
       jobUuid: string; // ID!
+      userUuid: string; // ID!
     };
     updateUser: {
       // args
@@ -529,6 +537,7 @@ export interface NexusGenArgTypes {
       // args
       boardUuid: string; // ID!
       jobUuid: string; // ID!
+      userUuid: string; // ID!
     };
     jobs: {
       // args

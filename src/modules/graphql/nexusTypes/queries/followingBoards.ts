@@ -32,6 +32,7 @@ export const followingBoards: QueryFieldType<'followingBoards'> = {
     }
 
     const properties = Object.keys(followingBoardProperties);
+    const permissions = ['VIEW', 'UNFOLLOW', 'ADD_JOB'];
 
     const params = {
       KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
@@ -45,17 +46,19 @@ export const followingBoards: QueryFieldType<'followingBoards'> = {
       },
       ProjectionExpression: properties.map((property) => `#${property}`),
     };
-    console.log('params', params);
 
     let { Items: items }: { Items: IFollowingBoard[] } = await dynamo.query(params);
-    console.log('items', items);
+
     items = items.map((item) => prepareResponseDate(item)) as IFollowingBoard[];
     items = items.filter((item) => item.isDeleted === false);
 
     let results = (await Promise.all(
-      items.map((item) => getBoard(dynamo, `USER#${item.uuid}`, `BOARD#${item.boardUuid}`)),
+      items.map((item) => getBoard(dynamo, `USER#${item.userUuid}`, `BOARD#${item.boardUuid}`)),
     )) as IBoard[];
+
     results.filter((result) => result.isDeleted === false);
+
+    results = results.map((item) => ({ ...item, permissions })) as IBoard[];
 
     return results;
   },
