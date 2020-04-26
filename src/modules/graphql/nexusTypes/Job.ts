@@ -39,6 +39,7 @@ export const jobProperties = {
   relation: 'key',
   uuid: 'string',
   createdAt: 'datetime',
+  createdBy: 'string',
   updatedAt: 'datetime',
 };
 

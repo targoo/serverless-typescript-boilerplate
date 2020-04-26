@@ -48,14 +48,14 @@ export const jobs: QueryFieldType<'jobs'> = {
         ProjectionExpression: properties.map((property) => `#${property}`),
       };
 
-      let { Items: items } = await dynamo.query(params);
+      let { Items: jobs } = await dynamo.query(params);
 
-      items = items
+      jobs = jobs
         .map((item) => prepareResponseDate(item))
         .map((item) => ({ ...item, permissions }))
         .filter((item) => item.isDeleted === isDeleted || false) as IJob[];
 
-      return items;
+      return jobs;
     } else {
       const permissions = ['VIEW', 'EDIT', 'ADD_EVENT'];
       const params = {
