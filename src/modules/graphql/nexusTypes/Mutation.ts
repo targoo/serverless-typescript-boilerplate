@@ -15,6 +15,8 @@ import {
   passwordlessSignIn,
   signInConfirm,
   sendEmail,
+  inviteUserOnBoard,
+  inviteUserOnJob,
   unfollowBoard,
   logout,
 } from './mutations';
@@ -28,13 +30,10 @@ export const Mutation = objectType({
     // @ts-ignore
     t.field('passwordlessSignIn', passwordlessSignIn);
 
-    // @ts-ignore
     t.field('createBoard', createBoard);
 
-    // @ts-ignore
     t.field('updateBoard', updateBoard);
 
-    // @ts-ignore
     t.field('archiveBoard', archiveBoard);
 
     // @ts-ignore
@@ -62,7 +61,10 @@ export const Mutation = objectType({
     t.field('archiveBoardFile', archiveBoardFile);
 
     // @ts-ignore
-    t.field('sendEmail', sendEmail);
+    t.field('inviteUserOnBoard', inviteUserOnBoard);
+
+    // @ts-ignore
+    t.field('inviteUserOnJob', inviteUserOnJob);
 
     // @ts-ignore
     t.field('unfollowBoard', unfollowBoard);

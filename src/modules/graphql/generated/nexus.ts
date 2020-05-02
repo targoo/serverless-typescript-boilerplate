@@ -138,7 +138,7 @@ export interface NexusGenEnums {
     | 'PHD'
     | 'SENIOR_BUSINESS_TECH_QUALIFICATION'
     | 'UNIVERSITY_DEGREE';
-  EmailTemplate: 'INVITE_AGENT';
+  EmailTemplate: 'INVITE_BOARD_AGENT' | 'INVITE_JOB_AGENT';
   EmploymentType: 'CONTRACT' | 'PERMANENT';
   EventType: 'FACE2FACE' | 'PHONE_CALL' | 'VIDEO_CALL';
   Feeling: 'ECSTATIC' | 'HAPPY' | 'NORMAL' | 'SAD';
@@ -398,10 +398,11 @@ export interface NexusGenFieldTypes {
     createBoard: NexusGenRootTypes['Board']; // Board!
     createEvent: NexusGenRootTypes['Event']; // Event!
     createJob: NexusGenRootTypes['Job']; // Job!
+    inviteUserOnBoard: boolean; // Boolean!
+    inviteUserOnJob: boolean; // Boolean!
     logout: boolean; // Boolean!
     multipleUpload: NexusGenRootTypes['File'][]; // [File!]!
     passwordlessSignIn: boolean; // Boolean!
-    sendEmail: boolean; // Boolean!
     signInConfirm: NexusGenRootTypes['Autho0User']; // Autho0User!
     singleUpload: NexusGenRootTypes['File']; // File!
     unfollowBoard: boolean; // Boolean!
@@ -468,6 +469,19 @@ export interface NexusGenArgTypes {
       data: NexusGenInputs['JobInputData']; // JobInputData!
       userUuid: string; // ID!
     };
+    inviteUserOnBoard: {
+      // args
+      boardUuid: string; // ID!
+      data: NexusGenInputs['EmailInputData']; // EmailInputData!
+      userUuid: string; // ID!
+    };
+    inviteUserOnJob: {
+      // args
+      boardUuid: string; // ID!
+      data: NexusGenInputs['EmailInputData']; // EmailInputData!
+      jobUuid: string; // ID!
+      userUuid: string; // ID!
+    };
     multipleUpload: {
       // args
       boardUuid?: string | null; // ID
@@ -478,10 +492,6 @@ export interface NexusGenArgTypes {
       email: string; // String!
       redirectUri: string; // String!
       state: string; // String!
-    };
-    sendEmail: {
-      // args
-      data: NexusGenInputs['EmailInputData']; // EmailInputData!
     };
     signInConfirm: {
       // args
@@ -495,7 +505,6 @@ export interface NexusGenArgTypes {
     unfollowBoard: {
       // args
       boardUuid: string; // ID!
-      isDeleted?: boolean | null; // Boolean
     };
     updateBoard: {
       // args

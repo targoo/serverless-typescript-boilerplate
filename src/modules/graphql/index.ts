@@ -5,8 +5,11 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { verify, decode } from '../../utils/jwt';
 import dynamo from '../../utils/dynamo';
 import s3 from '../../utils/s3';
-import { emailService } from '../../utils/emailService';
+import { emailService, EmailService } from '../../utils/emailService';
 import { IKeyBase } from '../../types/types';
+import { UserUtilityFactory, UserUtils } from './utility/userFactory';
+import { BoardUtilityFactory, BoardUtils } from './utility/boardFactory';
+import { JobUtilityFactory, JobUtils } from './utility/jobFactory';
 
 // Infers the resolve type of a promise
 type ThenArg<T> = T extends Promise<infer U> ? U : T;
@@ -16,7 +19,12 @@ export interface ContextParameters {
   context: Context;
 }
 
-interface GraphQLContext extends ContextParameters {
+export interface GraphQLContext extends ContextParameters {
+  utils: {
+    userfactory: UserUtils;
+    boardfactory: BoardUtils;
+    jobfactory: JobUtils;
+  };
   dynamo: {
     getItem: (key: IKeyBase, tableName?: string) => ReturnType<typeof dynamo.getItem>;
     saveItem: any;
@@ -29,7 +37,7 @@ interface GraphQLContext extends ContextParameters {
     query: any;
   };
   s3: any;
-  emailService: any;
+  emailService: EmailService;
   user: {
     sub: string;
     uuid: string;
@@ -65,6 +73,11 @@ export const getContext = async ({ event, context }: ContextParameters): Promise
   logger.debug(JSON.stringify(user));
 
   return {
+    utils: {
+      userfactory: UserUtilityFactory({ dynamo }),
+      boardfactory: BoardUtilityFactory({ dynamo }),
+      jobfactory: JobUtilityFactory({ dynamo }),
+    },
     event,
     context,
     dynamo,

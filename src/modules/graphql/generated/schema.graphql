@@ -113,7 +113,8 @@ input EmailInputData {
 }
 
 enum EmailTemplate {
-  INVITE_AGENT
+  INVITE_BOARD_AGENT
+  INVITE_JOB_AGENT
 }
 
 enum EmploymentType {
@@ -298,13 +299,14 @@ type Mutation {
   createBoard(data: BoardInputData!): Board!
   createEvent(boardUuid: ID!, data: EventInputData!, jobUuid: ID!): Event!
   createJob(boardUuid: ID!, data: JobInputData!, userUuid: ID!): Job!
+  inviteUserOnBoard(boardUuid: ID!, data: EmailInputData!, userUuid: ID!): Boolean!
+  inviteUserOnJob(boardUuid: ID!, data: EmailInputData!, jobUuid: ID!, userUuid: ID!): Boolean!
   logout: Boolean!
   multipleUpload(boardUuid: ID, files: [Upload!]!): [File!]!
   passwordlessSignIn(email: String!, redirectUri: String!, state: String!): Boolean!
-  sendEmail(data: EmailInputData!): Boolean!
   signInConfirm(accessToken: String!, state: String!): Autho0User!
   singleUpload(file: Upload!): File!
-  unfollowBoard(boardUuid: ID!, isDeleted: Boolean): Boolean!
+  unfollowBoard(boardUuid: ID!): Boolean!
   updateBoard(boardUuid: ID!, data: BoardInputData!): Board!
   updateJob(boardUuid: ID!, data: JobInputData!, jobUuid: ID!, userUuid: ID!): Job!
   updateUser(data: UserInputData!): User!

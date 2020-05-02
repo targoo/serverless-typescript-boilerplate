@@ -12,5 +12,7 @@ export { updateUser } from './updateUser';
 export { passwordlessSignIn } from './passwordlessSignIn';
 export { signInConfirm } from './signInConfirm';
 export { sendEmail } from './sendEmail';
+export { inviteUserOnBoard } from './inviteUserOnBoard';
+export { inviteUserOnJob } from './inviteUserOnJob';
 export { unfollowBoard } from './unfollowBoard';
 export { logout } from './logout';

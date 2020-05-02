@@ -2,10 +2,7 @@ import { arg } from '@nexus/schema';
 
 import { QueryFieldType } from '../../types';
 import { BoardInputWhere, BoardInputSort } from '../args';
-import { Board, boardProperties } from '../Board';
-import { IBoard } from '../../../../types/types';
-import logger from '../../../../utils/logger';
-import { prepareResponseDate } from '../utils/form';
+import { Board } from '../Board';
 
 export const boards: QueryFieldType<'boards'> = {
   type: Board,
@@ -19,42 +16,27 @@ export const boards: QueryFieldType<'boards'> = {
     }),
   },
 
-  // @ts-ignore
-  resolve: async (_parent, args, { user, dynamo }) => {
+  resolve: async (_parent, args, { user, utils: { boardfactory } }) => {
     if (!user) {
       throw new Error('Not authorized to list the boards');
     }
 
-    const properties = Object.keys(boardProperties);
     const permissions = ['VIEW', 'EDIT', 'ARCHIVE', 'ADD_JOB', 'INVITE'];
 
-    const params = {
-      KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
-      ExpressionAttributeNames: properties.reduce((acc, cur) => {
-        acc[`#${cur}`] = cur;
-        return acc;
-      }, {}),
-      ExpressionAttributeValues: {
-        ':userUUID': `USER#${user.uuid}`,
-        ':relation': 'BOARD#',
-      },
-      ProjectionExpression: properties.map((property) => `#${property}`),
-    };
-    logger.debug(JSON.stringify(params));
+    // Get boards
+    let boards = await boardfactory.list(user.uuid);
 
-    let { Items: items }: { Items: IBoard[] } = await dynamo.query(params);
-    logger.debug(`items: ${JSON.stringify(items)}`);
+    // Add permissions
+    boards = boards.map((item) => ({ ...item, permissions }));
 
-    items = items.map((item) => prepareResponseDate(item)) as IBoard[];
-
-    items = items.map((item) => ({ ...item, permissions })) as IBoard[];
-
+    // Filter
     if (args.where && args.where.isDeleted !== undefined) {
-      items = items.filter((item) => item.isDeleted === args.where.isDeleted);
+      boards = boards.filter((item) => item.isDeleted === args.where.isDeleted);
     }
 
+    // Sort
     if (args.sort) {
-      items.sort((a, b) => {
+      boards.sort((a, b) => {
         const aProp = a[args.sort.field];
         const bProp = b[args.sort.field];
         let comparison = 0;
@@ -67,6 +49,6 @@ export const boards: QueryFieldType<'boards'> = {
       });
     }
 
-    return items;
+    return boards;
   },
 };

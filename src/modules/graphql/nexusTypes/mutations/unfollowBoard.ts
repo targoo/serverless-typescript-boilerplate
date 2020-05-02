@@ -1,6 +1,5 @@
-import { idArg, booleanArg } from '@nexus/schema';
+import { idArg } from '@nexus/schema';
 
-import { IKeyBase } from '../../../../types/types';
 import logger from '../../../../utils/logger';
 import { MutationFieldType } from '../../types';
 
@@ -11,33 +10,19 @@ export const unfollowBoard: MutationFieldType<'unfollowBoard'> = {
     boardUuid: idArg({
       required: true,
     }),
-    isDeleted: booleanArg(),
   },
 
-  resolve: async (_parent, { boardUuid, isDeleted = true }, { user, dynamo }) => {
+  resolve: async (_parent, { boardUuid }, { user, utils: { boardfactory } }) => {
     if (!user) {
-      throw new Error('Not authorized to archive the board');
+      logger.error('Not authorized to unfollow the board');
+      throw new Error('Not authorized to unfollow the board');
     }
 
-    const key: IKeyBase = {
-      id: `USER#${user.uuid}`,
-      relation: `FOLLOWING_BOARD#${boardUuid}`,
-    };
-
-    const params = {
-      UpdateExpression: 'set #isDeleted = :isDeleted, #updatedAt = :updatedAt',
-      ExpressionAttributeNames: { '#isDeleted': 'isDeleted', '#updatedAt': 'updatedAt' },
-      ExpressionAttributeValues: {
-        ':isDeleted': JSON.stringify({ format: 'boolean', value: isDeleted }),
-        ':updatedAt': JSON.stringify({ format: 'date', value: new Date().toISOString() }),
-      },
-    };
-
     try {
-      await dynamo.updateItem(params, key);
+      await boardfactory.unfollow(boardUuid, user.uuid);
     } catch (error) {
       logger.error(error);
-      throw new Error('Could not un-follow the board');
+      return false;
     }
 
     return true;

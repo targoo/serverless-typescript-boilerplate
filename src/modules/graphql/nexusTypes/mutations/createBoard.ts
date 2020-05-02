@@ -3,10 +3,8 @@ import { arg } from '@nexus/schema';
 import { MutationFieldType } from '../../types';
 import { BoardInputData } from '../args';
 import { Board, boardFormProperties } from '../Board';
-import { IBoard } from '../../../../types/types';
-import id from '../../../../utils/id';
 import logger from '../../../../utils/logger';
-import { prepareFormInput, prepareResponseDate } from '../utils/form';
+import { prepareFormInput } from '../utils/form';
 
 export const createBoard: MutationFieldType<'createBoard'> = {
   type: Board,
@@ -18,28 +16,14 @@ export const createBoard: MutationFieldType<'createBoard'> = {
     }),
   },
 
-  // @ts-ignore
-  resolve: async (_parent, { data }, { user, dynamo }) => {
+  resolve: async (_parent, { data }, { user, utils: { boardfactory } }) => {
     if (!user) {
+      logger.error('Not authorized to create a new board');
       throw new Error('Not authorized to create a new board');
     }
 
-    const uuid = id();
-
-    const board = ({
+    return await boardfactory.create(user.uuid, {
       ...prepareFormInput(data, boardFormProperties),
-      id: `USER#${user.uuid}`,
-      relation: `BOARD#${uuid}`,
-      uuid: JSON.stringify({ format: 'string', value: uuid }),
-      isDeleted: JSON.stringify({ format: 'boolean', value: false }),
-      createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
-      createdBy: JSON.stringify({ format: 'string', value: user.uuid }),
-    } as unknown) as IBoard;
-
-    await dynamo.saveItem(board);
-
-    const response = prepareResponseDate(board) as IBoard;
-
-    return response;
+    });
   },
 };

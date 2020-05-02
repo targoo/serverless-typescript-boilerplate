@@ -22,26 +22,15 @@ export const board: QueryFieldType<'board'> = {
 
   args: boardArgs,
 
-  // @ts-ignore
-  resolve: async (_parent, { userUuid, boardUuid }, { user, dynamo }) => {
+  resolve: async (_parent, { userUuid, boardUuid }, { user, dynamo, utils: { boardfactory } }) => {
     if (!user) {
       throw new Error('Not authorized to get the board');
     }
 
-    // Check permissions
+    // Check permissions.
     if (userUuid !== user.uuid) {
-      const followingKey = {
-        id: `USER#${user.uuid}`,
-        relation: `FOLLOWING_BOARD#${boardUuid}`,
-      };
-      const { Item } = await dynamo.getItem(followingKey);
-
-      if (Item) {
-        const followingBoard = prepareResponseDate(Item) as IFollowingBoard;
-        if (followingBoard.isDeleted) {
-          throw new Error('Cannot view this board anymore');
-        }
-      } else {
+      const isFollowing = await boardfactory.isFollowing(boardUuid, user.uuid);
+      if (!isFollowing) {
         throw new Error('Cannot view this board');
       }
     }
@@ -49,18 +38,8 @@ export const board: QueryFieldType<'board'> = {
     const permissions = userUuid !== user.uuid ? ['VIEW', 'UNFOLLOW', 'ADD_JOB'] : ['VIEW', 'EDIT', 'ADD_JOB'];
 
     try {
-      const key = {
-        id: `USER#${userUuid}`,
-        relation: `BOARD#${boardUuid}`,
-      };
-
-      let { Item: item } = await dynamo.getItem(key);
-
-      item = prepareResponseDate(item) as IBoard;
-
-      console.log({ ...item, permissions });
-
-      return { ...item, permissions };
+      let board = await boardfactory.get(userUuid, boardUuid);
+      return { ...board, permissions };
     } catch (error) {
       logger.error(error);
       throw new Error('The board does not exist');

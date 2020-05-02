@@ -2,8 +2,6 @@ import { idArg, booleanArg } from '@nexus/schema';
 
 import { MutationFieldType } from '../../types';
 import { Board } from '../Board';
-import { IBoard, IKeyBase } from '../../../../types/types';
-import { prepareResponseDate } from '../utils/form';
 import logger from '../../../../utils/logger';
 
 export const archiveBoard: MutationFieldType<'archiveBoard'> = {
@@ -16,16 +14,11 @@ export const archiveBoard: MutationFieldType<'archiveBoard'> = {
     isDeleted: booleanArg(),
   },
 
-  // @ts-ignore
-  resolve: async (_parent, { boardUuid, isDeleted = true }, { user, dynamo }) => {
+  resolve: async (_parent, { boardUuid, isDeleted = true }, { user, utils: { boardfactory } }) => {
     if (!user) {
+      logger.error('Not authorized to archive the board');
       throw new Error('Not authorized to archive the board');
     }
-
-    const key: IKeyBase = {
-      id: `USER#${user.uuid}`,
-      relation: `BOARD#${boardUuid}`,
-    };
 
     const params = {
       UpdateExpression: 'set #isDeleted = :isDeleted, #updatedAt = :updatedAt',
@@ -37,11 +30,8 @@ export const archiveBoard: MutationFieldType<'archiveBoard'> = {
     };
 
     try {
-      await dynamo.updateItem(params, key);
-      const { Item } = await dynamo.getItem(key);
-
-      const item = prepareResponseDate(Item) as IBoard;
-      return item;
+      await boardfactory.update(user.uuid, boardUuid, params);
+      return boardfactory.get(user.uuid, boardUuid);
     } catch (error) {
       logger.error(error);
       throw new Error('Could not archive the board');

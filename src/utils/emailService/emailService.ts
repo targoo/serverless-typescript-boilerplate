@@ -1,8 +1,10 @@
 import { SES, AWSError } from 'aws-sdk';
 import { SendEmailRequest, SendEmailResponse } from 'aws-sdk/clients/ses';
 
-import { TAddresses, ISendTemplatedEmailOptions } from './emailService.types';
+import { TAddresses, ISendTemplatedEmailOptions, EmailService } from './emailService.types';
 import logger from '../logger';
+import { inviteUserOnBoard } from './templates/inviteUserOnBoard';
+import { inviteUserOnJob } from './templates/inviteUserOnJob';
 
 const localConfig = {
   region: process.env.AWS_REGION,
@@ -59,9 +61,21 @@ function sendEmail(
   return sesClient.sendEmail(sesParams).promise();
 }
 
-export const emailService = {
-  sendRawEmail: (to: TAddresses, subject: string, content: string, options?: ISendTemplatedEmailOptions) => {
+export const emailService: EmailService = {
+  sendRawEmail: (to, subject, content, options) => {
     logger.info(`send-raw-email ${to}`);
+    return sendEmail(to, subject, content, options);
+  },
+  sendTemplateEmail: (to, subject, template, data, options) => {
+    let content = '';
+    switch (template) {
+      case 'INVITE_BOARD_AGENT':
+        content = inviteUserOnBoard(data);
+        break;
+      case 'INVITE_JOB_AGENT':
+        content = inviteUserOnJob(data);
+        break;
+    }
     return sendEmail(to, subject, content, options);
   },
 };

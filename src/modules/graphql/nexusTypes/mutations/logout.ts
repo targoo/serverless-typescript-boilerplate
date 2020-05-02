@@ -1,21 +1,14 @@
-import { IUser } from '../../../../types/types';
 import logger from '../../../../utils/logger';
 import { MutationFieldType } from '../../types';
 
 export const logout: MutationFieldType<'logout'> = {
   type: 'Boolean',
 
-  // @ts-ignore
-  resolve: async (_parent, _arg, { user, dynamo }) => {
+  resolve: async (_parent, _arg, { user, utils: { userfactory } }) => {
     try {
-      const key = {
-        id: `USER#${user.uuid}`,
-        relation: `USER`,
-      };
+      const userExist = await userfactory.get(user.uuid);
 
-      let { Item } = await dynamo.getItem(key);
-
-      if (Item) {
+      if (userExist) {
         const params = {
           UpdateExpression: 'set #state = :state, #updated = :updated',
           ExpressionAttributeNames: {
@@ -27,7 +20,7 @@ export const logout: MutationFieldType<'logout'> = {
             ':updated': JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
           },
         };
-        await dynamo.updateItem(params, key);
+        await userfactory.update(user.uuid, params);
         return true;
       } else {
         logger.error('Could not find the user');

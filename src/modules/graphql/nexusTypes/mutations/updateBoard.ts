@@ -2,9 +2,8 @@ import { arg, idArg } from '@nexus/schema';
 
 import { BoardInputData } from '../args';
 import { Board, boardFormProperties } from '../Board';
-import { IBoard, IKeyBase } from '../../../../types/types';
 import logger from '../../../../utils/logger';
-import { prepareFormInput, prepareResponseDate } from '../utils/form';
+import { prepareFormInput } from '../utils/form';
 import { MutationFieldType } from '../../types';
 
 export const updateBoard: MutationFieldType<'updateBoard'> = {
@@ -20,16 +19,11 @@ export const updateBoard: MutationFieldType<'updateBoard'> = {
     }),
   },
 
-  // @ts-ignore
-  resolve: async (_parent, { boardUuid, data }, { user, dynamo }) => {
+  resolve: async (_parent, { boardUuid, data }, { user, dynamo, utils: { boardfactory } }) => {
     if (!user) {
+      logger.error('Not authorized to update the board');
       throw new Error('Not authorized to update the board');
     }
-
-    const key: IKeyBase = {
-      id: `USER#${user.uuid}`,
-      relation: `BOARD#${boardUuid}`,
-    };
 
     const prepData = prepareFormInput(data, boardFormProperties);
 
@@ -59,13 +53,8 @@ export const updateBoard: MutationFieldType<'updateBoard'> = {
     };
 
     try {
-      await dynamo.updateItem(params, key);
-
-      let { Item: board } = await dynamo.getItem(key);
-
-      board = prepareResponseDate(board) as IBoard;
-
-      return board;
+      await boardfactory.update(user.uuid, boardUuid, params);
+      return boardfactory.get(user.uuid, boardUuid);
     } catch (error) {
       logger.error(error);
       throw new Error('Could not update the board');

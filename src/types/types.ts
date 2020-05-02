@@ -66,7 +66,7 @@ export interface IKeyBase {
 export interface IEntityBase extends IKeyBase {
   createdAt: Date;
   updatedAt?: Date;
-  createdBy: string;
+  createdBy?: string;
   isDeleted: boolean;
   readonly uuid: string;
 }
