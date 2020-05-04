@@ -8,14 +8,16 @@ import id from '../../../utils/id';
 import { NexusGenRootTypes } from '../generated/nexus';
 
 export interface BoardUtils {
+  key: (userUuid: string, boardUuid: string) => IKeyBase;
   create: (userUuid: string, board: Partial<NexusGenRootTypes['Board']>) => Promise<NexusGenRootTypes['Board']>;
   get: (userUuid: string, boardUuid: string) => Promise<NexusGenRootTypes['Board'] | null>;
   list: (userUuid: string) => Promise<NexusGenRootTypes['Board'][]>;
+  followingList: (userUuid: string) => Promise<NexusGenRootTypes['Board'][]>;
   update: (
     userUuid: string,
     boardUuid: string,
     params: Omit<DocumentClient.UpdateItemInput, 'Key' | 'TableName'>,
-  ) => Promise<void>;
+  ) => Promise<NexusGenRootTypes['Board']>;
   isFollowing: (boardUuid: string, followingUserUuid: string) => Promise<boolean>;
   follow: (userUuid: string, boardUuid: string, followingUserUuid: string) => Promise<void>;
   unfollow: (boardUuid: string, followingUserUuid: string) => Promise<void>;
@@ -24,11 +26,14 @@ export interface BoardUtils {
 export type UtilityFactory<UtilityShape> = (context: Partial<GraphQLContext>) => UtilityShape;
 
 export const BoardUtilityFactory: UtilityFactory<BoardUtils> = ({ dynamo }) => ({
-  /**
-   *
-   * @param userUuid UUID of the owner of the board
-   * @param boardUuid UUID of the board
-   */
+  key(userUuid, boardUuid) {
+    const key: IKeyBase = {
+      id: `USER#${userUuid}`,
+      relation: `BOARD#${boardUuid}`,
+    };
+    return key;
+  },
+
   async create(userUuid, board) {
     const uuid = id();
 
@@ -45,17 +50,8 @@ export const BoardUtilityFactory: UtilityFactory<BoardUtils> = ({ dynamo }) => (
     return this.get(uuid);
   },
 
-  /**
-   *
-   * @param userUuid UUID of the owner of the board
-   * @param boardUuid UUID of the board
-   */
   async get(userUuid, boardUuid) {
-    const key: IKeyBase = {
-      id: `USER#${userUuid}`,
-      relation: `BOARD#${boardUuid}`,
-    };
-    const { Item } = await dynamo.getItem(key);
+    const { Item } = await dynamo.getItem(this.key(userUuid, boardUuid));
     if (Item) {
       return prepareResponseDate(Item) as NexusGenRootTypes['Board'];
     } else {
@@ -63,10 +59,6 @@ export const BoardUtilityFactory: UtilityFactory<BoardUtils> = ({ dynamo }) => (
     }
   },
 
-  /**
-   *
-   * @param userUuid UUID of the owner of the board
-   */
   async list(userUuid) {
     const properties = Object.keys(boardProperties);
 
@@ -88,12 +80,30 @@ export const BoardUtilityFactory: UtilityFactory<BoardUtils> = ({ dynamo }) => (
     return boards.map((item) => prepareResponseDate(item)) as NexusGenRootTypes['Board'][];
   },
 
-  /**
-   *
-   * @param userUuid
-   * @param boardUuid
-   * @param params
-   */
+  async followingList(userUuid) {
+    const properties = Object.keys(boardProperties);
+
+    const params = {
+      KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
+      ExpressionAttributeNames: properties.reduce((acc, cur) => {
+        acc[`#${cur}`] = cur;
+        return acc;
+      }, {}),
+      ExpressionAttributeValues: {
+        ':userUUID': `USER#${userUuid}`,
+        ':relation': 'FOLLOWING_BOARD#',
+      },
+      ProjectionExpression: properties.map((property) => `#${property}`),
+    };
+
+    let { Items } = await dynamo.query(params);
+    const followingBoards = Items.map((item) => prepareResponseDate(item)).filter(
+      (item) => item.isDeleted === false,
+    ) as IFollowingBoard[];
+
+    return await Promise.all(followingBoards.map(({ userUuid, boardUuid }) => this.get(userUuid, boardUuid)));
+  },
+
   async update(userUuid, boardUuid, params) {
     const key: IKeyBase = {
       id: `USER#${userUuid}`,
@@ -101,13 +111,10 @@ export const BoardUtilityFactory: UtilityFactory<BoardUtils> = ({ dynamo }) => (
     };
 
     await dynamo.updateItem(params, key);
+
+    return this.get(userUuid, boardUuid);
   },
 
-  /**
-   *
-   * @param boardUuid UUID of the board
-   * @param userUuid UUID of the follower of the board
-   */
   async isFollowing(boardUuid, followingUserUuid) {
     const key: IKeyBase = {
       id: `USER#${followingUserUuid}`,
@@ -123,12 +130,6 @@ export const BoardUtilityFactory: UtilityFactory<BoardUtils> = ({ dynamo }) => (
     }
   },
 
-  /**
-   *
-   * @param userUuid UUID of the owner of the board
-   * @param boardUuid UUID of the board
-   * @param followingUserUuid UUID of the user who want to follow the board
-   */
   async follow(userUuid, boardUuid, followingUserUuid) {
     const key: IKeyBase = {
       id: `USER#${followingUserUuid}`,
@@ -162,11 +163,6 @@ export const BoardUtilityFactory: UtilityFactory<BoardUtils> = ({ dynamo }) => (
     }
   },
 
-  /**
-   *
-   * @param boardUuid UUID of the board
-   * @param followingUserUuid UUID of the user who want to follow the board
-   */
   async unfollow(boardUuid, followingUserUuid) {
     const key: IKeyBase = {
       id: `USER#${followingUserUuid}`,

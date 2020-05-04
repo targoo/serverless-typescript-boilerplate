@@ -4,9 +4,10 @@ import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 import { IUser } from '../../../types/types';
 import { prepareResponseDate } from '../nexusTypes/utils/form';
 import { GraphQLContext } from '../index';
+import { NexusGenRootTypes } from '../generated/nexus';
 
 export interface UserUtils {
-  get: (userUuid: string) => Promise<IUser | null>;
+  get: (userUuid: string) => Promise<NexusGenRootTypes['User'] | null>;
   update: (userUuid: string, params: Omit<DocumentClient.UpdateItemInput, 'Key' | 'TableName'>) => Promise<void>;
   findOrCreateByEmail: (email: string) => Promise<IUser>;
 }

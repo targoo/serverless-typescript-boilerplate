@@ -1,8 +1,8 @@
 import { arg } from '@nexus/schema';
 
 import { QueryFieldType } from '../../types';
-import { BoardInputWhere, BoardInputSort } from '../args';
-import { Board, followingBoardProperties, boardProperties } from '../Board';
+import { BoardInputSort } from '../args';
+import { Board, followingBoardProperties } from '../Board';
 import { IFollowingBoard, IBoard } from '../../../../types/types';
 import logger from '../../../../utils/logger';
 import { prepareResponseDate } from '../utils/form';
@@ -25,41 +25,17 @@ export const followingBoards: QueryFieldType<'followingBoards'> = {
     }),
   },
 
-  // @ts-ignore
-  resolve: async (_parent, _args, { user, dynamo }) => {
+  resolve: async (_parent, _args, { user, utils: { boardfactory } }) => {
     if (!user) {
+      logger.error('Not authorized to list the boards');
       throw new Error('Not authorized to list the boards');
     }
 
-    const properties = Object.keys(followingBoardProperties);
+    let boards = await boardfactory.followingList(user.uuid);
+
+    // Permissions
     const permissions = ['VIEW', 'UNFOLLOW', 'ADD_JOB'];
 
-    const params = {
-      KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
-      ExpressionAttributeNames: properties.reduce((acc, cur) => {
-        acc[`#${cur}`] = cur;
-        return acc;
-      }, {}),
-      ExpressionAttributeValues: {
-        ':userUUID': `USER#${user.uuid}`,
-        ':relation': 'FOLLOWING_BOARD#',
-      },
-      ProjectionExpression: properties.map((property) => `#${property}`),
-    };
-
-    let { Items: items }: { Items: IFollowingBoard[] } = await dynamo.query(params);
-
-    items = items.map((item) => prepareResponseDate(item)) as IFollowingBoard[];
-    items = items.filter((item) => item.isDeleted === false);
-
-    let results = (await Promise.all(
-      items.map((item) => getBoard(dynamo, `USER#${item.userUuid}`, `BOARD#${item.boardUuid}`)),
-    )) as IBoard[];
-
-    results.filter((result) => result.isDeleted === false);
-
-    results = results.map((item) => ({ ...item, permissions })) as IBoard[];
-
-    return results;
+    return boards.filter((result) => result.isDeleted === false).map((item) => ({ ...item, permissions }));
   },
 };

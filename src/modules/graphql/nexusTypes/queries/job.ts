@@ -3,8 +3,6 @@ import { idArg } from '@nexus/schema';
 import { QueryFieldType } from '../../types';
 import { Job } from '../Job';
 import logger from '../../../../utils/logger';
-import { prepareResponseDate } from '../utils/form';
-import { IJob } from '../../../../types/types';
 
 const jobArgs = {
   userUuid: idArg({
@@ -26,23 +24,28 @@ export const job: QueryFieldType<'job'> = {
 
   args: jobArgs,
 
-  // @ts-ignore
-  resolve: async (_parent, { userUuid, boardUuid, jobUuid }, { user, dynamo }) => {
+  resolve: async (_parent, { userUuid, boardUuid, jobUuid }, { user, utils: { jobfactory } }) => {
     if (!user) {
-      throw new Error('Not authorized to get the board');
+      logger.error('Not authorized to get the job');
+      throw new Error('Not authorized to get the job');
     }
 
-    const key = {
-      id: `USER#${userUuid}`,
-      relation: `JOB#BOARD#${boardUuid}#${jobUuid}`,
-    };
+    // Check permissions.
+    if (userUuid !== user.uuid) {
+      const isFollowing = await jobfactory.isFollowing(boardUuid, jobUuid, user.uuid);
+      if (!isFollowing) {
+        throw new Error('Cannot view this job');
+      }
+    }
 
-    const { Item } = await dynamo.getItem(key);
-    logger.debug(`item: ${JSON.stringify(Item)}`);
-
-    const item = prepareResponseDate(Item) as IJob;
-    logger.debug(`item: ${JSON.stringify(item)}`);
-
-    return item;
+    const permissions =
+      userUuid === user.uuid ? ['VIEW', 'EDIT', 'ARCHIVE', 'INVITE', 'ADD_EVENT'] : ['VIEW', 'EDIT', 'ADD_EVENT'];
+    try {
+      const job = await jobfactory.get(userUuid, boardUuid, jobUuid);
+      return { ...job, permissions };
+    } catch (error) {
+      logger.error(error);
+      throw new Error('The job does not exist');
+    }
   },
 };

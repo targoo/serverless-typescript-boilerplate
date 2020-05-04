@@ -2,9 +2,7 @@ import { idArg } from '@nexus/schema';
 
 import { QueryFieldType } from '../../types';
 import { Board } from '../Board';
-import { IBoard, IFollowingJob, IFollowingBoard } from '../../../../types/types';
 import logger from '../../../../utils/logger';
-import { prepareResponseDate } from '../utils/form';
 
 const boardArgs = {
   userUuid: idArg({
@@ -24,6 +22,7 @@ export const board: QueryFieldType<'board'> = {
 
   resolve: async (_parent, { userUuid, boardUuid }, { user, dynamo, utils: { boardfactory } }) => {
     if (!user) {
+      logger.error('Not authorized to get the board');
       throw new Error('Not authorized to get the board');
     }
 
@@ -38,7 +37,7 @@ export const board: QueryFieldType<'board'> = {
     const permissions = userUuid !== user.uuid ? ['VIEW', 'UNFOLLOW', 'ADD_JOB'] : ['VIEW', 'EDIT', 'ADD_JOB'];
 
     try {
-      let board = await boardfactory.get(userUuid, boardUuid);
+      const board = await boardfactory.get(userUuid, boardUuid);
       return { ...board, permissions };
     } catch (error) {
       logger.error(error);

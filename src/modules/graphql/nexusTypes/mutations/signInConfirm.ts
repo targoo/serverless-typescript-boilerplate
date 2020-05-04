@@ -1,12 +1,11 @@
 import { stringArg } from '@nexus/schema';
 import axios from 'axios';
-import * as crypto from 'crypto';
 
 import { MutationFieldType } from '../../types';
 import { Autho0User } from '../Autho0User';
 import { sign } from '../../../../utils/jwt';
 import logger from '../../../../utils/logger';
-import { IUser, IAuth } from '../../../../types/types';
+import { IAuth } from '../../../../types/types';
 
 export const signInConfirm: MutationFieldType<'signInConfirm'> = {
   type: Autho0User,

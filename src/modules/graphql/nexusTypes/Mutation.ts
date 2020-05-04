@@ -36,13 +36,10 @@ export const Mutation = objectType({
 
     t.field('archiveBoard', archiveBoard);
 
-    // @ts-ignore
     t.field('createJob', createJob);
 
-    // @ts-ignore
     t.field('archiveJob', archiveJob);
 
-    // @ts-ignore
     t.field('updateJob', updateJob);
 
     // @ts-ignore
@@ -66,10 +63,8 @@ export const Mutation = objectType({
     // @ts-ignore
     t.field('inviteUserOnJob', inviteUserOnJob);
 
-    // @ts-ignore
     t.field('unfollowBoard', unfollowBoard);
 
-    // @ts-ignore
     t.field('logout', logout);
   },
 });

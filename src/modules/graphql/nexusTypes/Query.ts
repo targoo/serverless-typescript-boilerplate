@@ -18,10 +18,8 @@ const Query = queryType({
     // @ts-ignore
     t.list.field('boards', boards);
 
-    // @ts-ignore
     t.list.field('followingBoards', followingBoards);
 
-    // @ts-ignore
     t.field('job', job);
 
     // @ts-ignore

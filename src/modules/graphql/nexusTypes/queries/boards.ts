@@ -3,6 +3,7 @@ import { arg } from '@nexus/schema';
 import { QueryFieldType } from '../../types';
 import { BoardInputWhere, BoardInputSort } from '../args';
 import { Board } from '../Board';
+import logger from '../../../../utils/logger';
 
 export const boards: QueryFieldType<'boards'> = {
   type: Board,
@@ -18,6 +19,7 @@ export const boards: QueryFieldType<'boards'> = {
 
   resolve: async (_parent, args, { user, utils: { boardfactory } }) => {
     if (!user) {
+      logger.error('Not authorized to list the boards');
       throw new Error('Not authorized to list the boards');
     }
 
