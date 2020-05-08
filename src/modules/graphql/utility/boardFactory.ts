@@ -1,8 +1,8 @@
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 
-import { boardProperties } from '../nexusTypes/Board';
+import { boardFormProperties, boardProperties } from '../nexusTypes/Board';
 import { IFollowingBoard, IKeyBase } from '../../../types/types';
-import { prepareResponseDate } from '../nexusTypes/utils/form';
+import { prepareResponseDate, prepareFormInput } from '../nexusTypes/utils/form';
 import { GraphQLContext } from '../index';
 import id from '../../../utils/id';
 import { NexusGenRootTypes } from '../generated/nexus';
@@ -16,7 +16,7 @@ export interface BoardUtils {
   update: (
     userUuid: string,
     boardUuid: string,
-    params: Omit<DocumentClient.UpdateItemInput, 'Key' | 'TableName'>,
+    board: Partial<NexusGenRootTypes['Board']>,
   ) => Promise<NexusGenRootTypes['Board']>;
   isFollowing: (boardUuid: string, followingUserUuid: string) => Promise<boolean>;
   follow: (userUuid: string, boardUuid: string, followingUserUuid: string) => Promise<void>;
@@ -104,13 +104,35 @@ export const BoardUtilityFactory: UtilityFactory<BoardUtils> = ({ dynamo }) => (
     return await Promise.all(followingBoards.map(({ userUuid, boardUuid }) => this.get(userUuid, boardUuid)));
   },
 
-  async update(userUuid, boardUuid, params) {
-    const key: IKeyBase = {
-      id: `USER#${userUuid}`,
-      relation: `BOARD#${boardUuid}`,
+  async update(userUuid, boardUuid, board) {
+    const prepData = prepareFormInput(board, boardFormProperties);
+
+    const boardFormPropertiesWithUpdateAt = [...Object.keys(prepData), 'updatedAt'];
+
+    const UpdateExpression = boardFormPropertiesWithUpdateAt.reduce((acc, cur, index) => {
+      acc = index === 0 ? `${acc} #${cur} = :${cur}` : `${acc}, #${cur} = :${cur}`;
+      return acc;
+    }, 'set');
+
+    const ExpressionAttributeNames = boardFormPropertiesWithUpdateAt.reduce((acc, cur) => {
+      acc[`#${cur}`] = cur;
+      return acc;
+    }, {});
+
+    const ExpressionAttributeValues = boardFormPropertiesWithUpdateAt.reduce((acc, cur) => {
+      acc[`:${cur}`] = prepData[cur] || null;
+      return acc;
+    }, {});
+
+    ExpressionAttributeValues[':updatedAt'] = JSON.stringify({ format: 'date', value: new Date().toISOString() });
+
+    const params = {
+      UpdateExpression,
+      ExpressionAttributeNames,
+      ExpressionAttributeValues,
     };
 
-    await dynamo.updateItem(params, key);
+    await dynamo.updateItem(params, this.key(userUuid, boardUuid));
 
     return this.get(userUuid, boardUuid);
   },

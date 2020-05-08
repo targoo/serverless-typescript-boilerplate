@@ -20,18 +20,12 @@ export const archiveBoard: MutationFieldType<'archiveBoard'> = {
       throw new Error('Not authorized to archive the board');
     }
 
-    const params = {
-      UpdateExpression: 'set #isDeleted = :isDeleted, #updatedAt = :updatedAt',
-      ExpressionAttributeNames: { '#isDeleted': 'isDeleted', '#updatedAt': 'updatedAt' },
-      ExpressionAttributeValues: {
-        ':isDeleted': JSON.stringify({ format: 'boolean', value: isDeleted }),
-        ':updatedAt': JSON.stringify({ format: 'date', value: new Date().toISOString() }),
-      },
+    const data = {
+      isDeleted,
     };
 
     try {
-      await boardfactory.update(user.uuid, boardUuid, params);
-      return boardfactory.get(user.uuid, boardUuid);
+      return await boardfactory.update(user.uuid, boardUuid, data);
     } catch (error) {
       logger.error(error);
       throw new Error('Could not archive the board');

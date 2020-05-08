@@ -119,7 +119,10 @@ enum EmailTemplate {
 
 enum EmploymentType {
   CONTRACT
-  PERMANENT
+  INTERNSHIP
+  PERMANENT_FULL_TIME
+  PERMANENT_PART_TIME
+  TEMPORARY
 }
 
 """
