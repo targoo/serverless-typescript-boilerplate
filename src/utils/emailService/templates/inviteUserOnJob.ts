@@ -30,7 +30,7 @@ export const inviteUserOnJob = ({
     </style>
     <div style="padding: 10px ; line-height: 18px; font-family: 'Lucida Grande',Verdana,Arial,sans-serif; font-size: 12px; color:#1C1C1C; max-width: 800px; margin: 0 auto; text-align: left;">
       <div style="display:block; padding: 20px; width: 100%; background-color: #AAC0AA">
-        <img align="center" alt="JobPod" src="https://jobpod.xyz/logo.svg" style="display: block; padding-bottom: 0; display: inline !important; vertical-align: bottom; width: auto; height: 60px;">
+        <img align="center" alt="JobsBoard" src="https://jobpod.xyz/logo.svg" style="display: block; padding-bottom: 0; display: inline !important; vertical-align: bottom; width: auto; height: 60px;">
       </div>
       <div style="display:block; box-sizing: border-box; width: 100%; padding: 40px 50px; line-height: 30px; font-family: 'Lucida Grande',Verdana,Arial,sans-serif; font-size: 16px; color:#1C1C1C; background-color: #ffffff; border-bottom: 6px solid #F0E0F0">
         <p>Hi,</p>
@@ -51,7 +51,7 @@ export const inviteUserOnJob = ({
           </a>
         </p>
         <p><strong>JobPod</strong> is a smart dashboard for your entire job search.</p>
-        <p>If you have any questions please reply to this email or contact us at <a href="mailto:support@jobpod.xyz">support@jobpod.xyz</a></p>
+        <p>If you have any questions please reply to this email or contact us at <a href="mailto:support@jobsboard.io">support@jobsboard.io</a></p>
         <p>Thanks,<br />JopPod Team</p>
       </div>
     </div>
