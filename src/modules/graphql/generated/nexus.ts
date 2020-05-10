@@ -313,7 +313,7 @@ export interface NexusGenFieldTypes {
     createdAt: any; // DateTime!
     description: string | null; // String
     educationLevel: NexusGenEnums['EducationLevel'] | null; // EducationLevel
-    files: NexusGenRootTypes['File'][] | null; // [File!]
+    files: NexusGenRootTypes['File'][]; // [File!]!
     followers: NexusGenRootTypes['User'][]; // [User!]!
     id: string; // ID!
     interestLevel: NexusGenEnums['InterestLevel'] | null; // InterestLevel

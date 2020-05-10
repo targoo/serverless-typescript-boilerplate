@@ -1,7 +1,6 @@
 import logger from '../../utils/logger';
 import { APIGatewayProxyEvent, Context } from 'aws-lambda';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-
 import { verify, decode } from '../../utils/jwt';
 import dynamo from '../../utils/dynamo';
 import s3 from '../../utils/s3';
@@ -10,6 +9,7 @@ import { IKeyBase } from '../../types/types';
 import { UserUtilityFactory, UserUtils } from './utility/userFactory';
 import { BoardUtilityFactory, BoardUtils } from './utility/boardFactory';
 import { JobUtilityFactory, JobUtils } from './utility/jobFactory';
+import { FileUtilityFactory, FileUtils } from './utility/fileFactory';
 
 // Infers the resolve type of a promise
 type ThenArg<T> = T extends Promise<infer U> ? U : T;
@@ -24,6 +24,7 @@ export interface GraphQLContext extends ContextParameters {
     userfactory: UserUtils;
     boardfactory: BoardUtils;
     jobfactory: JobUtils;
+    filefactory: FileUtils;
   };
   dynamo: {
     getItem: (key: IKeyBase, tableName?: string) => ReturnType<typeof dynamo.getItem>;
@@ -60,23 +61,17 @@ export const getContext = async ({ event, context }: ContextParameters): Promise
   const {
     headers: { Authorization },
   } = event;
-  logger.debug(`Authorization: ${Authorization}`);
 
   const isTokenValid = verify(Authorization);
 
   const user = isTokenValid ? decode(Authorization) : null;
-
-  // Check with the DB is the session is still valid.
-
-  // We should memo by user.
-
-  logger.debug(JSON.stringify(user));
 
   return {
     utils: {
       userfactory: UserUtilityFactory({ dynamo }),
       boardfactory: BoardUtilityFactory({ dynamo }),
       jobfactory: JobUtilityFactory({ dynamo }),
+      filefactory: FileUtilityFactory({ dynamo }),
     },
     event,
     context,

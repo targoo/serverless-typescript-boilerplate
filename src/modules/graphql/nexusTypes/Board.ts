@@ -1,9 +1,6 @@
 import { objectType } from '@nexus/schema';
 
-import logger from '../../../utils/logger';
-import { File, fileProperties } from './File';
-import { IFile, IUser } from '../../../types/types';
-import { prepareResponseDate } from './utils/form';
+import { File } from './File';
 import { EducationLevel, InterestLevel } from './enums';
 import { User } from './User';
 
@@ -92,50 +89,18 @@ export const Board = objectType({
       type: File,
 
       // @ts-ignore
-      resolve: async ({ uuid }, _args, { user, dynamo }) => {
-        const properties = Object.keys(fileProperties);
-
-        const params = {
-          KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
-          ExpressionAttributeNames: properties.reduce((acc, cur) => {
-            acc[`#${cur}`] = cur;
-            return acc;
-          }, {}),
-          ExpressionAttributeValues: {
-            ':userUUID': `USER#${user.uuid}`,
-            ':relation': `FILE#BOARD#${uuid}`,
-          },
-          ProjectionExpression: properties.map((property) => `#${property}`),
-        };
-        logger.debug(JSON.stringify(params));
-
-        let { Items: items }: { Items: IFile[] } = await dynamo.query(params);
-        logger.debug(`items: ${JSON.stringify(items)}`);
-
-        items = items.map((item) => prepareResponseDate(item)) as IFile[];
-        logger.debug(`items: ${JSON.stringify(items)}`);
-
-        items = items.filter((item) => item.isDeleted === false);
-
-        return items;
+      resolve: async ({ id, uuid }, _args, { utils: { filefactory } }) => {
+        const userUuid = id.split('#')[1];
+        return await filefactory.list(userUuid, uuid);
       },
-      nullable: true,
     });
 
     t.field('user', {
       type: User,
 
-      resolve: async ({ id }, _args, { dynamo }) => {
-        const key = {
-          id,
-          relation: 'USER',
-        };
-
-        const { Item } = await dynamo.getItem(key);
-
-        const item = prepareResponseDate(Item) as IUser;
-
-        return item;
+      resolve: async ({ id }, _args, { utils: { userfactory } }) => {
+        const userUuid = id.split('#')[1];
+        return await userfactory.get(userUuid);
       },
     });
 
@@ -146,62 +111,5 @@ export const Board = objectType({
         return await userfactory.boardFollowers(user.uuid, parents.uuid);
       },
     });
-
-    // t.string('locationName', { nullable: true });
-
-    // t.string('locationAddress', { nullable: true });
-
-    // t.string('locationRangekey', { nullable: true });
-
-    // t.string('locationHash', { nullable: true });
-
-    // t.json('locationGeoJson', { nullable: true });
-
-    // t.time('time', { nullable: true });
-
-    // t.date('date', { nullable: true });
-
-    // t.list.field('jobs', {
-    //   type: Job,
-    //   resolve: async ({ uuid }, _args, { uuid, dynamo }) => {
-    //     const params = {
-    //       KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
-    //       ExpressionAttributeNames: {
-    //         '#uuid': 'uuid',
-    //         '#title': 'title',
-    //         '#status': 'status',
-    //         '#createdAt': 'createdAt',
-    //         '#updatedAt': 'updatedAt',
-    //         '#id': 'id',
-    //         '#relation': 'relation',
-    //       },
-    //       ExpressionAttributeValues: {
-    //         ':userUUID': `USER#${uuid}`,
-    //         ':relation': `JOB#BOARD#${uuid}`,
-    //       },
-    //       ProjectionExpression: ['#relation', '#title', '#uuid', '#status', '#createdAt', '#updatedAt', 'isDeleted'],
-    //     };
-    //     logger.debug(JSON.stringify(params));
-
-    //     let { Items: items }: { Items: IJob[] } = await dynamo.query(params);
-
-    //     logger.debug(`items: ${JSON.stringify(items)}`);
-
-    //     items = items.map(item => {
-    //       if (item.createdAt) {
-    //         item.createdAt = new Date(item.createdAt);
-    //       }
-    //       if (item.updatedAt) {
-    //         item.updatedAt = new Date(item.updatedAt);
-    //       }
-    //       return item;
-    //     });
-
-    //     logger.debug(JSON.stringify(items));
-
-    //     return items;
-    //   },
-    //   nullable: true,
-    // });
   },
 });
