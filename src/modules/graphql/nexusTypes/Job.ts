@@ -2,7 +2,7 @@ import { objectType } from '@nexus/schema';
 
 import logger from '../../../utils/logger';
 import { prepareResponseDate } from './utils/form';
-import { IEvent, IUser } from '../../../types/types';
+import { IEvent } from '../../../types/types';
 import { Event, eventProperties } from './Event';
 import { Board } from './Board';
 import { EmploymentType, Feeling, JobStatus, RemoteOption } from './enums';
@@ -40,6 +40,19 @@ export const jobProperties = {
   uuid: 'string',
   createdAt: 'datetime',
   createdBy: 'string',
+  updatedAt: 'datetime',
+};
+
+export const followingJobProperties = {
+  id: 'key',
+  fid: 'key',
+  relation: 'key',
+  userUuid: 'string',
+  boardUuid: 'string',
+  jobUuid: 'string',
+  followingUserUuid: 'string',
+  isDeleted: 'boolean',
+  createdAt: 'datetime',
   updatedAt: 'datetime',
 };
 
@@ -151,34 +164,19 @@ export const Job = objectType({
     t.field('board', {
       type: Board,
 
-      // @ts-ignore
-      resolve: async ({ relation }, _args, { user, dynamo }) => {
+      resolve: async ({ relation }, _args, { user, utils: { boardfactory } }) => {
         const boardUuid = relation.split('#')[2];
 
-        const key = {
-          id: `USER#${user.uuid}`,
-          relation: `BOARD#${boardUuid}`,
-        };
-
-        const { Item = {} } = await dynamo.getItem(key);
-
-        return Item;
+        return await boardfactory.get(user.uuid, boardUuid);
       },
     });
 
     t.field('user', {
       type: User,
 
-      // @ts-ignore
-      resolve: async ({ id }, _args, { dynamo }) => {
-        const key = {
-          id,
-          relation: 'USER',
-        };
-
-        const { Item } = await dynamo.getItem(key);
-
-        return prepareResponseDate(Item) as IUser;
+      resolve: async ({ id }, _args, { utils: { userfactory } }) => {
+        const userUuid = id.split('#')[1];
+        return await userfactory.get(userUuid);
       },
     });
 
@@ -186,15 +184,19 @@ export const Job = objectType({
       type: User,
 
       // @ts-ignore
-      resolve: async ({ createdBy }, _args, { dynamo }) => {
-        const key = {
-          id: `USER#${createdBy}`,
-          relation: 'USER',
-        };
+      resolve: async ({ createdBy }, _args, { utils: { userfactory } }) => {
+        return await userfactory.get(createdBy);
+      },
+    });
 
-        const { Item } = await dynamo.getItem(key);
+    t.list.field('followers', {
+      type: User,
 
-        return prepareResponseDate(Item) as IUser;
+      resolve: async ({ relation }, _args, { user, utils: { userfactory } }) => {
+        const boardUuid = relation.split('#')[2];
+        const jobUuid = relation.split('#')[3];
+
+        return await userfactory.jobFollowers(user.uuid, boardUuid, jobUuid);
       },
     });
   },

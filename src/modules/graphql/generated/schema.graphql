@@ -212,6 +212,7 @@ type Job {
   employmentType: EmploymentType
   events: [Event!]
   feeling: Feeling!
+  followers: [User!]!
 
   """
   Internal partition key
@@ -309,7 +310,7 @@ type Mutation {
   passwordlessSignIn(email: String!, redirectUri: String!, state: String!): Boolean!
   signInConfirm(accessToken: String!, state: String!): Autho0User!
   singleUpload(file: Upload!): File!
-  unfollowBoard(boardUuid: ID!): Boolean!
+  unfollowBoard(boardUuid: ID!, followerUserUuid: ID!, userUuid: ID!): Boolean!
   updateBoard(boardUuid: ID!, data: BoardInputData!): Board!
   updateJob(boardUuid: ID!, data: JobInputData!, jobUuid: ID!, userUuid: ID!): Job!
   updateUser(data: UserInputData!): User!
@@ -380,9 +381,9 @@ type User {
   email: String!
   isDeleted: Boolean!
   isEmailVerified: Boolean!
-  name: String!
-  nickname: String!
-  state: String!
+  name: String
+  nickname: String
+  state: String
   updatedAt: DateTime
 
   """

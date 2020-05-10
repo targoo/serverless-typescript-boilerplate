@@ -20,21 +20,21 @@ export const board: QueryFieldType<'board'> = {
 
   args: boardArgs,
 
-  resolve: async (_parent, { userUuid, boardUuid }, { user, dynamo, utils: { boardfactory } }) => {
+  resolve: async (_parent, { userUuid, boardUuid }, { user, utils: { boardfactory } }) => {
     if (!user) {
       logger.error('Not authorized to get the board');
       throw new Error('Not authorized to get the board');
     }
 
-    // Check permissions.
-    if (userUuid !== user.uuid) {
+    const permissions = ['VIEW'];
+    if (userUuid === user.uuid) {
+      permissions.push(...['EDIT', 'ADD_JOB']);
+    } else {
       const isFollowing = await boardfactory.isFollowing(boardUuid, user.uuid);
-      if (!isFollowing) {
-        throw new Error('Cannot view this board');
+      if (isFollowing) {
+        permissions.push(...['UNFOLLOW', 'ADD_JOB']);
       }
     }
-
-    const permissions = userUuid !== user.uuid ? ['VIEW', 'UNFOLLOW', 'ADD_JOB'] : ['VIEW', 'EDIT', 'ADD_JOB'];
 
     try {
       const board = await boardfactory.get(userUuid, boardUuid);

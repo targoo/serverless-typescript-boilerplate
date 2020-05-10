@@ -21,15 +21,15 @@ export const User = objectType({
   definition(t) {
     t.id('uuid', { description: 'Unique Id of the user based on the email' });
 
-    t.string('nickname');
+    t.string('nickname', { nullable: true });
 
-    t.string('name');
+    t.string('name', { nullable: true });
 
     t.boolean('isEmailVerified');
 
     t.string('email');
 
-    t.string('state');
+    t.string('state', { nullable: true });
 
     t.datetime('createdAt');
 

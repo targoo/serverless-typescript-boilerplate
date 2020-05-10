@@ -1,6 +1,4 @@
-import { DocumentClient } from 'aws-sdk/clients/dynamodb';
-
-import { boardFormProperties, boardProperties } from '../nexusTypes/Board';
+import { boardFormProperties, boardProperties, followingBoardProperties } from '../nexusTypes/Board';
 import { IFollowingBoard, IKeyBase } from '../../../types/types';
 import { prepareResponseDate, prepareFormInput } from '../nexusTypes/utils/form';
 import { GraphQLContext } from '../index';
@@ -81,22 +79,23 @@ export const BoardUtilityFactory: UtilityFactory<BoardUtils> = ({ dynamo }) => (
   },
 
   async followingList(userUuid) {
-    const properties = Object.keys(boardProperties);
+    const properties = Object.keys(followingBoardProperties);
 
     const params = {
-      KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
+      KeyConditionExpression: '#id = :id and begins_with(#relation, :relation)',
       ExpressionAttributeNames: properties.reduce((acc, cur) => {
         acc[`#${cur}`] = cur;
         return acc;
       }, {}),
       ExpressionAttributeValues: {
-        ':userUUID': `USER#${userUuid}`,
+        ':id': `USER#${userUuid}`,
         ':relation': 'FOLLOWING_BOARD#',
       },
       ProjectionExpression: properties.map((property) => `#${property}`),
     };
 
     let { Items } = await dynamo.query(params);
+
     const followingBoards = Items.map((item) => prepareResponseDate(item)).filter(
       (item) => item.isDeleted === false,
     ) as IFollowingBoard[];
@@ -179,6 +178,7 @@ export const BoardUtilityFactory: UtilityFactory<BoardUtils> = ({ dynamo }) => (
         fid: `USER#${userUuid}`,
         userUuid: JSON.stringify({ format: 'string', value: userUuid }),
         boardUuid: JSON.stringify({ format: 'string', value: boardUuid }),
+        followingUserUuid: JSON.stringify({ format: 'string', value: followingUserUuid }),
         isDeleted: JSON.stringify({ format: 'boolean', value: false }),
         createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
       });

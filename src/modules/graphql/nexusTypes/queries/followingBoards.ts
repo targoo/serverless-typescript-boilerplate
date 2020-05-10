@@ -2,19 +2,8 @@ import { arg } from '@nexus/schema';
 
 import { QueryFieldType } from '../../types';
 import { BoardInputSort } from '../args';
-import { Board, followingBoardProperties } from '../Board';
-import { IFollowingBoard, IBoard } from '../../../../types/types';
+import { Board } from '../Board';
 import logger from '../../../../utils/logger';
-import { prepareResponseDate } from '../utils/form';
-
-const getBoard = async (dynamo, id, relation) => {
-  const key = {
-    id,
-    relation,
-  };
-  const { Item }: { Item: IBoard } = await dynamo.getItem(key);
-  return prepareResponseDate(Item);
-};
 
 export const followingBoards: QueryFieldType<'followingBoards'> = {
   type: Board,

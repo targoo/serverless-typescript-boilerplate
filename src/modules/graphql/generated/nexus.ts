@@ -254,9 +254,9 @@ export interface NexusGenRootTypes {
     email: string; // String!
     isDeleted: boolean; // Boolean!
     isEmailVerified: boolean; // Boolean!
-    name: string; // String!
-    nickname: string; // String!
-    state: string; // String!
+    name?: string | null; // String
+    nickname?: string | null; // String
+    state?: string | null; // String
     updatedAt?: any | null; // DateTime
     uuid: string; // ID!
   };
@@ -374,6 +374,7 @@ export interface NexusGenFieldTypes {
     employmentType: NexusGenEnums['EmploymentType'] | null; // EmploymentType
     events: NexusGenRootTypes['Event'][] | null; // [Event!]
     feeling: NexusGenEnums['Feeling']; // Feeling!
+    followers: NexusGenRootTypes['User'][]; // [User!]!
     id: string; // ID!
     ir35: boolean | null; // Boolean
     isDeleted: boolean; // Boolean!
@@ -426,9 +427,9 @@ export interface NexusGenFieldTypes {
     email: string; // String!
     isDeleted: boolean; // Boolean!
     isEmailVerified: boolean; // Boolean!
-    name: string; // String!
-    nickname: string; // String!
-    state: string; // String!
+    name: string | null; // String
+    nickname: string | null; // String
+    state: string | null; // String
     updatedAt: any | null; // DateTime
     uuid: string; // ID!
   };
@@ -505,6 +506,8 @@ export interface NexusGenArgTypes {
     unfollowBoard: {
       // args
       boardUuid: string; // ID!
+      followerUserUuid: string; // ID!
+      userUuid: string; // ID!
     };
     updateBoard: {
       // args

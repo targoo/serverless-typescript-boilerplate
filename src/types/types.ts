@@ -97,12 +97,14 @@ export interface IBoard extends IEntityBase {
 export interface IFollowingBoard extends IEntityBase {
   userUuid: string;
   boardUuid: string;
+  followingUserUuid: string;
 }
 
 export interface IFollowingJob extends IEntityBase {
   userUuid: string;
   boardUuid: string;
   jobUuid: string;
+  followingUserUuid: string;
 }
 
 export interface IUser extends IEntityBase {

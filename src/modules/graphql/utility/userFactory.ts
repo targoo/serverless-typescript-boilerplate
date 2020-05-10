@@ -1,15 +1,19 @@
 import * as crypto from 'crypto';
 import { DocumentClient } from 'aws-sdk/clients/dynamodb';
 
-import { IUser } from '../../../types/types';
+import { IUser, IFollowingBoard, IFollowingJob } from '../../../types/types';
 import { prepareResponseDate } from '../nexusTypes/utils/form';
 import { GraphQLContext } from '../index';
 import { NexusGenRootTypes } from '../generated/nexus';
+import { followingBoardProperties } from '../nexusTypes/Board';
+import { followingJobProperties } from '../nexusTypes/Job';
 
 export interface UserUtils {
   get: (userUuid: string) => Promise<NexusGenRootTypes['User'] | null>;
   update: (userUuid: string, params: Omit<DocumentClient.UpdateItemInput, 'Key' | 'TableName'>) => Promise<void>;
   findOrCreateByEmail: (email: string) => Promise<IUser>;
+  boardFollowers: (userUuid: string, boardUuid: string) => Promise<NexusGenRootTypes['User'][]>;
+  jobFollowers: (userUuid: string, boardUuid: string, jobUuid: string) => Promise<NexusGenRootTypes['User'][]>;
 }
 
 export type UtilityFactory<UtilityShape> = (context: Partial<GraphQLContext>) => UtilityShape;
@@ -63,5 +67,59 @@ export const UserUtilityFactory: UtilityFactory<UserUtils> = ({ dynamo }) => ({
 
       return await this.get(userUuid);
     }
+  },
+
+  async boardFollowers(userUuid, boardUuid) {
+    const properties = Object.keys(followingBoardProperties);
+
+    const params = {
+      IndexName: 'followers',
+      KeyConditionExpression: '#fid = :fid and begins_with(#relation, :relation)',
+      ExpressionAttributeNames: properties.reduce((acc, cur) => {
+        acc[`#${cur}`] = cur;
+        return acc;
+      }, {}),
+      ExpressionAttributeValues: {
+        ':fid': `USER#${userUuid}`,
+        ':relation': `FOLLOWING_BOARD#${boardUuid}`,
+      },
+      ProjectionExpression: properties.map((property) => `#${property}`),
+    };
+    const { Items } = await dynamo.query(params);
+
+    const followingUsers = Items.map((item) => prepareResponseDate(item)).filter(
+      (item) => item.isDeleted === false,
+    ) as IFollowingBoard[];
+
+    return (await Promise.all(
+      followingUsers.map(({ followingUserUuid }) => this.get(followingUserUuid)),
+    )) as NexusGenRootTypes['User'][];
+  },
+
+  async jobFollowers(userUuid, boardUuid, jobUuid) {
+    const properties = Object.keys(followingJobProperties);
+
+    const params = {
+      IndexName: 'followers',
+      KeyConditionExpression: '#fid = :fid and begins_with(#relation, :relation)',
+      ExpressionAttributeNames: properties.reduce((acc, cur) => {
+        acc[`#${cur}`] = cur;
+        return acc;
+      }, {}),
+      ExpressionAttributeValues: {
+        ':fid': `USER#${userUuid}`,
+        ':relation': `FOLLOWING_JOB#BOARD#${boardUuid}#${jobUuid}`,
+      },
+      ProjectionExpression: properties.map((property) => `#${property}`),
+    };
+    const { Items } = await dynamo.query(params);
+
+    const followingUsers = Items.map((item) => prepareResponseDate(item)).filter(
+      (item) => item.isDeleted === false,
+    ) as IFollowingJob[];
+
+    return (await Promise.all(
+      followingUsers.map(({ followingUserUuid }) => this.get(followingUserUuid)),
+    )) as NexusGenRootTypes['User'][];
   },
 });

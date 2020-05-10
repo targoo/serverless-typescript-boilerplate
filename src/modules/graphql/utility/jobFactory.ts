@@ -2,7 +2,7 @@ import id from '../../../utils/id';
 import { prepareResponseDate, prepareFormInput } from '../nexusTypes/utils/form';
 import { IFollowingJob, IKeyBase } from '../../../types/types';
 import { GraphQLContext } from '../index';
-import { jobFormProperties, jobProperties } from '../nexusTypes/Job';
+import { jobFormProperties, jobProperties, followingJobProperties } from '../nexusTypes/Job';
 import { NexusGenRootTypes } from '../generated/nexus';
 
 export interface JobUtils {
@@ -11,6 +11,7 @@ export interface JobUtils {
     userUuid: string,
     boardUuid: string,
     job: Partial<NexusGenRootTypes['Job']>,
+    createdByUserUuid: string,
   ) => Promise<NexusGenRootTypes['Job']>;
   get: (userUuid: string, boardUuid: string, jobUuid: string) => Promise<NexusGenRootTypes['Job'] | null>;
   list: (userUuid: string, boardUuid: string) => Promise<NexusGenRootTypes['Job'][]>;
@@ -36,7 +37,7 @@ export const JobUtilityFactory: UtilityFactory<JobUtils> = ({ dynamo }) => ({
     return key;
   },
 
-  async create(userUuid, boardUuid, job) {
+  async create(userUuid, boardUuid, job, createdByUserUuid) {
     const jobUuid = id();
 
     await dynamo.saveItem({
@@ -45,7 +46,7 @@ export const JobUtilityFactory: UtilityFactory<JobUtils> = ({ dynamo }) => ({
       uuid: JSON.stringify({ format: 'string', value: jobUuid }),
       isDeleted: JSON.stringify({ format: 'boolean', value: false }),
       createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
-      createdBy: JSON.stringify({ format: 'string', value: userUuid }),
+      createdBy: JSON.stringify({ format: 'string', value: createdByUserUuid }),
     });
 
     return this.get(userUuid, boardUuid, jobUuid);
@@ -64,13 +65,13 @@ export const JobUtilityFactory: UtilityFactory<JobUtils> = ({ dynamo }) => ({
     const properties = Object.keys(jobProperties);
 
     const params = {
-      KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
+      KeyConditionExpression: '#id = :id and begins_with(#relation, :relation)',
       ExpressionAttributeNames: properties.reduce((acc, cur) => {
         acc[`#${cur}`] = cur;
         return acc;
       }, {}),
       ExpressionAttributeValues: {
-        ':userUUID': `USER#${userUuid}`,
+        ':id': `USER#${userUuid}`,
         ':relation': `JOB#BOARD#${boardUuid}`,
       },
       ProjectionExpression: properties.map((property) => `#${property}`),
@@ -82,24 +83,23 @@ export const JobUtilityFactory: UtilityFactory<JobUtils> = ({ dynamo }) => ({
   },
 
   async followingList(userUuid, boardUuid) {
+    const properties = Object.keys(followingJobProperties);
+
     const params = {
-      KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
-      ExpressionAttributeNames: {
-        '#userUuid': 'userUuid',
-        '#boardUuid': 'boardUuid',
-        '#jobUuid': 'jobUuid',
-        '#isDeleted': 'isDeleted',
-        '#id': 'id',
-        '#relation': 'relation',
-      },
+      KeyConditionExpression: '#id = :id and begins_with(#relation, :relation)',
+      ExpressionAttributeNames: properties.reduce((acc, cur) => {
+        acc[`#${cur}`] = cur;
+        return acc;
+      }, {}),
       ExpressionAttributeValues: {
-        ':userUUID': `USER#${userUuid}`,
+        ':id': `USER#${userUuid}`,
         ':relation': `FOLLOWING_JOB#BOARD#${boardUuid}#`,
       },
-      ProjectionExpression: ['#userUuid', '#boardUuid', '#jobUuid', '#isDeleted', '#id', '#relation'],
+      ProjectionExpression: properties.map((property) => `#${property}`),
     };
 
     const { Items } = await dynamo.query(params);
+
     const followingJobs = Items.map((item) => prepareResponseDate(item)).filter(
       (item) => item.isDeleted === false,
     ) as IFollowingJob[];
@@ -137,7 +137,7 @@ export const JobUtilityFactory: UtilityFactory<JobUtils> = ({ dynamo }) => ({
       ExpressionAttributeValues,
     };
 
-    await dynamo.updateItem(params, this.key());
+    await dynamo.updateItem(params, this.key(userUuid, boardUuid, jobUuid));
 
     return this.get(userUuid, boardUuid, jobUuid);
   },
@@ -185,6 +185,7 @@ export const JobUtilityFactory: UtilityFactory<JobUtils> = ({ dynamo }) => ({
         userUuid: JSON.stringify({ format: 'string', value: userUuid }),
         boardUuid: JSON.stringify({ format: 'string', value: boardUuid }),
         jobUuid: JSON.stringify({ format: 'string', value: jobUuid }),
+        followingUserUuid: JSON.stringify({ format: 'string', value: followingUserUuid }),
         isDeleted: JSON.stringify({ format: 'boolean', value: false }),
         createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
       });

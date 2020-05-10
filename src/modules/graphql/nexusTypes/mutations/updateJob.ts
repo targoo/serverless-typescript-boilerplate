@@ -34,12 +34,13 @@ export const updateJob: MutationFieldType<'updateJob'> = {
     if (userUuid !== user.uuid) {
       const isFollowing = await jobfactory.isFollowing(boardUuid, jobUuid, user.uuid);
       if (!isFollowing) {
+        logger.error('Cannot update a job for this board');
         throw new Error('Cannot update a job for this board');
       }
     }
 
     try {
-      return await jobfactory.update(user.uuid, boardUuid, jobUuid, data);
+      return await jobfactory.update(userUuid, boardUuid, jobUuid, data);
     } catch (error) {
       logger.error(error);
       throw new Error('Could not update the board');

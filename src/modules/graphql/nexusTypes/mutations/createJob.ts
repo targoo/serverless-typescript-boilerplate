@@ -37,11 +37,16 @@ export const createJob: MutationFieldType<'createJob'> = {
       }
     }
 
-    const job = await jobfactory.create(userUuid, boardUuid, {
-      ...data,
-      status: JobStatus.STARTED,
-      feeling: Feeling.NORMAL,
-    });
+    const job = await jobfactory.create(
+      userUuid,
+      boardUuid,
+      {
+        ...data,
+        status: JobStatus.STARTED,
+        feeling: Feeling.NORMAL,
+      },
+      user.uuid,
+    );
 
     // If a user create a job for someone else, we need to record that permission.
     if (userUuid !== user.uuid) {

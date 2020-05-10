@@ -34,9 +34,11 @@ export const boardProperties = {
 
 export const followingBoardProperties = {
   id: 'key',
+  fid: 'key',
   relation: 'key',
   userUuid: 'string',
   boardUuid: 'string',
+  followingUserUuid: 'string',
   isDeleted: 'boolean',
   createdAt: 'datetime',
   updatedAt: 'datetime',
@@ -140,24 +142,8 @@ export const Board = objectType({
     t.list.field('followers', {
       type: User,
 
-      // @ts-ignore
-      resolve: async (parents, _args, { dynamo }) => {
-        console.log(parents.uuid);
-
-        // const params = {
-        //   KeyConditionExpression: '#fid = :fid and begins_with(#relation, :relation)',
-        //   ExpressionAttributeNames: {
-        //     '#fid': 'fid',
-        //     '#id': 'id',
-        //   },
-        //   ExpressionAttributeValues: {
-        //     ':userUUID': `USER#${user.uuid}`,
-        //     ':relation': 'BOARD#',
-        //   },
-        //   ProjectionExpression: ['fid'],
-        // };
-
-        return [];
+      resolve: async (parents, _args, { user, utils: { userfactory } }) => {
+        return await userfactory.boardFollowers(user.uuid, parents.uuid);
       },
     });
 
