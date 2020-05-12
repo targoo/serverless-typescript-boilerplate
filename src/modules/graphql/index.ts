@@ -10,6 +10,7 @@ import { UserUtilityFactory, UserUtils } from './utility/userFactory';
 import { BoardUtilityFactory, BoardUtils } from './utility/boardFactory';
 import { JobUtilityFactory, JobUtils } from './utility/jobFactory';
 import { FileUtilityFactory, FileUtils } from './utility/fileFactory';
+import { EventUtilityFactory, EventUtils } from './utility/eventFactory';
 
 // Infers the resolve type of a promise
 type ThenArg<T> = T extends Promise<infer U> ? U : T;
@@ -25,6 +26,7 @@ export interface GraphQLContext extends ContextParameters {
     boardfactory: BoardUtils;
     jobfactory: JobUtils;
     filefactory: FileUtils;
+    eventfactory: EventUtils;
   };
   dynamo: {
     getItem: (key: IKeyBase, tableName?: string) => ReturnType<typeof dynamo.getItem>;
@@ -72,6 +74,7 @@ export const getContext = async ({ event, context }: ContextParameters): Promise
       boardfactory: BoardUtilityFactory({ dynamo }),
       jobfactory: JobUtilityFactory({ dynamo }),
       filefactory: FileUtilityFactory({ dynamo }),
+      eventfactory: EventUtilityFactory({ dynamo }),
     },
     event,
     context,

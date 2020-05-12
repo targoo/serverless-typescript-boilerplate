@@ -301,12 +301,12 @@ type Mutation {
   archiveBoardFile(boardUuid: ID!, fileUuid: ID!, isDeleted: Boolean): File!
   archiveJob(boardUuid: ID!, isDeleted: Boolean, jobUuid: ID!): Job!
   createBoard(data: BoardInputData!): Board!
-  createEvent(boardUuid: ID!, data: EventInputData!, jobUuid: ID!): Event!
+  createEvent(boardUuid: ID!, data: EventInputData!, jobUuid: ID!, userUuid: ID!): Event!
   createJob(boardUuid: ID!, data: JobInputData!, userUuid: ID!): Job!
   inviteUserOnBoard(boardUuid: ID!, data: EmailInputData!, userUuid: ID!): Boolean!
   inviteUserOnJob(boardUuid: ID!, data: EmailInputData!, jobUuid: ID!, userUuid: ID!): Boolean!
   logout: Boolean!
-  multipleUpload(boardUuid: ID, files: [Upload!]!): [File!]!
+  multipleUpload(boardUuid: ID, files: [Upload!]!, jobUuid: ID): [File!]!
   passwordlessSignIn(email: String!, redirectUri: String!, state: String!): Boolean!
   signInConfirm(accessToken: String!, state: String!): Autho0User!
   singleUpload(file: Upload!): File!

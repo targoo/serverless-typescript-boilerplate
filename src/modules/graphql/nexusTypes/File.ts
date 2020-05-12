@@ -7,7 +7,7 @@ const UPLOAD_BUCKET_NAME = process.env.AWS_BUCKET_UPLOAD || '';
 export const fileFormProperties = {
   filename: 'string',
   mimetype: 'string',
-  encoding: 'date',
+  encoding: 'string',
   resource: 'string',
 };
 

@@ -12,6 +12,9 @@ export const createEvent: MutationFieldType<'createEvent'> = {
   type: Event,
 
   args: {
+    userUuid: idArg({
+      required: true,
+    }),
     boardUuid: idArg({
       required: true,
     }),
@@ -24,29 +27,21 @@ export const createEvent: MutationFieldType<'createEvent'> = {
     }),
   },
 
-  // @ts-ignore
-  resolve: async (_parent, { boardUuid, jobUuid, data }, { user, dynamo }) => {
+  resolve: async (_parent, { userUuid, boardUuid, jobUuid, data }, { user, utils: { jobfactory, eventfactory } }) => {
     if (!user) {
+      logger.error('Not authorized to create a new event');
       throw new Error('Not authorized to create a new event');
     }
 
-    const uuid = id();
+    // Check permissions.
+    if (userUuid !== user.uuid) {
+      const isFollowing = await jobfactory.isFollowing(boardUuid, jobUuid, user.uuid);
+      if (!isFollowing) {
+        logger.error('Cannot create an event for this job');
+        throw new Error('Cannot create an event for this job');
+      }
+    }
 
-    const event = ({
-      ...prepareFormInput(data, eventFormProperties),
-      id: `USER#${user.uuid}`,
-      relation: `EVENT#BOARD#${boardUuid}#JOB#${jobUuid}#${uuid}`,
-      uuid: JSON.stringify({ format: 'string', value: uuid }),
-      isDeleted: JSON.stringify({ format: 'boolean', value: false }),
-      createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
-    } as unknown) as IEvent;
-
-    logger.debug(JSON.stringify(event));
-    await dynamo.saveItem(event);
-
-    const response = prepareResponseDate(event);
-    logger.debug(JSON.stringify(response));
-
-    return event;
+    return await eventfactory.create(userUuid, boardUuid, jobUuid, data, user.uuid);
   },
 };

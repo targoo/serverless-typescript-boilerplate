@@ -4,9 +4,9 @@ import { MutationFieldType } from '../../types';
 import { File } from '../File';
 import { id } from '../../../../utils';
 import { sanitizeFileName } from '../../../../utils/files/files';
-import { IFile } from '../../../../types/types';
-import { prepareResponseDate } from '../utils/form';
 import logger from '../../../../utils/logger';
+import { FileUtils } from '../../utility/fileFactory';
+import { NexusGenRootTypes } from '../../generated/nexus';
 
 const UPLOAD_BUCKET_NAME = process.env.AWS_BUCKET_UPLOAD || '';
 
@@ -15,38 +15,53 @@ export const multipleUpload: MutationFieldType<'multipleUpload'> = {
 
   args: {
     boardUuid: idArg(),
+    jobUuid: idArg(),
     files: arg({ type: 'Upload', required: true, list: true }),
   },
 
   // @ts-ignore
-  resolve: async (_parent, { files, boardUuid }, { user, dynamo, s3 }) => {
+  resolve: async (_parent, { files, boardUuid, jobUuid }, { user, s3, utils: { filefactory } }) => {
     if (!user) {
+      logger.error('Not authorized to upload files');
       throw new Error('Not authorized to upload files');
     }
 
     const filesData = files as Promise<FileUpload>[];
-    console.log('filesData', filesData);
-    const result = await Promise.all(files.map((file) => uploadFile(file, user.uuid, boardUuid, dynamo, s3)));
-    console.log('result', result);
+    const result = await Promise.all(
+      filesData.map((file) => uploadFile(user.uuid, boardUuid, jobUuid, file, s3, filefactory)),
+    );
+
     return result;
   },
 };
 
-const uploadFile = async (file, userUuid, boardUuid, dynamo, s3) => {
+const uploadFile = async (
+  userUuid: string,
+  boardUuid: string,
+  jobUuid: string,
+  file: Promise<FileUpload>,
+  s3: any,
+  filefactory: FileUtils,
+): Promise<NexusGenRootTypes['File'] | void> => {
   const { filename, mimetype, encoding, createReadStream } = await file;
-  console.log('filename', filename);
-  console.log('mimetype', mimetype);
-  console.log('encoding', encoding);
-  console.log('createReadStream', createReadStream);
-  const sanitizedFilename = sanitizeFileName(filename);
+  const fileUuid = id();
 
-  const uuid = id();
-  const stream = createReadStream();
-  const resource = `${uuid}/${sanitizedFilename}`;
+  const sanitizedFilename = sanitizeFileName(filename);
+  const resource = jobUuid
+    ? `${userUuid}/${boardUuid}/${jobUuid}/${fileUuid}/${sanitizedFilename}`
+    : `${userUuid}/${boardUuid}/${fileUuid}/${sanitizedFilename}`;
+
   let sanitizedMimetype;
   switch (mimetype) {
     case 'application/pdf':
       sanitizedMimetype = 'PDF';
+      break;
+    case 'application/msword':
+    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.document':
+    case 'application/vnd.openxmlformats-officedocument.wordprocessingml.template':
+    case 'application/vnd.ms-word.document.macroEnabled.12':
+    case 'application/vnd.ms-word.template.macroEnabled.12':
+      sanitizedMimetype = 'DOC';
       break;
     default:
       sanitizedMimetype = 'FILE';
@@ -56,30 +71,20 @@ const uploadFile = async (file, userUuid, boardUuid, dynamo, s3) => {
   const params = {
     Bucket: UPLOAD_BUCKET_NAME,
     Key: resource,
-    Body: stream,
+    Body: createReadStream(),
     ContentType: mimetype,
+  };
+
+  const item: Partial<NexusGenRootTypes['File']> = {
+    filename: sanitizedFilename,
+    mimetype: sanitizedMimetype,
+    encoding,
+    resource,
   };
 
   try {
     await s3.upload(params);
-    logger.debug(`File uploaded under ${resource}`);
-
-    const file = ({
-      id: `USER#${userUuid}`,
-      relation: `FILE#BOARD#${boardUuid}#${uuid}`,
-      resource: JSON.stringify({ format: 'string', value: resource }),
-      filename: JSON.stringify({ format: 'string', value: sanitizedFilename }),
-      mimetype: JSON.stringify({ format: 'string', value: sanitizedMimetype }),
-      encoding: JSON.stringify({ format: 'string', value: encoding }),
-      uuid: JSON.stringify({ format: 'string', value: uuid }),
-      isDeleted: JSON.stringify({ format: 'boolean', value: false }),
-      createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
-    } as unknown) as IFile;
-
-    logger.debug(JSON.stringify(file));
-    await dynamo.saveItem(file);
-
-    return prepareResponseDate(file);
+    return await filefactory.boardCreate(userUuid, boardUuid, fileUuid, item);
   } catch (error) {
     logger.error(error);
   }

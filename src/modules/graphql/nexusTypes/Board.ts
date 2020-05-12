@@ -89,9 +89,9 @@ export const Board = objectType({
       type: File,
 
       // @ts-ignore
-      resolve: async ({ id, uuid }, _args, { utils: { filefactory } }) => {
+      resolve: async ({ id, uuid: boardUuid }, _args, { utils: { filefactory } }) => {
         const userUuid = id.split('#')[1];
-        return await filefactory.list(userUuid, uuid);
+        return await filefactory.boardList(userUuid, boardUuid);
       },
     });
 

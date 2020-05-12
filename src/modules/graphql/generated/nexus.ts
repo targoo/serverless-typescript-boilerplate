@@ -463,6 +463,7 @@ export interface NexusGenArgTypes {
       boardUuid: string; // ID!
       data: NexusGenInputs['EventInputData']; // EventInputData!
       jobUuid: string; // ID!
+      userUuid: string; // ID!
     };
     createJob: {
       // args
@@ -487,6 +488,7 @@ export interface NexusGenArgTypes {
       // args
       boardUuid?: string | null; // ID
       files: any[]; // [Upload!]!
+      jobUuid?: string | null; // ID
     };
     passwordlessSignIn: {
       // args
