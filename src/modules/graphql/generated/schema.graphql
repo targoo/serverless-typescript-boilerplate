@@ -23,6 +23,7 @@ Board
 type Board {
   availableDate: Date
   createdAt: DateTime!
+  createdBy: User!
   description: String
   educationLevel: EducationLevel
   files: [File!]!
@@ -131,7 +132,7 @@ Event
 type Event {
   createdAt: DateTime!
   description: String!
-  endAt: DateTime!
+  endAt: DateTime
   isDeleted: Boolean!
   startAt: DateTime!
   type: EventType!

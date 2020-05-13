@@ -197,7 +197,7 @@ export interface NexusGenRootTypes {
     // root type
     createdAt: any; // DateTime!
     description: string; // String!
-    endAt: any; // DateTime!
+    endAt?: any | null; // DateTime
     isDeleted: boolean; // Boolean!
     startAt: any; // DateTime!
     type: NexusGenEnums['EventType']; // EventType!
@@ -311,6 +311,7 @@ export interface NexusGenFieldTypes {
     // field return type
     availableDate: any | null; // Date
     createdAt: any; // DateTime!
+    createdBy: NexusGenRootTypes['User']; // User!
     description: string | null; // String
     educationLevel: NexusGenEnums['EducationLevel'] | null; // EducationLevel
     files: NexusGenRootTypes['File'][]; // [File!]!
@@ -336,7 +337,7 @@ export interface NexusGenFieldTypes {
     // field return type
     createdAt: any; // DateTime!
     description: string; // String!
-    endAt: any; // DateTime!
+    endAt: any | null; // DateTime
     isDeleted: boolean; // Boolean!
     startAt: any; // DateTime!
     type: NexusGenEnums['EventType']; // EventType!

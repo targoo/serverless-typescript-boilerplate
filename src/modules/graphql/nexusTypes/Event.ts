@@ -16,6 +16,7 @@ export const eventProperties = {
   relation: 'key',
   uuid: 'string',
   createdAt: 'datetime',
+  createdBy: 'string',
   updatedAt: 'datetime',
 };
 
@@ -29,7 +30,7 @@ export const Event = objectType({
 
     t.datetime('startAt');
 
-    t.datetime('endAt');
+    t.datetime('endAt', { nullable: true });
 
     t.field('type', { type: EventType });
 

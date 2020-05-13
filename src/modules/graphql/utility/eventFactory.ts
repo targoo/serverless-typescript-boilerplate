@@ -1,9 +1,8 @@
 import { prepareResponseDate, prepareFormInput } from '../nexusTypes/utils/form';
 import { GraphQLContext } from '../index';
 import { NexusGenRootTypes } from '../generated/nexus';
-import { fileProperties, fileFormProperties } from '../nexusTypes/File';
 import { IKeyBase } from '../../../types/types';
-import { eventFormProperties } from '../nexusTypes/Event';
+import { eventFormProperties, eventProperties } from '../nexusTypes/Event';
 import id from '../../../utils/id';
 
 export interface EventUtils {
@@ -21,6 +20,7 @@ export interface EventUtils {
     jobUuid: string,
     eventUuid: string,
   ) => Promise<NexusGenRootTypes['Event'] | null>;
+  list: (userUuid: string, boardUuid: string, jobUuid: string) => Promise<NexusGenRootTypes['Event'][]>;
 }
 
 export type UtilityFactory<UtilityShape> = (context: Partial<GraphQLContext>) => UtilityShape;
@@ -29,7 +29,7 @@ export const EventUtilityFactory: UtilityFactory<EventUtils> = ({ dynamo }) => (
   key(userUuid, boardUuid, jobUuid, eventUuid) {
     const key: IKeyBase = {
       id: `USER#${userUuid}`,
-      relation: `EVENT#BOARD#${boardUuid}#JOB#${jobUuid}#${eventUuid}`,
+      relation: `EVENT#USER#${userUuid}#BOARD#${boardUuid}#JOB#${jobUuid}#${eventUuid}`,
     };
     return key;
   },
@@ -56,5 +56,26 @@ export const EventUtilityFactory: UtilityFactory<EventUtils> = ({ dynamo }) => (
     } else {
       return null;
     }
+  },
+
+  async list(userUuid, boardUuid, jobUuid) {
+    const properties = Object.keys(eventProperties);
+
+    const params = {
+      KeyConditionExpression: '#id = :id and begins_with(#relation, :relation)',
+      ExpressionAttributeNames: properties.reduce((acc, cur) => {
+        acc[`#${cur}`] = cur;
+        return acc;
+      }, {}),
+      ExpressionAttributeValues: {
+        ':id': `USER#${userUuid}`,
+        ':relation': `EVENT#USER#${userUuid}#BOARD#${boardUuid}#JOB#${jobUuid}#`,
+      },
+      ProjectionExpression: properties.map((property) => `#${property}`),
+    };
+
+    const { Items: events } = await dynamo.query(params);
+
+    return events.map((event) => prepareResponseDate(event)) as NexusGenRootTypes['Event'][];
   },
 });

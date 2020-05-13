@@ -104,6 +104,15 @@ export const Board = objectType({
       },
     });
 
+    t.field('createdBy', {
+      type: User,
+
+      // @ts-ignore
+      resolve: async ({ createdBy }, _args, { utils: { userfactory } }) => {
+        return await userfactory.get(createdBy);
+      },
+    });
+
     t.list.field('followers', {
       type: User,
 

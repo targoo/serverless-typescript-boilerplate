@@ -126,37 +126,14 @@ export const Job = objectType({
       type: Event,
 
       // @ts-ignore
-      resolve: async (parent, _args, { user, dynamo }) => {
-        // @ts-ignore
-        const { relation } = parent;
-
-        // job relation: JOB#BOARD#bja06ihpRpZwrisa#XH0jkiTHTwrdOKS7
+      resolve: async ({ id, relation }, _args, { user, dynamo, utils: { eventfactory } }) => {
+        // id: USER#a6e02f9fb80b2daa538679cb6e6e26f559f18fa3
+        // relation: JOB#BOARD#bja06ihpRpZwrisa#XH0jkiTHTwrdOKS7
+        const userUuid = id.split('#')[1];
         const boardUuid = relation.split('#')[2];
         const jobUuid = relation.split('#')[3];
 
-        const properties = Object.keys(eventProperties);
-
-        const params = {
-          KeyConditionExpression: '#id = :userUUID and begins_with(#relation, :relation)',
-          ExpressionAttributeNames: properties.reduce((acc, cur) => {
-            acc[`#${cur}`] = cur;
-            return acc;
-          }, {}),
-          ExpressionAttributeValues: {
-            ':userUUID': `USER#${user.uuid}`,
-            ':relation': `EVENT#BOARD#${boardUuid}#JOB#${jobUuid}`,
-          },
-          ProjectionExpression: properties.map((property) => `#${property}`),
-        };
-        logger.debug(JSON.stringify(params));
-
-        let { Items: items }: { Items: IEvent[] } = await dynamo.query(params);
-        logger.debug(`items: ${JSON.stringify(items)}`);
-
-        items = items.map((item) => prepareResponseDate(item)) as IEvent[];
-        logger.debug(`items: ${JSON.stringify(items)}`);
-
-        return items;
+        return await eventfactory.list(userUuid, boardUuid, jobUuid);
       },
       nullable: true,
     });
