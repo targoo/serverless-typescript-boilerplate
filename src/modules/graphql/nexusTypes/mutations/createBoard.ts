@@ -1,10 +1,8 @@
 import { arg } from '@nexus/schema';
-
 import { MutationFieldType } from '../../types';
 import { BoardInputData } from '../args';
 import { Board, boardFormProperties } from '../Board';
 import logger from '../../../../utils/logger';
-import { prepareFormInput } from '../utils/form';
 
 export const createBoard: MutationFieldType<'createBoard'> = {
   type: Board,
@@ -22,8 +20,6 @@ export const createBoard: MutationFieldType<'createBoard'> = {
       throw new Error('Not authorized to create a new board');
     }
 
-    return await boardfactory.create(user.uuid, {
-      ...prepareFormInput(data, boardFormProperties),
-    });
+    return await boardfactory.create(user.uuid, data);
   },
 };

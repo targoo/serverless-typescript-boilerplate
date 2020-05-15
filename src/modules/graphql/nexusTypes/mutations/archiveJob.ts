@@ -1,5 +1,4 @@
 import { idArg, booleanArg } from '@nexus/schema';
-
 import { MutationFieldType } from '../../types';
 import { Job } from '../Job';
 import logger from '../../../../utils/logger';

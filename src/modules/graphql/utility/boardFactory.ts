@@ -36,15 +36,15 @@ export const BoardUtilityFactory: UtilityFactory<BoardUtils> = ({ dynamo }) => (
     const boardUuid = id();
 
     await dynamo.saveItem({
-      ...board,
       ...this.key(userUuid, boardUuid),
+      ...prepareFormInput(board, boardFormProperties),
       uuid: JSON.stringify({ format: 'string', value: boardUuid }),
       isDeleted: JSON.stringify({ format: 'boolean', value: false }),
       createdAt: JSON.stringify({ format: 'datetime', value: new Date().toISOString() }),
       createdBy: JSON.stringify({ format: 'string', value: userUuid }),
     });
 
-    return this.get(boardUuid);
+    return this.get(userUuid, boardUuid);
   },
 
   async get(userUuid, boardUuid) {
