@@ -1,6 +1,6 @@
 {
   "Table": {
-    "TableName": "serverless-boilerplate-local-main",
+    "TableName": "jobsboard-local-main",
     "KeySchema": [
       {
         "AttributeName": "id",

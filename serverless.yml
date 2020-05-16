@@ -1,4 +1,4 @@
-service: serverless-boilerplate
+service: jobsboard
 
 plugins:
   - serverless-webpack
@@ -18,8 +18,8 @@ provider:
   timeout: 10 # Default Lambda timeout.
   memorySize: 512 # Default Lambda Memory Size.
   profile: YOUR_PROFILE # Default profile to use. Don't forget to amend this value.
-  deploymentBucket:
-    name: serverless-boilerplate-eu-west-1-deploy # Your chosen S3 bucket for deployment.
+  # deploymentBucket:
+  #   name: serverless-boilerplate-eu-west-1-deploy # Your chosen S3 bucket for deployment.
   stackTags:
     project: ${self:service}
     env: ${self:custom.stage}
