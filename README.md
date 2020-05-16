@@ -108,9 +108,3 @@ webpack.config.js: Webpack default config file
 ## License
 
 Serverless Boilerplate is [MIT licensed](https://opensource.org/licenses/MIT).
-
-# askmyjobboard-backend
-
-- https://beta.huntr.co/
-- https://itnext.io/my-experience-with-severless-graphql-2e95e5a8bda7
-- https://qiita.com/daisukeArk/items/de9c92e6b650494bfb61
