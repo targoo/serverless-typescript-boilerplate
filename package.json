@@ -46,7 +46,7 @@
   "dependencies": {
     "apollo-server-lambda": "2.13.1",
     "auth0-js": "9.13.2",
-    "axios": "0.19.2",
+    "axios": "0.21.1",
     "dynamodb-geo": "0.4.0",
     "graphql": "15.0.0",
     "graphql-iso-date": "3.6.1",
