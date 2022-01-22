@@ -53,7 +53,7 @@
     "graphql-type-json": "0.3.1",
     "graphql-upload": "10.0.0",
     "jsonwebtoken": "8.5.1",
-    "nanoid": "3.1.7",
+    "nanoid": "3.1.31",
     "nexus": "0.21.0",
     "winston": "3.2.1",
     "yup": "0.28.5"
